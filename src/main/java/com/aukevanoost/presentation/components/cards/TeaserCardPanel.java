@@ -21,17 +21,16 @@ public class TeaserCardPanel extends Panel {
                 "cardImage",
                 getImageSize(image, 500),
                 List.of(
-                    getImageSize(image, 500),
-                    getImageSize(image, 1000)
+                    getImageSrcSet(image, 500),
+                    getImageSrcSet(image, 1000)
                 )
             )
         );
-
         add(link);
+    }
 
-
-
-
+    private String getImageSrcSet(String url, int size) {
+        return String.format("%s %dw", this.getImageSize(url, size), size);
     }
 
     private String getImageSize(String url, int size) {

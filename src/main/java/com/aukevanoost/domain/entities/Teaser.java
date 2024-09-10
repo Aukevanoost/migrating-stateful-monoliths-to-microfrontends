@@ -1,6 +1,12 @@
 package com.aukevanoost.domain.entities;
 
-public class Teaser {
+import java.io.Serial;
+import java.io.Serializable;
+
+public class Teaser implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     private String title;
     private String image;
     private String url;

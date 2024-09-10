@@ -3,14 +3,14 @@ package com.aukevanoost.domain.entities;
 import java.io.Serial;
 import java.io.Serializable;
 
-public class Recommendation implements Serializable {
+public class Product implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
     private String name;
-    private String sku;
+    private String id;
     private String image;
-    private Integer[] rgb;
+    private Integer startPrice;
     private String url;
 
     public String getName() {
@@ -21,12 +21,12 @@ public class Recommendation implements Serializable {
         this.name = name;
     }
 
-    public String getSku() {
-        return sku;
+    public String getId() {
+        return id;
     }
 
-    public void setSku(String sku) {
-        this.sku = sku;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getImage() {
@@ -37,12 +37,12 @@ public class Recommendation implements Serializable {
         this.image = image;
     }
 
-    public Integer[] getRgb() {
-        return rgb;
+    public Integer getStartPrice() {
+        return startPrice;
     }
 
-    public void setRgb(Integer[] rgb) {
-        this.rgb = rgb;
+    public void setStartPrice(Integer startPrice) {
+        this.startPrice = startPrice;
     }
 
     public String getUrl() {
@@ -53,11 +53,11 @@ public class Recommendation implements Serializable {
         this.url = url;
     }
 
-    public Recommendation(String name, String sku, String image, Integer[] rgb, String url) {
+    public Product(String name, String id, String image, Integer startPrice, String url) {
         this.name = name;
-        this.sku = sku;
+        this.id = id;
         this.image = image;
-        this.rgb = rgb;
+        this.startPrice = startPrice;
         this.url = url;
     }
 }

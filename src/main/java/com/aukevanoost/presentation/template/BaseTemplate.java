@@ -24,7 +24,4 @@ public class BaseTemplate extends WebPage {
         add(headerPanel = new HeaderPanel("headerPanel"));
         add(footerPanel = new FooterPanel("footerPanel"));
     }
-
-    //getters for layout areas
-    //...
 }

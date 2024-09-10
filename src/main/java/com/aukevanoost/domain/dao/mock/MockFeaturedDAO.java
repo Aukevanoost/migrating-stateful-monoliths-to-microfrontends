@@ -7,9 +7,7 @@ import com.aukevanoost.domain.dao.mock.db.Recommendations;
 import com.aukevanoost.domain.dao.mock.db.Teasers;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MockFeaturedDAO implements IFeaturedDAO {

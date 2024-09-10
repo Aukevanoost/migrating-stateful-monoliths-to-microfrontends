@@ -1,7 +1,7 @@
 package com.aukevanoost.presentation;
 
 import com.aukevanoost.presentation.pages.HomePage;
-import com.aukevanoost.presentation.pages.ProductsPage;
+import com.aukevanoost.presentation.pages.CategoryPage;
 import org.apache.wicket.csp.CSPDirective;
 import org.apache.wicket.csp.CSPDirectiveSrcValue;
 import org.apache.wicket.markup.html.WebPage;
@@ -39,7 +39,8 @@ public class WicketApplication extends WebApplication
 			.add(CSPDirective.FONT_SRC, "https://fonts.gstatic.com");
 
 		// add your configuration here
-		mountPage("/products/${product}", ProductsPage.class);
+		mountPage("/products/${category}", CategoryPage.class);
+		mountPage("/products", CategoryPage.class);
 
 	}
 }
