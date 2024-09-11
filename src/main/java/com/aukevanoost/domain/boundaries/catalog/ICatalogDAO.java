@@ -1,9 +1,8 @@
-package com.aukevanoost.domain.boundaries.featured;
+package com.aukevanoost.domain.boundaries.catalog;
 
 import com.aukevanoost.domain.entities.Category;
 import com.aukevanoost.domain.entities.Product;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 

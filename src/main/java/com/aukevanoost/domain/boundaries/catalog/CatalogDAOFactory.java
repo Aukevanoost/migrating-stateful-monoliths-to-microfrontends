@@ -1,4 +1,4 @@
-package com.aukevanoost.domain.boundaries.featured;
+package com.aukevanoost.domain.boundaries.catalog;
 
 import com.aukevanoost.domain.dao.mock.MockCatalogDAO;
 

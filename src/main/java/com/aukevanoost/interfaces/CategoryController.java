@@ -1,6 +1,6 @@
 package com.aukevanoost.interfaces;
 
-import com.aukevanoost.domain.boundaries.featured.ICatalogDAO;
+import com.aukevanoost.domain.boundaries.catalog.ICatalogDAO;
 import com.aukevanoost.domain.entities.Category;
 import com.aukevanoost.interfaces.boundaries.category.CategoryFilter;
 import com.aukevanoost.interfaces.boundaries.category.ICategoryController;

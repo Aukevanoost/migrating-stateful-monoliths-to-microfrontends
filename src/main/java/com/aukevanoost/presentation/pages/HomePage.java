@@ -18,6 +18,7 @@ public class HomePage extends BaseTemplate {
         this.controller = HomeControllerFactory.build();
         this.viewmodel = controller.process();
 
+
         RepeatingView teaserCards = new RepeatingView("teaserCards");
         this.viewmodel.teasers().forEach(t -> teaserCards.add(
             new TeaserCardPanel(
@@ -28,6 +29,7 @@ public class HomePage extends BaseTemplate {
             )
         ));
         add(teaserCards);
+
 
         var recommendationsCardPanel = new RecommendationCardPanel("recommendationCards", this.viewmodel.recommended());
         add(recommendationsCardPanel);

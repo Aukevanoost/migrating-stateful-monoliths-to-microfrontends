@@ -49,6 +49,20 @@ public class CategoryPage extends BaseTemplate {
     private void buildProductsPage(Category c) {
         add(new Label("title", c.getName()));
 
+
+        buildCategoryFilter(c);
+
+
+        var sortedProducts = c.getProducts()
+                .stream()
+                .sorted(Comparator.comparingInt(Product::getStartPrice).reversed())
+                .toList();
+
+        var productCards = new ProductCardPanel("productCards", sortedProducts);
+        add(productCards);
+    }
+
+    private void buildCategoryFilter(Category c) {
         WebMarkupContainer actionsContainer = new WebMarkupContainer("actionsContainer");
         actionsContainer.add(new Label("productsSize", c.getProducts().size()));
 
@@ -74,13 +88,5 @@ public class CategoryPage extends BaseTemplate {
         };
         actionsContainer.add(listView);
         add(actionsContainer);
-
-        var sortedProducts = c.getProducts()
-                .stream()
-                .sorted(Comparator.comparingInt(Product::getStartPrice).reversed())
-                .toList();
-
-        var productCards = new ProductCardPanel("productCards", sortedProducts);
-        add(productCards);
     }
 }
