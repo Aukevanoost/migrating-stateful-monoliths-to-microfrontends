@@ -1,5 +1,6 @@
-package com.aukevanoost.presentation.components.cards;
+package com.aukevanoost.presentation.pages.home;
 
+import com.aukevanoost.interfaces.boundaries.home.dto.RecommendationDTO;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ExternalImage;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -9,28 +10,24 @@ import java.util.List;
 
 public class RecommendationCardPanel extends Panel {
 
-    private final String name;
-    private final String img;
-    private final String url;
+    private final RecommendationDTO recommendation;
 
-    public RecommendationCardPanel(String id, String name, String img, String url) {
+    public RecommendationCardPanel(String id, RecommendationDTO recommendation) {
         super(id);
-        this.name = name;
-        this.img = img;
-        this.url = url;
+        this.recommendation = recommendation;
     }
 
     protected void onInitialize() {
         super.onInitialize();
-        ExternalLink link = new ExternalLink("url", url);
-        link.add(new Label("name", name));
+        ExternalLink link = new ExternalLink("url", recommendation.url());
+        link.add(new Label("name", recommendation.name()));
         link.add(
             new ExternalImage(
                 "image",
-                getImageSize(img, 200),
+                getImageSize(recommendation.image(), 200),
                 List.of(
-                    getImageSrcSet(img, 200),
-                    getImageSrcSet(img, 400)
+                    getImageSrcSet(recommendation.image(), 200),
+                    getImageSrcSet(recommendation.image(), 400)
                 )
             )
         );
@@ -43,5 +40,9 @@ public class RecommendationCardPanel extends Panel {
 
     private String getImageSize(String url, int size) {
         return url.replace("[size]", String.valueOf(size));
+    }
+
+    public static RecommendationCardPanel from(String id, RecommendationDTO dto) {
+        return new RecommendationCardPanel(id, dto);
     }
 }

@@ -2,7 +2,6 @@ package com.aukevanoost.domain.entities;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.stream.IntStream;
 
 public class Recommendation implements Serializable {
     @Serial

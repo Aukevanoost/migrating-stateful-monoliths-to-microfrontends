@@ -1,6 +1,6 @@
 package com.aukevanoost.interfaces;
 
-import com.aukevanoost.domain.boundaries.catalog.ICatalogDAO;
+import com.aukevanoost.domain.boundaries.ICatalogDAO;
 import com.aukevanoost.domain.entities.Category;
 import com.aukevanoost.interfaces.boundaries.category.*;
 import com.aukevanoost.interfaces.boundaries.category.dto.CategoryDTO;
@@ -9,7 +9,6 @@ import com.aukevanoost.interfaces.boundaries.category.dto.ProductDTO;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -24,26 +23,26 @@ public class CategoryController implements ICategoryController {
     private ICatalogDAO catalogDAO;
 
     public CategoryViewModel process(String activeCategoryKey) {
-        return CategoryViewModel.build(
-            this.catalogDAO
-                .getProductsByCategory(activeCategoryKey)
-                .map(CategoryDTO::from),
-            getFilters(activeCategoryKey)
-        );
+        var category = this.catalogDAO.getProductsByCategory(activeCategoryKey).map(CategoryDTO::from);
+
+        var filters = getFilters(activeCategoryKey).toList();
+
+        return CategoryViewModel.build(category, filters);
     }
 
     public CategoryViewModel process() {
-        return CategoryViewModel.build(
-            Optional.of(new CategoryDTO(
-                ALL_PRODUCTS_NAME,
-                ALL_PRODUCTS_KEY,
-                catalogDAO.getAllProducts().map(ProductDTO::from).toList()
-            )),
-            getFilters(ALL_PRODUCTS_KEY)
-        );
+        var category = Optional.of(new CategoryDTO(
+            ALL_PRODUCTS_NAME,
+            ALL_PRODUCTS_KEY,
+            catalogDAO.getAllProducts().map(ProductDTO::from).toList()
+        ));
+
+        var filters = getFilters(ALL_PRODUCTS_KEY).toList();
+
+        return CategoryViewModel.build(category, filters);
     }
 
-    private List<CategoryFilterDTO> getFilters(String activeCategory) {
+    private Stream<CategoryFilterDTO> getFilters(String activeCategory) {
         return Stream.concat(
             Stream.of(new CategoryFilterDTO(
                 CATEGORY_BASE_URL,
@@ -51,7 +50,7 @@ public class CategoryController implements ICategoryController {
                 ALL_PRODUCTS_KEY.equals(activeCategory)
             )),
             this.catalogDAO.getAllCategories().map(this.mapToFilter(activeCategory))
-        ).toList();
+        );
     }
 
     private Function<Category, CategoryFilterDTO> mapToFilter(String activeCategory) {

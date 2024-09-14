@@ -7,22 +7,22 @@ public class Teaser implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private String title;
+    private String name;
     private String image;
-    private String url;
+    private Category category;
 
-    public Teaser(String title, String image, String url) {
-        this.title = title;
+    public Teaser(String name, String image, Category category) {
+        this.name = name;
         this.image = image;
-        this.url = url;
+        this.category = category;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getImage() {
@@ -33,11 +33,11 @@ public class Teaser implements Serializable {
         this.image = image;
     }
 
-    public String getUrl() {
-        return url;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

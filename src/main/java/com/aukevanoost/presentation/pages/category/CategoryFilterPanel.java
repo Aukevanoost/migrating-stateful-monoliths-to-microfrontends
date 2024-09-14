@@ -26,7 +26,11 @@ public class CategoryFilterPanel extends Panel {
         } else {
             fragment = new Fragment("filterContainer", "inactiveFilter", this);
             fragment.setRenderBodyOnly(true);
+
+
             ExternalLink link = new ExternalLink("link", filter.url());
+
+
             link.add(new Label("category", filter.name()));
             fragment.add(link);
         }

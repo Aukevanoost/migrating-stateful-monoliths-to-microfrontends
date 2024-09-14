@@ -2,6 +2,7 @@ package com.aukevanoost.presentation;
 
 import com.aukevanoost.presentation.pages.home.HomePage;
 import com.aukevanoost.presentation.pages.category.CategoryPage;
+import com.aukevanoost.presentation.pages.stores.StoresPage;
 import org.apache.wicket.cdi.CdiConfiguration;
 import org.apache.wicket.csp.CSPDirective;
 import org.apache.wicket.csp.CSPDirectiveSrcValue;
@@ -48,5 +49,6 @@ public class WicketApplication extends WebApplication
 		mountPage("/products/${category}", CategoryPage.class);
 		mountPage("/products", CategoryPage.class);
 
+		mountPage("/stores", StoresPage.class);
 	}
 }

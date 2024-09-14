@@ -4,7 +4,7 @@ import com.aukevanoost.interfaces.boundaries.category.dto.CategoryDTO;
 import com.aukevanoost.interfaces.boundaries.category.ICategoryController;
 import com.aukevanoost.interfaces.boundaries.category.CategoryViewModel;
 import com.aukevanoost.interfaces.boundaries.category.dto.ProductDTO;
-import com.aukevanoost.presentation.components.cards.ProductCardPanel;
+import com.aukevanoost.presentation.components.ProductCardPanel;
 import com.aukevanoost.presentation.template.BaseTemplate;
 import jakarta.inject.Inject;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -41,21 +41,20 @@ public class CategoryPage extends BaseTemplate {
 
             buildCategoryFilter(c);
 
-            var sortedProducts = c.products()
+            RepeatingView productCards = new RepeatingView("productCards");
+
+            c.products()
                 .stream()
                 .sorted(Comparator.comparingInt(ProductDTO::startPrice).reversed())
-                .toList();
-
-            RepeatingView productCards = new RepeatingView("productCards");
-            sortedProducts.forEach(p -> productCards.add(
-                new ProductCardPanel(
+                .map(p -> new ProductCardPanel(
                     productCards.newChildId(),
                     p.name(),
                     p.url(),
                     p.image(),
                     p.startPrice()
-                )
-            ));
+                ))
+                .forEach(productCards::add);
+
             add(productCards);
         });
     }
@@ -65,9 +64,10 @@ public class CategoryPage extends BaseTemplate {
         actionsContainer.add(new Label("productsSize", c.products().size()));
 
         RepeatingView filterCards = new RepeatingView("filterCards");
-        this.viewmodel.filters().forEach(filter -> filterCards.add(
-           new CategoryFilterPanel(filterCards.newChildId(), filter)
-        ));
+        this.viewmodel.filters()
+            .stream()
+            .map(f -> new CategoryFilterPanel(filterCards.newChildId(), f))
+            .forEach(filterCards::add);
 
         actionsContainer.add(filterCards);
         add(actionsContainer);

@@ -1,10 +1,12 @@
 package com.aukevanoost.domain.dao.mock;
 
-import com.aukevanoost.domain.boundaries.featured.IFeaturedDAO;
+import com.aukevanoost.domain.boundaries.IFeaturedDAO;
+import com.aukevanoost.domain.dao.mock.db.Categories;
 import com.aukevanoost.domain.dao.mock.db.Recommendations;
+import com.aukevanoost.domain.dao.mock.db.Teasers;
+import com.aukevanoost.domain.entities.Category;
 import com.aukevanoost.domain.entities.Recommendation;
 import com.aukevanoost.domain.entities.Teaser;
-import com.aukevanoost.domain.dao.mock.db.Teasers;
 import jakarta.enterprise.context.RequestScoped;
 
 import java.util.Arrays;

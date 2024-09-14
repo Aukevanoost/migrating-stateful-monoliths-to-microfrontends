@@ -1,17 +1,12 @@
-package com.aukevanoost.presentation.components.cards;
+package com.aukevanoost.presentation.components;
 
-import com.aukevanoost.domain.entities.Product;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ExternalImage;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.markup.repeater.RepeatingView;
 
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.List;
-import java.util.Locale;
 
 public class ProductCardPanel extends Panel {
 

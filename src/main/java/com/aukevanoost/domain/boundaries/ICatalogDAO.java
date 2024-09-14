@@ -1,4 +1,4 @@
-package com.aukevanoost.domain.boundaries.catalog;
+package com.aukevanoost.domain.boundaries;
 
 import com.aukevanoost.domain.entities.Category;
 import com.aukevanoost.domain.entities.Product;

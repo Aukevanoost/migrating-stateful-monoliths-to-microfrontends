@@ -3,6 +3,7 @@ package com.aukevanoost.interfaces.boundaries.category.dto;
 import com.aukevanoost.domain.entities.Product;
 import com.aukevanoost.domain.entities.ProductVariant;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 public record ProductDTO(
@@ -11,6 +12,7 @@ public record ProductDTO(
     String url,
     Integer startPrice
 ) implements Serializable {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public static ProductDTO from(Product product) {

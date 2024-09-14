@@ -18,6 +18,11 @@ public class Category implements Serializable {
         this.products = products;
     }
 
+    public Category(String key, String name) {
+        this(key, name, List.of());
+    }
+
+
     public List<Product> getProducts() {
         return products;
     }
@@ -45,7 +50,4 @@ public class Category implements Serializable {
         return this;
     }
 
-    public Category(String key, String name) {
-        this(key, name, List.of());
-    }
 }

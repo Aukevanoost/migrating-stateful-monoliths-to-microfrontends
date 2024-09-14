@@ -1,4 +1,4 @@
-package com.aukevanoost.domain.boundaries.featured;
+package com.aukevanoost.domain.boundaries;
 
 import com.aukevanoost.domain.entities.Recommendation;
 import com.aukevanoost.domain.entities.Teaser;
