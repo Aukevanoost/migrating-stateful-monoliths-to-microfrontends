@@ -11,7 +11,8 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 public class HomePage extends BaseTemplate {
     @Inject
     private IHomeController controller;
-    private HomeViewModel viewmodel;
+
+    private final HomeViewModel viewmodel;
 
     public HomePage(){
         super();
@@ -23,9 +24,9 @@ public class HomePage extends BaseTemplate {
         this.viewmodel.teasers().forEach(t -> teaserCards.add(
             new TeaserCardPanel(
                 teaserCards.newChildId(),
-                t.getTitle(),
-                t.getUrl(),
-                t.getImage()
+                t.title(),
+                t.url(),
+                t.image()
             )
         ));
         add(teaserCards);
@@ -34,9 +35,9 @@ public class HomePage extends BaseTemplate {
         this.viewmodel.recommended().forEach(r -> recommendationCards.add(
             new RecommendationCardPanel(
                 recommendationCards.newChildId(),
-                r.getName(),
-                r.getImage(),
-                r.getUrl()
+                r.name(),
+                r.image(),
+                r.url()
             )
         ));
         add(recommendationCards);

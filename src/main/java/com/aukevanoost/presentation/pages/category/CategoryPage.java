@@ -1,22 +1,15 @@
 package com.aukevanoost.presentation.pages.category;
 
-import com.aukevanoost.domain.entities.Category;
-import com.aukevanoost.domain.entities.Product;
-import com.aukevanoost.interfaces.boundaries.category.CategoryFilter;
+import com.aukevanoost.interfaces.boundaries.category.dto.CategoryDTO;
 import com.aukevanoost.interfaces.boundaries.category.ICategoryController;
 import com.aukevanoost.interfaces.boundaries.category.CategoryViewModel;
+import com.aukevanoost.interfaces.boundaries.category.dto.ProductDTO;
 import com.aukevanoost.presentation.components.cards.ProductCardPanel;
 import com.aukevanoost.presentation.template.BaseTemplate;
 import jakarta.inject.Inject;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.ExternalLink;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.repeater.RepeatingView;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import java.util.Comparator;
@@ -25,11 +18,10 @@ public class CategoryPage extends BaseTemplate {
     @Inject
     private ICategoryController controller;
 
-    private CategoryViewModel viewmodel;
+    private final CategoryViewModel viewmodel;
 
     public CategoryPage() {
         super();
-
         this.viewmodel = this.controller.process();
     }
 
@@ -45,42 +37,38 @@ public class CategoryPage extends BaseTemplate {
         super.onInitialize();
 
         this.viewmodel.category().ifPresent(c -> {
-            add(new Label("title", c.getName()));
+            add(new Label("title", c.name()));
 
             buildCategoryFilter(c);
 
-            var sortedProducts = c.getProducts()
+            var sortedProducts = c.products()
                 .stream()
-                .sorted(Comparator.comparingInt(Product::getStartPrice).reversed())
+                .sorted(Comparator.comparingInt(ProductDTO::startPrice).reversed())
                 .toList();
 
             RepeatingView productCards = new RepeatingView("productCards");
             sortedProducts.forEach(p -> productCards.add(
                 new ProductCardPanel(
                     productCards.newChildId(),
-                    p.getName(),
-                    p.getUrl(),
-                    p.getImage(),
-                    p.getStartPrice()
+                    p.name(),
+                    p.url(),
+                    p.image(),
+                    p.startPrice()
                 )
             ));
             add(productCards);
         });
     }
 
-    private void buildCategoryFilter(Category c) {
+    private void buildCategoryFilter(CategoryDTO c) {
         WebMarkupContainer actionsContainer = new WebMarkupContainer("actionsContainer");
-        actionsContainer.add(new Label("productsSize", c.getProducts().size()));
+        actionsContainer.add(new Label("productsSize", c.products().size()));
 
         RepeatingView filterCards = new RepeatingView("filterCards");
-        this.viewmodel.filters().forEach(f -> filterCards.add(
-           new CategoryFilterPanel(
-               filterCards.newChildId(),
-               f.name(),
-               f.url(),
-               f.active()
-           )
+        this.viewmodel.filters().forEach(filter -> filterCards.add(
+           new CategoryFilterPanel(filterCards.newChildId(), filter)
         ));
+
         actionsContainer.add(filterCards);
         add(actionsContainer);
     }

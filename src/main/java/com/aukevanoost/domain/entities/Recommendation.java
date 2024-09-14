@@ -2,6 +2,7 @@ package com.aukevanoost.domain.entities;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.stream.IntStream;
 
 public class Recommendation implements Serializable {
     @Serial
@@ -60,4 +61,22 @@ public class Recommendation implements Serializable {
         this.rgb = rgb;
         this.url = url;
     }
+
+    public static Recommendation fromProduct(Product product, String variantSKU) {
+        var variant = product.getVariants()
+            .stream()
+            .filter(v -> v.getSku().equals(variantSKU))
+            .findFirst()
+            .orElseThrow();
+
+        return new Recommendation(
+            product.getName(),
+            variant.getSku(),
+            variant.getImage(),
+            variant.getRGB(),
+            String.format("/products/%s?sku=%s", product.getId(), variantSKU)
+        );
+    }
+
+
 }

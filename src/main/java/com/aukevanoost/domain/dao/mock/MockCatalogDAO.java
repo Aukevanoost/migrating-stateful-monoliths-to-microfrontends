@@ -1,6 +1,7 @@
 package com.aukevanoost.domain.dao.mock;
 
 import com.aukevanoost.domain.boundaries.catalog.ICatalogDAO;
+import com.aukevanoost.domain.dao.mock.db.Categories;
 import com.aukevanoost.domain.dao.mock.db.Products;
 import com.aukevanoost.domain.entities.Category;
 import com.aukevanoost.domain.entities.Product;
@@ -13,17 +14,17 @@ import java.util.stream.Stream;
 public class MockCatalogDAO implements ICatalogDAO {
     @Override
     public Optional<Category> getProductsByCategory(String category) {
-        return Products.ALL.stream()
+        return Categories.ALL.stream()
                 .filter(p -> p.getKey().equals(category))
                 .findFirst();
     }
 
     @Override
     public Stream<Product> getAllProducts() {
-        return Products.ALL.stream().flatMap(c -> c.getProducts().stream());
+        return Products.ALL.values().stream();
     }
 
     public Stream<Category> getAllCategories() {
-        return Products.ALL.stream().map(c -> new Category(c.getKey(), c.getName()));
+        return Categories.ALL.stream().map(c -> new Category(c.getKey(), c.getName()));
     }
 }

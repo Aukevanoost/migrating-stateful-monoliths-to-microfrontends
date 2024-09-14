@@ -1,10 +1,11 @@
 package com.aukevanoost.interfaces;
 
 import com.aukevanoost.domain.boundaries.featured.IFeaturedDAO;
-import com.aukevanoost.domain.dao.mock.MockFeaturedDAO;
 import com.aukevanoost.domain.entities.Recommendation;
 import com.aukevanoost.interfaces.boundaries.home.IHomeController;
 import com.aukevanoost.interfaces.boundaries.home.HomeViewModel;
+import com.aukevanoost.interfaces.boundaries.home.dto.RecommendationDTO;
+import com.aukevanoost.interfaces.boundaries.home.dto.TeaserDTO;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
@@ -16,17 +17,16 @@ public class HomeController implements IHomeController {
     @Inject
     private IFeaturedDAO featuredDAO;
 
-    public HomeController() {   }
-
     public HomeViewModel process() {
         var avgColor = getAverageColor(
             featuredDAO.getRecommendations("CL-01-GY", "AU-07-MT")
                 .map(Recommendation::getRgb)
                 .toList()
         );
+
         return HomeViewModel.build(
-            featuredDAO.getTeasers().toList(),
-            featuredDAO.getRecommendationsSimilarColor(avgColor, 4).toList()
+            featuredDAO.getTeasers().map(TeaserDTO::from).toList(),
+            featuredDAO.getRecommendationsSimilarColor(avgColor, 4).map(RecommendationDTO::from).toList()
         );
     }
 

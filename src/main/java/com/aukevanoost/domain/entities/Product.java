@@ -2,16 +2,15 @@ package com.aukevanoost.domain.entities;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 public class Product implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
     private String name;
-    private String id;
-    private String image;
-    private Integer startPrice;
-    private String url;
+    private String sku;
+    private List<ProductVariant> variants;
 
     public String getName() {
         return name;
@@ -22,42 +21,25 @@ public class Product implements Serializable {
     }
 
     public String getId() {
-        return id;
+        return sku;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.sku = id;
     }
 
-    public String getImage() {
-        return image;
+
+    public List<ProductVariant> getVariants() {
+        return variants;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setVariants(List<ProductVariant> variants) {
+        this.variants = variants;
     }
 
-    public Integer getStartPrice() {
-        return startPrice;
-    }
-
-    public void setStartPrice(Integer startPrice) {
-        this.startPrice = startPrice;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public Product(String name, String id, String image, Integer startPrice, String url) {
+    public Product(String name, String sku, List<ProductVariant> variants) {
         this.name = name;
-        this.id = id;
-        this.image = image;
-        this.startPrice = startPrice;
-        this.url = url;
+        this.sku = sku;
+        this.variants = variants;
     }
 }
