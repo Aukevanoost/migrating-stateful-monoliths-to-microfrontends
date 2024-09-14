@@ -1,4 +1,4 @@
-package com.aukevanoost.presentation.pages;
+package com.aukevanoost.presentation.pages.home;
 
 import com.aukevanoost.interfaces.boundaries.home.HomeViewModel;
 import com.aukevanoost.interfaces.boundaries.home.IHomeController;
@@ -21,17 +21,25 @@ public class HomePage extends BaseTemplate {
     protected void onInitialize() {
         RepeatingView teaserCards = new RepeatingView("teaserCards");
         this.viewmodel.teasers().forEach(t -> teaserCards.add(
-                new TeaserCardPanel(
-                        teaserCards.newChildId(),
-                        t.getTitle(),
-                        t.getUrl(),
-                        t.getImage()
-                )
+            new TeaserCardPanel(
+                teaserCards.newChildId(),
+                t.getTitle(),
+                t.getUrl(),
+                t.getImage()
+            )
         ));
         add(teaserCards);
 
-        var recommendationsCardPanel = new RecommendationCardPanel("recommendationCards", this.viewmodel.recommended());
-        add(recommendationsCardPanel);
+        RepeatingView recommendationCards = new RepeatingView("recommendationCards");
+        this.viewmodel.recommended().forEach(r -> recommendationCards.add(
+            new RecommendationCardPanel(
+                recommendationCards.newChildId(),
+                r.getName(),
+                r.getImage(),
+                r.getUrl()
+            )
+        ));
+        add(recommendationCards);
 
         super.onInitialize();
     }

@@ -15,31 +15,36 @@ import java.util.Locale;
 
 public class ProductCardPanel extends Panel {
 
-    public ProductCardPanel(String id, List<Product> products) {
+    private final String name;
+    private final String url;
+    private final String image;
+    private final Integer price;
+
+    public ProductCardPanel(String id, String name, String url, String image, Integer price) {
         super(id);
+        this.name = name;
+        this.url = url;
+        this.image = image;
+        this.price = price;
+    }
 
-        RepeatingView productCards = new RepeatingView("products");
-        products.forEach(r -> {
-            var container = new WebMarkupContainer(productCards.newChildId());
-            ExternalLink link = new ExternalLink("url", r.getUrl());
-            link.add(
-                new ExternalImage(
-                    "image",
-                    getImageSize(r.getImage(), 200),
-                    List.of(
-                        getImageSrcSet(r.getImage(), 200),
-                        getImageSrcSet(r.getImage(), 400),
-                        getImageSrcSet(r.getImage(), 800)
-                    )
+    protected void onInitialize() {
+        super.onInitialize();
+        ExternalLink link = new ExternalLink("url", url);
+        link.add(
+            new ExternalImage(
+                "image",
+                getImageSize(image, 200),
+                List.of(
+                    getImageSrcSet(image, 200),
+                    getImageSrcSet(image, 400),
+                    getImageSrcSet(image, 800)
                 )
-            );
-            link.add(new Label("name", r.getName()));
-            link.add(new Label("price", convertPrice(r.getStartPrice())));
-
-            container.add(link);
-            productCards.add(container);
-        });
-        add(productCards);
+            )
+        );
+        link.add(new Label("name", name));
+        link.add(new Label("price", convertPrice(price)));
+        add(link);
     }
 
     private String getImageSrcSet(String url, int size) {

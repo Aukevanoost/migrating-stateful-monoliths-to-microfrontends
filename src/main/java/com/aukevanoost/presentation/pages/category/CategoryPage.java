@@ -1,4 +1,4 @@
-package com.aukevanoost.presentation.pages;
+package com.aukevanoost.presentation.pages.category;
 
 import com.aukevanoost.domain.entities.Category;
 import com.aukevanoost.domain.entities.Product;
@@ -15,6 +15,7 @@ import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
+import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -49,11 +50,20 @@ public class CategoryPage extends BaseTemplate {
             buildCategoryFilter(c);
 
             var sortedProducts = c.getProducts()
-                    .stream()
-                    .sorted(Comparator.comparingInt(Product::getStartPrice).reversed())
-                    .toList();
+                .stream()
+                .sorted(Comparator.comparingInt(Product::getStartPrice).reversed())
+                .toList();
 
-            var productCards = new ProductCardPanel("productCards", sortedProducts);
+            RepeatingView productCards = new RepeatingView("productCards");
+            sortedProducts.forEach(p -> productCards.add(
+                new ProductCardPanel(
+                    productCards.newChildId(),
+                    p.getName(),
+                    p.getUrl(),
+                    p.getImage(),
+                    p.getStartPrice()
+                )
+            ));
             add(productCards);
         });
     }
@@ -62,27 +72,16 @@ public class CategoryPage extends BaseTemplate {
         WebMarkupContainer actionsContainer = new WebMarkupContainer("actionsContainer");
         actionsContainer.add(new Label("productsSize", c.getProducts().size()));
 
-        ListView<CategoryFilter> listView = new ListView<CategoryFilter>("filters", this.viewmodel.filters()) {
-            @Override
-            protected void populateItem(ListItem<CategoryFilter> item) {
-                CategoryFilter currentItem = item.getModelObject();
-                Fragment fragment;
-                if (currentItem.active()) {
-                    item.add(new AttributeModifier("class", "e_Filter__filter--active"));
-                    fragment = new Fragment("itemContainer", "activeFilter", CategoryPage.this);
-                    fragment.setRenderBodyOnly(true);
-                    fragment.add(new Label("category", Model.of(currentItem.name())));
-                } else {
-                    fragment = new Fragment("itemContainer", "inactiveFilter", CategoryPage.this);
-                    fragment.setRenderBodyOnly(true);
-                    ExternalLink link = new ExternalLink("link", currentItem.url());
-                    link.add(new Label("category", Model.of(currentItem.name())));
-                    fragment.add(link);
-                }
-                item.add(fragment);
-            }
-        };
-        actionsContainer.add(listView);
+        RepeatingView filterCards = new RepeatingView("filterCards");
+        this.viewmodel.filters().forEach(f -> filterCards.add(
+           new CategoryFilterPanel(
+               filterCards.newChildId(),
+               f.name(),
+               f.url(),
+               f.active()
+           )
+        ));
+        actionsContainer.add(filterCards);
         add(actionsContainer);
     }
 }

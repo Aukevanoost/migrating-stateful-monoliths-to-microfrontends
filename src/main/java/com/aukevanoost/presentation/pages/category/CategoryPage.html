@@ -10,23 +10,15 @@
             <div class="e_Filter">
                 Filter:
                 <ul>
-                    <li wicket:id="filters"><span wicket:id="itemContainer"></span></li>
+                    <li wicket:id="filterCards"></li>
                 </ul>
 
             </div>
         </div>
-        <wicket:container wicket:id="productCards"></wicket:container>
-
+        <ul class="e_CategoryPage_list">
+            <li class="e_Product" wicket:id="productCards"></li>
+        </ul>
     </main>
-
-    <wicket:fragment wicket:id="activeFilter">
-        <span wicket:id="category"></span>
-    </wicket:fragment>
-    <wicket:fragment wicket:id="inactiveFilter">
-        <a wicket:id="link">
-            <span wicket:id="category"></span>
-        </a>
-    </wicket:fragment>
 </wicket:extend>
 
 

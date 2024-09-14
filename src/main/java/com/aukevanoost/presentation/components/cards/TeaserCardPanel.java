@@ -8,10 +8,20 @@ import org.apache.wicket.markup.html.panel.Panel;
 import java.util.List;
 
 public class TeaserCardPanel extends Panel {
+    private final String title;
+    private final String url;
+    private final String image;
 
     public TeaserCardPanel(String id, String title, String url, String image) {
         super(id);
+        this.title = title;
+        this.url = url;
+        this.image = image;
+    }
 
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
         ExternalLink link = new ExternalLink("cardUrl", url);
 
         link.add(new Label("cardTitle", title));

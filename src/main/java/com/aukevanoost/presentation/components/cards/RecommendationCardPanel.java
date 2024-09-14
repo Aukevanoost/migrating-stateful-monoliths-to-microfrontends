@@ -1,39 +1,40 @@
 package com.aukevanoost.presentation.components.cards;
 
-import com.aukevanoost.domain.entities.Recommendation;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ExternalImage;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.markup.repeater.RepeatingView;
 
 import java.util.List;
 
 public class RecommendationCardPanel extends Panel {
 
-    public RecommendationCardPanel(String id, List<Recommendation> recommendations) {
-        super(id);
+    private final String name;
+    private final String img;
+    private final String url;
 
-        RepeatingView recommendationCards = new RepeatingView("recommendation");
-        recommendations.forEach(r -> {
-            var container = new WebMarkupContainer(recommendationCards.newChildId());
-            ExternalLink link = new ExternalLink("url", r.getUrl());
-            link.add(new Label("name", r.getName()));
-            link.add(
-                new ExternalImage(
-                    "image",
-                    getImageSize(r.getImage(), 200),
-                    List.of(
-                        getImageSrcSet(r.getImage(), 200),
-                        getImageSrcSet(r.getImage(), 400)
-                    )
+    public RecommendationCardPanel(String id, String name, String img, String url) {
+        super(id);
+        this.name = name;
+        this.img = img;
+        this.url = url;
+    }
+
+    protected void onInitialize() {
+        super.onInitialize();
+        ExternalLink link = new ExternalLink("url", url);
+        link.add(new Label("name", name));
+        link.add(
+            new ExternalImage(
+                "image",
+                getImageSize(img, 200),
+                List.of(
+                    getImageSrcSet(img, 200),
+                    getImageSrcSet(img, 400)
                 )
-            );
-            container.add(link);
-            recommendationCards.add(container);
-        });
-        add(recommendationCards);
+            )
+        );
+        add(link);
     }
 
     private String getImageSrcSet(String url, int size) {
