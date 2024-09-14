@@ -12,15 +12,11 @@ public class BaseTemplate extends WebPage {
     private Component headerPanel;
     private Component footerPanel;
 
-    public BaseTemplate(){
+    public BaseTemplate(){}
+    public BaseTemplate(PageParameters parameters) { super(parameters); }
 
-        add(headerPanel = new HeaderPanel("headerPanel"));
-        add(footerPanel = new FooterPanel("footerPanel"));
-
-    }
-
-    public BaseTemplate(PageParameters parameters) {
-        super(parameters);
+    protected void onInitialize() {
+        super.onInitialize();
         add(headerPanel = new HeaderPanel("headerPanel"));
         add(footerPanel = new FooterPanel("footerPanel"));
     }

@@ -4,37 +4,32 @@ import com.aukevanoost.domain.entities.Category;
 import com.aukevanoost.domain.entities.Product;
 import com.aukevanoost.interfaces.boundaries.category.CategoryFilter;
 import com.aukevanoost.interfaces.boundaries.category.ICategoryController;
-import com.aukevanoost.interfaces.boundaries.category.CategoryControllerFactory;
 import com.aukevanoost.interfaces.boundaries.category.CategoryViewModel;
 import com.aukevanoost.presentation.components.cards.ProductCardPanel;
-import com.aukevanoost.presentation.components.cards.RecommendationCardPanel;
 import com.aukevanoost.presentation.template.BaseTemplate;
+import jakarta.inject.Inject;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
-import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
-import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import java.util.Comparator;
-import java.util.Spliterator;
 
 public class CategoryPage extends BaseTemplate {
-    private ICategoryController controller = CategoryControllerFactory.build();;
+    @Inject
+    private ICategoryController controller;
+
     private CategoryViewModel viewmodel;
 
     public CategoryPage() {
         super();
 
         this.viewmodel = this.controller.process();
-        this.viewmodel.category().ifPresent(this::buildProductsPage);
     }
 
     public CategoryPage(PageParameters parameters) {
@@ -42,24 +37,25 @@ public class CategoryPage extends BaseTemplate {
         this.viewmodel = this.controller.process(
             parameters.get("category").toString()
         );
-
-        this.viewmodel.category().ifPresent(this::buildProductsPage);
     }
 
-    private void buildProductsPage(Category c) {
-        add(new Label("title", c.getName()));
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
 
+        this.viewmodel.category().ifPresent(c -> {
+            add(new Label("title", c.getName()));
 
-        buildCategoryFilter(c);
+            buildCategoryFilter(c);
 
+            var sortedProducts = c.getProducts()
+                    .stream()
+                    .sorted(Comparator.comparingInt(Product::getStartPrice).reversed())
+                    .toList();
 
-        var sortedProducts = c.getProducts()
-                .stream()
-                .sorted(Comparator.comparingInt(Product::getStartPrice).reversed())
-                .toList();
-
-        var productCards = new ProductCardPanel("productCards", sortedProducts);
-        add(productCards);
+            var productCards = new ProductCardPanel("productCards", sortedProducts);
+            add(productCards);
+        });
     }
 
     private void buildCategoryFilter(Category c) {

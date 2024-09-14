@@ -2,6 +2,7 @@ package com.aukevanoost.presentation;
 
 import com.aukevanoost.presentation.pages.HomePage;
 import com.aukevanoost.presentation.pages.CategoryPage;
+import org.apache.wicket.cdi.CdiConfiguration;
 import org.apache.wicket.csp.CSPDirective;
 import org.apache.wicket.csp.CSPDirectiveSrcValue;
 import org.apache.wicket.markup.html.WebPage;
@@ -32,7 +33,12 @@ public class WicketApplication extends WebApplication
 	{
 		super.init();
 
-		// needed for the styling used by the quickstart
+		CdiConfiguration cdiConfiguration =
+				new CdiConfiguration();
+		cdiConfiguration.configure(this);
+
+		getMarkupSettings().setStripWicketTags(true);
+
 		getCspSettings().blocking()
 			.add(CSPDirective.STYLE_SRC, CSPDirectiveSrcValue.SELF)
 			.add(CSPDirective.STYLE_SRC, "https://fonts.googleapis.com/css")

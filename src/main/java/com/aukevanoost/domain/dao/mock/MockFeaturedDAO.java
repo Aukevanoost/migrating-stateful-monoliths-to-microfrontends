@@ -5,12 +5,17 @@ import com.aukevanoost.domain.entities.Recommendation;
 import com.aukevanoost.domain.entities.Teaser;
 import com.aukevanoost.domain.dao.mock.db.Recommendations;
 import com.aukevanoost.domain.dao.mock.db.Teasers;
+import jakarta.enterprise.context.RequestScoped;
 
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+@RequestScoped
 public class MockFeaturedDAO implements IFeaturedDAO {
+
+    public MockFeaturedDAO() {  }
+
     @Override
     public Stream<Teaser> getTeasers() {
         return Teasers.ALL.stream();

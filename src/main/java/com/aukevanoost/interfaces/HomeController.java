@@ -1,18 +1,22 @@
 package com.aukevanoost.interfaces;
 
 import com.aukevanoost.domain.boundaries.featured.IFeaturedDAO;
+import com.aukevanoost.domain.dao.mock.MockFeaturedDAO;
 import com.aukevanoost.domain.entities.Recommendation;
 import com.aukevanoost.interfaces.boundaries.home.IHomeController;
 import com.aukevanoost.interfaces.boundaries.home.HomeViewModel;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 
 import java.util.List;
 
+@RequestScoped
 public class HomeController implements IHomeController {
+
+    @Inject
     private IFeaturedDAO featuredDAO;
 
-    public HomeController(IFeaturedDAO featuredDAO) {
-        this.featuredDAO = featuredDAO;
-    }
+    public HomeController() {   }
 
     public HomeViewModel process() {
         var avgColor = getAverageColor(

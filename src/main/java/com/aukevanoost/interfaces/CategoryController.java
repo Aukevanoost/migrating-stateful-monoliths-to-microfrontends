@@ -5,18 +5,19 @@ import com.aukevanoost.domain.entities.Category;
 import com.aukevanoost.interfaces.boundaries.category.CategoryFilter;
 import com.aukevanoost.interfaces.boundaries.category.ICategoryController;
 import com.aukevanoost.interfaces.boundaries.category.CategoryViewModel;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+@RequestScoped
 public class CategoryController implements ICategoryController {
-    private ICatalogDAO catalogDAO;
 
-    public CategoryController(ICatalogDAO catalogDAO) {
-        this.catalogDAO = catalogDAO;
-    }
+    @Inject
+    private ICatalogDAO catalogDAO;
 
     public CategoryViewModel process(String categoryKey) {
         return CategoryViewModel.build(
