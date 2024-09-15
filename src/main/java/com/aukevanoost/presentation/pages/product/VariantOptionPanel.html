@@ -1,0 +1,24 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+</head>
+<body>
+<wicket:panel>
+    <li wicket:id="variantOption" class="d_VariantOption">
+        <i class="d_VariantOption__color"></i>
+        <wicket:container wicket:id="optionContainer"></wicket:container>
+    </li>
+
+    <wicket:fragment wicket:id="activeVariant">
+        <strong wicket:id="variantName"></strong>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="inactiveVariant">
+        <a wicket:id="link">
+            <span wicket:id="variantName"></span>
+        </a>
+    </wicket:fragment>
+</wicket:panel>
+</body>
+</html>

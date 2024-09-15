@@ -31,6 +31,7 @@ public class CategoryPage extends BaseTemplate {
         vm = this.controller.process(
             parameters.get("category").toString()
         );
+
     }
 
     @Override

@@ -2,6 +2,8 @@ package com.aukevanoost.presentation;
 
 import com.aukevanoost.presentation.pages.home.HomePage;
 import com.aukevanoost.presentation.pages.category.CategoryPage;
+import com.aukevanoost.presentation.pages.product.ProductPage;
+import com.aukevanoost.presentation.pages.product.ProductPage;
 import com.aukevanoost.presentation.pages.stores.StoresPage;
 import org.apache.wicket.cdi.CdiConfiguration;
 import org.apache.wicket.csp.CSPDirective;
@@ -41,14 +43,15 @@ public class WicketApplication extends WebApplication
 		getMarkupSettings().setStripWicketTags(true);
 
 		getCspSettings().blocking()
-			.add(CSPDirective.STYLE_SRC, CSPDirectiveSrcValue.SELF)
-			.add(CSPDirective.STYLE_SRC, "https://fonts.googleapis.com/css")
-			.add(CSPDirective.FONT_SRC, "https://fonts.gstatic.com");
+			.remove(CSPDirective.STYLE_SRC)
+			.add(CSPDirective.STYLE_SRC, CSPDirectiveSrcValue.SELF, CSPDirectiveSrcValue.UNSAFE_INLINE)
+			.add(CSPDirective.FONT_SRC, CSPDirectiveSrcValue.SELF);
 
 		// add your configuration here
 		mountPage("/products/${category}", CategoryPage.class);
 		mountPage("/products", CategoryPage.class);
-
+		mountPage("/product/${product}", ProductPage.class);
+		mountPage("/product/${product}/${variant}", ProductPage.class);
 		mountPage("/stores", StoresPage.class);
 	}
 }

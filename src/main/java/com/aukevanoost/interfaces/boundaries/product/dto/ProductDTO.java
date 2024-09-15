@@ -1,6 +1,7 @@
 package com.aukevanoost.interfaces.boundaries.product.dto;
 
 import com.aukevanoost.domain.entities.Product;
+import com.aukevanoost.domain.entities.ProductVariant;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -9,27 +10,21 @@ import java.util.List;
 public record ProductDTO(
     String sku,
     String name,
-    String variantName,
     String image,
+    String color,
     List<String> highlights
 ) implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public static ProductDTO from(Product product, String sku) {
-        var variant = product.variants$()
-            .filter(v -> v.sku().equals(sku))
-            .findFirst()
-            .orElseThrow();
-
+    public static ProductDTO from(Product product, ProductVariant variant){
         return new ProductDTO(
-            sku,
+            product.sku(),
             product.name(),
-            variant.name(),
             variant.image(),
+            variant.color(),
             product.highlights()
         );
     }
-
 }
