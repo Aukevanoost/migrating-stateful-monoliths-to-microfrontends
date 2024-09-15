@@ -9,8 +9,4 @@ import java.util.List;
 public record StoresViewModel(List<StoreDTO> stores) implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-
-    public static StoresViewModel build(List<StoreDTO> stores) {
-        return new StoresViewModel(stores);
-    }
 }

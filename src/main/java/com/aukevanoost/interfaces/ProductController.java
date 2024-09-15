@@ -1,6 +1,8 @@
 package com.aukevanoost.interfaces;
 
 import com.aukevanoost.domain.boundaries.ICatalogDAO;
+import com.aukevanoost.domain.boundaries.IRecommendedDAO;
+import com.aukevanoost.interfaces.boundaries.home.dto.RecommendationDTO;
 import com.aukevanoost.interfaces.boundaries.product.IProductController;
 import com.aukevanoost.interfaces.boundaries.product.ProductViewModel;
 import com.aukevanoost.interfaces.boundaries.product.dto.ProductDTO;
@@ -11,6 +13,9 @@ import jakarta.inject.Inject;
 public class ProductController implements IProductController {
     @Inject
     private ICatalogDAO catalogDAO;
+
+    @Inject
+    private IRecommendedDAO recommendedDAO;
 
     public ProductViewModel process(String productSku, @Nullable String variantSku) {
         var dbProduct = catalogDAO
@@ -27,9 +32,15 @@ public class ProductController implements IProductController {
             .map(v -> VariantOptionDTO.from(v, v.sku().equals(dbActiveVariant.sku())))
             .toList();
 
+        var recommendations = recommendedDAO
+            .getRecommendationsSimilarColor(dbActiveVariant.rgb(), 4)
+            .map(RecommendationDTO::from)
+            .toList();
+
         return new ProductViewModel(
             product,
-            variants
+            variants,
+            recommendations
         );
     }
 }

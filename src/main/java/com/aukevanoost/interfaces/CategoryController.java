@@ -30,7 +30,7 @@ public class CategoryController implements ICategoryController {
 
         var filters = getFilters(activeCategoryKey).toList();
 
-        return CategoryViewModel.build(
+        return new CategoryViewModel(
             CategoryDTO.from(category),
             products,
             filters
@@ -47,7 +47,7 @@ public class CategoryController implements ICategoryController {
 
         var filters = getFilters(ALL_PRODUCTS_KEY).toList();
 
-        return CategoryViewModel.build(category, products, filters);
+        return new CategoryViewModel(category, products, filters);
     }
 
     private Stream<CategoryFilterDTO> getFilters(String activeCategory) {

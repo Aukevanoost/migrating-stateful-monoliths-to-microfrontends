@@ -2,6 +2,7 @@ package com.aukevanoost.presentation.pages.home;
 
 import com.aukevanoost.interfaces.boundaries.home.HomeViewModel;
 import com.aukevanoost.interfaces.boundaries.home.IHomeController;
+import com.aukevanoost.presentation.components.RecommendationCardPanel;
 import com.aukevanoost.presentation.template.BaseTemplate;
 import jakarta.inject.Inject;
 import org.apache.wicket.markup.repeater.RepeatingView;
@@ -28,7 +29,10 @@ public class HomePage extends BaseTemplate {
         RepeatingView recommendationCards = new RepeatingView("recommendationCards");
         vm.recommended()
             .stream()
-            .map(r -> new RecommendationCardPanel(recommendationCards.newChildId(), r))
+            .map(r -> new RecommendationCardPanel(
+                recommendationCards.newChildId(),
+                r.name(), r.image(), r.url()
+            ))
             .forEach(recommendationCards::add);
         add(recommendationCards);
 

@@ -1,4 +1,4 @@
-package com.aukevanoost.interfaces.boundaries.home.dto;
+package com.aukevanoost.interfaces.boundaries.product.dto;
 
 import com.aukevanoost.domain.entities.Recommendation;
 
@@ -17,7 +17,7 @@ public record RecommendationDTO(
     public static RecommendationDTO from(Recommendation recommendation) {
         return new RecommendationDTO(
             recommendation.name(),
-            recommendation.image(),
+            recommendation.sku(),
             recommendation.url()
         );
     }

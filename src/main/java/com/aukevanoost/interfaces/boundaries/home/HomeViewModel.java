@@ -10,8 +10,4 @@ import java.util.List;
 public record HomeViewModel(List<TeaserDTO> teasers, List<RecommendationDTO> recommended) implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-
-    public static HomeViewModel build(List<TeaserDTO> teasers, List<RecommendationDTO> recommended) {
-        return new HomeViewModel(teasers, recommended);
-    }
 }

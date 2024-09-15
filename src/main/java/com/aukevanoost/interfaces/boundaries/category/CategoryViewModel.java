@@ -15,12 +15,4 @@ public record CategoryViewModel(
 ) implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-
-    public static CategoryViewModel build(
-        CategoryDTO category,
-        List<ProductDTO> products,
-        List<CategoryFilterDTO> filters
-    ) {
-        return new CategoryViewModel(category, products, filters);
-    }
 }

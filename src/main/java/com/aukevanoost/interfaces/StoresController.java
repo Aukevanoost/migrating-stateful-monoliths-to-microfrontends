@@ -18,6 +18,6 @@ public class StoresController implements IStoresController {
             .map(StoreDTO::from)
             .toList();
 
-        return StoresViewModel.build(stores);
+        return new StoresViewModel(stores);
     }
 }

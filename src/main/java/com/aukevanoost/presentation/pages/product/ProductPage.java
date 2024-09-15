@@ -3,6 +3,7 @@ package com.aukevanoost.presentation.pages.product;
 import com.aukevanoost.interfaces.boundaries.product.IProductController;
 import com.aukevanoost.interfaces.boundaries.product.ProductViewModel;
 import com.aukevanoost.presentation.components.ImagePanel;
+import com.aukevanoost.presentation.components.RecommendationCardPanel;
 import com.aukevanoost.presentation.template.BaseTemplate;
 import jakarta.inject.Inject;
 import org.apache.wicket.markup.html.basic.Label;
@@ -40,6 +41,16 @@ public class ProductPage extends BaseTemplate {
             variants.add(new VariantOptionPanel(variants.newChildId(), variant));
         });
         add(variants);
+
+        RepeatingView recommendationCards = new RepeatingView("recommendationCards");
+        vm.recommendations()
+            .stream()
+            .map(r -> new RecommendationCardPanel(
+                recommendationCards.newChildId(),
+                r.name(), r.image(), r.url()
+            ))
+            .forEach(recommendationCards::add);
+        add(recommendationCards);
 
     }
 }

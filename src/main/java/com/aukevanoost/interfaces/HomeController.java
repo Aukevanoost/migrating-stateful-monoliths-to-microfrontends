@@ -1,6 +1,7 @@
 package com.aukevanoost.interfaces;
 
 import com.aukevanoost.domain.boundaries.IFeaturedDAO;
+import com.aukevanoost.domain.boundaries.IRecommendedDAO;
 import com.aukevanoost.domain.entities.Recommendation;
 import com.aukevanoost.interfaces.boundaries.home.IHomeController;
 import com.aukevanoost.interfaces.boundaries.home.HomeViewModel;
@@ -17,9 +18,12 @@ public class HomeController implements IHomeController {
     @Inject
     private IFeaturedDAO featuredDAO;
 
+    @Inject
+    private IRecommendedDAO recommendedDAO;
+
     public HomeViewModel process() {
         var avgColor = getAverageColor(
-            featuredDAO.getRecommendations("CL-01-GY", "AU-07-MT")
+            recommendedDAO.getRecommendations("CL-01-GY", "AU-07-MT")
                 .map(Recommendation::rgb)
                 .toList()
         );
@@ -29,12 +33,12 @@ public class HomeController implements IHomeController {
             .map(TeaserDTO::from)
             .toList();
 
-        var recommendations = featuredDAO
+        var recommendations = recommendedDAO
             .getRecommendationsSimilarColor(avgColor, 4)
             .map(RecommendationDTO::from)
             .toList();
 
-        return HomeViewModel.build(teasers, recommendations);
+        return new HomeViewModel(teasers, recommendations);
     }
 
     private Integer[] getAverageColor(List<Integer[]> colors) {
