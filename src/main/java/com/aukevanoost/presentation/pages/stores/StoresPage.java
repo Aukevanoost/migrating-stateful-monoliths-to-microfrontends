@@ -9,7 +9,7 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 public class StoresPage extends BaseTemplate {
 
     @Inject
-    private IStoresController storesController;
+    private transient IStoresController storesController;
 
     private final StoresViewModel storesViewModel;
 

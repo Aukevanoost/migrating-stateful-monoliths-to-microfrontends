@@ -1,6 +1,7 @@
 package com.aukevanoost.presentation.pages.home;
 
 import com.aukevanoost.interfaces.boundaries.home.dto.RecommendationDTO;
+import com.aukevanoost.presentation.components.ImagePanel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ExternalImage;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -21,25 +22,8 @@ public class RecommendationCardPanel extends Panel {
         super.onInitialize();
         ExternalLink link = new ExternalLink("url", recommendation.url());
         link.add(new Label("name", recommendation.name()));
-        link.add(
-            new ExternalImage(
-                "image",
-                getImageSize(recommendation.image(), 200),
-                List.of(
-                    getImageSrcSet(recommendation.image(), 200),
-                    getImageSrcSet(recommendation.image(), 400)
-                )
-            )
-        );
+        link.add(new ImagePanel("image", recommendation.image(), 200, 400));
         add(link);
-    }
-
-    private String getImageSrcSet(String url, int size) {
-        return String.format("%s %dw", this.getImageSize(url, size), size);
-    }
-
-    private String getImageSize(String url, int size) {
-        return url.replace("[size]", String.valueOf(size));
     }
 
     public static RecommendationCardPanel from(String id, RecommendationDTO dto) {

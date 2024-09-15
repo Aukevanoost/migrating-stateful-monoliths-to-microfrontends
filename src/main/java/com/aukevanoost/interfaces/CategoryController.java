@@ -23,23 +23,31 @@ public class CategoryController implements ICategoryController {
     private ICatalogDAO catalogDAO;
 
     public CategoryViewModel process(String activeCategoryKey) {
-        var category = this.catalogDAO.getProductsByCategory(activeCategoryKey).map(CategoryDTO::from);
+        var category = this.catalogDAO.getProductsByCategory(activeCategoryKey)
+            .orElseThrow(() -> new IllegalArgumentException("Category not found"));
+
+        var products = category.getProducts().stream().map(ProductDTO::from).toList();
 
         var filters = getFilters(activeCategoryKey).toList();
 
-        return CategoryViewModel.build(category, filters);
+        return CategoryViewModel.build(
+            CategoryDTO.from(category),
+            products,
+            filters
+        );
     }
 
     public CategoryViewModel process() {
-        var category = Optional.of(new CategoryDTO(
+        var category = new CategoryDTO(
             ALL_PRODUCTS_NAME,
-            ALL_PRODUCTS_KEY,
-            catalogDAO.getAllProducts().map(ProductDTO::from).toList()
-        ));
+            ALL_PRODUCTS_KEY
+        );
+
+        var products = catalogDAO.getAllProducts().map(ProductDTO::from).toList();
 
         var filters = getFilters(ALL_PRODUCTS_KEY).toList();
 
-        return CategoryViewModel.build(category, filters);
+        return CategoryViewModel.build(category, products, filters);
     }
 
     private Stream<CategoryFilterDTO> getFilters(String activeCategory) {

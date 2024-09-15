@@ -1,6 +1,7 @@
 package com.aukevanoost.presentation.pages.home;
 
 import com.aukevanoost.interfaces.boundaries.home.dto.TeaserDTO;
+import com.aukevanoost.presentation.components.ImagePanel;
 import com.aukevanoost.presentation.pages.category.CategoryPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ExternalImage;
@@ -30,17 +31,8 @@ public class TeaserCardPanel extends Panel {
         };
 
         link.add(new Label("cardTitle", teaser.title()));
+        link.add(new ImagePanel("cardImage", teaser.image(), 500, 1000));
 
-        link.add(
-            new ExternalImage(
-                "cardImage",
-                getImageSize(teaser.image(), 500),
-                List.of(
-                    getImageSrcSet(teaser.image(), 500),
-                    getImageSrcSet(teaser.image(), 1000)
-                )
-            )
-        );
         add(link);
     }
 

@@ -26,17 +26,8 @@ public class ProductCardPanel extends Panel {
     protected void onInitialize() {
         super.onInitialize();
         ExternalLink link = new ExternalLink("url", url);
-        link.add(
-            new ExternalImage(
-                "image",
-                getImageSize(image, 200),
-                List.of(
-                    getImageSrcSet(image, 200),
-                    getImageSrcSet(image, 400),
-                    getImageSrcSet(image, 800)
-                )
-            )
-        );
+        link.add(new ImagePanel("image", image, 200, 400, 800));
+
         link.add(new Label("name", name));
         link.add(new Label("price", convertPrice(price)));
         add(link);

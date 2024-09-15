@@ -13,21 +13,22 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import java.util.Comparator;
+import java.util.List;
 
 public class CategoryPage extends BaseTemplate {
     @Inject
-    private ICategoryController controller;
+    private transient ICategoryController controller;
 
-    private final CategoryViewModel viewmodel;
+    private final CategoryViewModel vm;
 
     public CategoryPage() {
         super();
-        this.viewmodel = this.controller.process();
+        this.vm = this.controller.process();
     }
 
     public CategoryPage(PageParameters parameters) {
         super(parameters);
-        this.viewmodel = this.controller.process(
+        this.vm = this.controller.process(
             parameters.get("category").toString()
         );
     }
@@ -36,35 +37,33 @@ public class CategoryPage extends BaseTemplate {
     protected void onInitialize() {
         super.onInitialize();
 
-        this.viewmodel.category().ifPresent(c -> {
-            add(new Label("title", c.name()));
+        add(new Label("title", vm.category().name()));
 
-            buildCategoryFilter(c);
+        buildCategoryFilter(vm.products());
 
-            RepeatingView productCards = new RepeatingView("productCards");
+        RepeatingView productCards = new RepeatingView("productCards");
 
-            c.products()
-                .stream()
-                .sorted(Comparator.comparingInt(ProductDTO::startPrice).reversed())
-                .map(p -> new ProductCardPanel(
-                    productCards.newChildId(),
-                    p.name(),
-                    p.url(),
-                    p.image(),
-                    p.startPrice()
-                ))
-                .forEach(productCards::add);
+        vm.products()
+            .stream()
+            .sorted(Comparator.comparingInt(ProductDTO::startPrice).reversed())
+            .map(p -> new ProductCardPanel(
+                productCards.newChildId(),
+                p.name(),
+                p.url(),
+                p.image(),
+                p.startPrice()
+            ))
+            .forEach(productCards::add);
 
-            add(productCards);
-        });
+        add(productCards);
     }
 
-    private void buildCategoryFilter(CategoryDTO c) {
+    private void buildCategoryFilter(List<ProductDTO> products) {
         WebMarkupContainer actionsContainer = new WebMarkupContainer("actionsContainer");
-        actionsContainer.add(new Label("productsSize", c.products().size()));
+        actionsContainer.add(new Label("productsSize", products.size()));
 
         RepeatingView filterCards = new RepeatingView("filterCards");
-        this.viewmodel.filters()
+        this.vm.filters()
             .stream()
             .map(f -> new CategoryFilterPanel(filterCards.newChildId(), f))
             .forEach(filterCards::add);
