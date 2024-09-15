@@ -23,12 +23,12 @@ public class CategoryPage extends BaseTemplate {
 
     public CategoryPage() {
         super();
-        this.vm = this.controller.process();
+        vm = this.controller.process();
     }
 
     public CategoryPage(PageParameters parameters) {
         super(parameters);
-        this.vm = this.controller.process(
+        vm = this.controller.process(
             parameters.get("category").toString()
         );
     }
@@ -63,7 +63,7 @@ public class CategoryPage extends BaseTemplate {
         actionsContainer.add(new Label("productsSize", products.size()));
 
         RepeatingView filterCards = new RepeatingView("filterCards");
-        this.vm.filters()
+        vm.filters()
             .stream()
             .map(f -> new CategoryFilterPanel(filterCards.newChildId(), f))
             .forEach(filterCards::add);

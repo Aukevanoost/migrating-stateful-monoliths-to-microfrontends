@@ -26,7 +26,7 @@ public class CategoryController implements ICategoryController {
         var category = this.catalogDAO.getProductsByCategory(activeCategoryKey)
             .orElseThrow(() -> new IllegalArgumentException("Category not found"));
 
-        var products = category.getProducts().stream().map(ProductDTO::from).toList();
+        var products = category.products$().map(ProductDTO::from).toList();
 
         var filters = getFilters(activeCategoryKey).toList();
 
@@ -64,8 +64,8 @@ public class CategoryController implements ICategoryController {
     private Function<Category, CategoryFilterDTO> mapToFilter(String activeCategory) {
         return category -> CategoryFilterDTO.from(
             category,
-            String.format("%s/%s", CATEGORY_BASE_URL, category.getKey()),
-            category.getKey().equals(activeCategory)
+            String.format("%s/%s", CATEGORY_BASE_URL, category.key()),
+            category.key().equals(activeCategory)
         );
     }
 }

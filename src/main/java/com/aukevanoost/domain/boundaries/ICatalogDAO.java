@@ -8,6 +8,8 @@ import java.util.stream.Stream;
 
 public interface ICatalogDAO {
     Optional<Category> getProductsByCategory(String category);
+    Optional<Product> getProductBySKU(String sku);
     Stream<Product> getAllProducts();
     Stream<Category> getAllCategories();
+
 }

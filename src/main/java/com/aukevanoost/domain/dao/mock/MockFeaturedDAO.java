@@ -31,9 +31,8 @@ public class MockFeaturedDAO implements IFeaturedDAO {
     }
 
     public Stream<Recommendation> getRecommendationsSimilarColor(Integer[] rgb, int length) {
-        return Recommendations.ALL.values()
-            .stream()
-            .sorted((Comparator.comparingDouble(x -> getColorDistance(x.getRgb(), rgb))))
+        return Recommendations.stream()
+            .sorted((Comparator.comparingDouble(x -> getColorDistance(x.rgb(), rgb))))
             .limit(length);
     }
 

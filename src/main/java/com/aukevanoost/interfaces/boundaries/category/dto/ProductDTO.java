@@ -16,12 +16,14 @@ public record ProductDTO(
     private static final long serialVersionUID = 1L;
 
     public static ProductDTO from(Product product) {
+        var firstVariant = product.variants$().findFirst().orElseThrow();
+
         return new ProductDTO(
-            product.getName(),
-            product.getVariants().getFirst().getImage(),
-            String.format("/product/%s", product.getId()),
-            product.getVariants().stream()
-                .map(ProductVariant::getPrice)
+            product.name(),
+            firstVariant.image(),
+            String.format("/product/%s", product.sku()),
+            product.variants$()
+                .map(ProductVariant::price)
                 .min(Integer::compareTo)
                 .orElse(0)
         );

@@ -1,12 +1,9 @@
 package com.aukevanoost.presentation.components;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.markup.html.image.ExternalImage;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.ContextRelativeResource;
-import org.apache.wicket.request.resource.PackageResourceReference;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,7 +39,7 @@ public class ImagePanel extends Panel {
                 .collect(Collectors.joining(", "))
         ));
 
-        for(String tag : List.of("class", "alt")) {
+        for(String tag : List.of("class", "id", "alt")) {
             if(getMarkupAttributes().get(tag) != null) {
                 image.add(new AttributeModifier(tag, getMarkupAttributes().get(tag).toString()));
             }

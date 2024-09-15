@@ -3,6 +3,7 @@ package com.aukevanoost.domain.dao.mock.db;
 import com.aukevanoost.domain.entities.Store;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Stores {
     public static List<Store> ALL = List.of(
@@ -35,4 +36,8 @@ public class Stores {
             "/img/store/[size]/store-4.webp"
         )
     );
+
+    public static Stream<Store> stream() {
+        return ALL.stream();
+    }
 }

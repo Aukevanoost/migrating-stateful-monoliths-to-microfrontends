@@ -3,6 +3,7 @@ package com.aukevanoost.domain.dao.mock.db;
 import com.aukevanoost.domain.entities.Teaser;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Teasers {
     public static List<Teaser> ALL = List.of(
@@ -17,4 +18,8 @@ public class Teasers {
             Categories.ALL.get("autonomous")
         )
     );
+
+    public static Stream<Teaser> stream() {
+        return ALL.stream();
+    }
 }

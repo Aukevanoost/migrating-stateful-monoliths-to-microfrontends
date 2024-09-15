@@ -20,7 +20,7 @@ public class HomeController implements IHomeController {
     public HomeViewModel process() {
         var avgColor = getAverageColor(
             featuredDAO.getRecommendations("CL-01-GY", "AU-07-MT")
-                .map(Recommendation::getRgb)
+                .map(Recommendation::rgb)
                 .toList()
         );
 

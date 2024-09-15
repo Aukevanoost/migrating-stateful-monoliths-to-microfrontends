@@ -10,23 +10,23 @@ public class HomePage extends BaseTemplate {
     @Inject
     private transient IHomeController controller;
 
-    private final HomeViewModel viewmodel;
+    private final HomeViewModel vm;
 
     public HomePage(){
         super();
-        this.viewmodel = controller.process();
+        vm = controller.process();
     }
 
     protected void onInitialize() {
         RepeatingView teaserCards = new RepeatingView("teaserCards");
-        this.viewmodel.teasers()
+        vm.teasers()
             .stream()
             .map(teaser -> new TeaserCardPanel(teaserCards.newChildId(), teaser))
             .forEach(teaserCards::add);
         add(teaserCards);
 
         RepeatingView recommendationCards = new RepeatingView("recommendationCards");
-        this.viewmodel.recommended()
+        vm.recommended()
             .stream()
             .map(r -> new RecommendationCardPanel(recommendationCards.newChildId(), r))
             .forEach(recommendationCards::add);

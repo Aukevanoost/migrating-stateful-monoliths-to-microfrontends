@@ -18,11 +18,19 @@ public class MockCatalogDAO implements ICatalogDAO {
     }
 
     @Override
-    public Stream<Product> getAllProducts() {
-        return Products.ALL.values().stream();
+    public Optional<Product> getProductBySKU(String sku) {
+        return Optional.of(Products.ALL.get(sku));
     }
 
-    public Stream<Category> getAllCategories() {
-        return Categories.ALL.values().stream();
+    @Override
+    public Stream<Product> getAllProducts() {
+        return Products.stream();
     }
+
+    @Override
+    public Stream<Category> getAllCategories() {
+        return Categories.stream();
+    }
+
+
 }

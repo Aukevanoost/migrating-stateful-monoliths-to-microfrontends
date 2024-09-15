@@ -1,12 +1,9 @@
 package com.aukevanoost.presentation.components;
 
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.image.ExternalImage;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.Panel;
-
 import java.text.DecimalFormat;
-import java.util.List;
 
 public class ProductCardPanel extends Panel {
 

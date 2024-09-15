@@ -11,17 +11,17 @@ public class StoresPage extends BaseTemplate {
     @Inject
     private transient IStoresController storesController;
 
-    private final StoresViewModel storesViewModel;
+    private final StoresViewModel vm;
 
     public StoresPage(){
         super();
-        storesViewModel = storesController.process();
+        vm = storesController.process();
     }
 
     protected void onInitialize() {
         RepeatingView stores = new RepeatingView("storeCards");
 
-        storesViewModel.stores()
+        vm.stores()
             .stream()
             .map(s -> new StoreCardPanel(stores.newChildId(), s))
             .forEach(stores::add);

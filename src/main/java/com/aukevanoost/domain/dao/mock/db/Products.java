@@ -15,6 +15,11 @@ public class Products {
             "TerraFirma AutoCultivator T-300",
             "AU-01",
             List.of(
+                "Precision GPS mapping optimizes field coverage.",
+                "Hybrid engine ensures eco-friendly extended operation.",
+                "Fully autonomous with smart obstacle detection and terrain adaptation."
+            ),
+            List.of(
                 new ProductVariant(
                     "Silver",
                     "/img/product/[size]/AU-01-SI.webp",
@@ -27,6 +32,11 @@ public class Products {
         Map.entry("AU-02", new Product(
             "SmartFarm Titan",
             "AU-02",
+            List.of(
+                "Advanced autopilot technology for precise farming operations.",
+                "Eco-friendly solar-assisted power system for sustainable use.",
+                "Intelligent AI for real-time field analysis and automated adjustments."
+            ),
             List.of(
                 new ProductVariant(
                     "Sunset Copper",
@@ -54,6 +64,11 @@ public class Products {
         Map.entry("AU-03", new Product(
             "FutureHarvest Navigator",
             "AU-03",
+            List.of(
+                "Autonomous navigation with sub-inch accuracy",
+                "Solar-enhanced hybrid powertrain for extended operation",
+                "Real-time crop and soil health analytics"
+            ),
             List.of(
                 new ProductVariant(
                     "Turquoise Titan",
@@ -89,6 +104,11 @@ public class Products {
             "Sapphire Sunworker 460R",
             "AU-04",
             List.of(
+                "Next-generation autonomous guidance system for seamless operation",
+                "High-capacity energy storage for all-day work without recharge",
+                "Advanced analytics suite for precision soil and plant health management"
+            ),
+            List.of(
                 new ProductVariant(
                     "Ruby Red",
                     "/img/product/[size]/AU-04-RD.webp",
@@ -109,6 +129,11 @@ public class Products {
             "EcoGrow Crop Commander",
             "AU-05",
             List.of(
+                "Ultra-precise field navigation technology",
+                "Dual-mode power system for maximum uptime",
+                "On-the-go field data analysis for smart farming decisions"
+            ),
+            List.of(
                 new ProductVariant(
                     "Zestful Horizon",
                     "/img/product/[size]/AU-05-ZH.webp",
@@ -121,6 +146,11 @@ public class Products {
         Map.entry("AU-06", new Product(
             "FarmFleet Sovereign",
             "AU-06",
+            List.of(
+                "Robust all-terrain adaptability for diverse farm landscapes",
+                "High-efficiency energy matrix for longer field endurance",
+                "Integrated crop management system with advanced diagnostics"
+            ),
             List.of(
                 new ProductVariant(
                     "Canary Zenith",
@@ -142,6 +172,11 @@ public class Products {
             "Verde Voyager",
             "AU-07",
             List.of(
+                "Adaptive drive system intelligently navigates through diverse field conditions",
+                "Clean energy operation with advanced solar battery technology",
+                "High-resolution field scanners for precise agronomy insights"
+            ),
+            List.of(
                 new ProductVariant(
                     "Glacial Mint",
                     "/img/product/[size]/AU-07-MT.webp",
@@ -162,6 +197,11 @@ public class Products {
             "Field Pioneer",
             "AU-08",
             List.of(
+                "Automated field traversal with intelligent pathfinding algorithms",
+                "Eco-friendly electric motors paired with high-capacity batteries",
+                "Real-time environmental monitoring for optimal crop growth"
+            ),
+            List.of(
                 new ProductVariant(
                     "Polar White",
                     "/img/product/[size]/AU-08-WH.webp",
@@ -174,6 +214,11 @@ public class Products {
         Map.entry("CL-01", new Product(
             "Heritage Workhorse",
             "CL-01",
+            List.of(
+                "Proven reliability with a touch of modern reliability enhancements",
+                "Robust construction equipped to withstand decades of labor",
+                "User-friendly operation with traditional manual controls"
+            ),
             List.of(
                 new ProductVariant(
                     "Verdant Field",
@@ -195,6 +240,11 @@ public class Products {
             "Falcon Crest Farm",
             "CL-02",
             List.of(
+                "Rugged simplicity meets classic design",
+                "Built-to-last machinery for reliable fieldwork",
+                "Ease of control with straightforward mechanical systems"
+            ),
+            List.of(
                 new ProductVariant(
                     "Cerulean Classic",
                     "/img/product/[size]/CL-02-BL.webp",
@@ -207,6 +257,11 @@ public class Products {
         Map.entry("CL-03", new Product(
             "Falcon Crest Work",
             "CL-03",
+            List.of(
+                "Vintage engineering with a legacy of durability",
+                "Powerful yet simple mechanics for easy operation and repair",
+                "Classic aesthetics with a robust body, built to last"
+            ),
             List.of(
                 new ProductVariant(
                     "Meadow Green",
@@ -235,6 +290,11 @@ public class Products {
             "Broadfield Majestic",
             "CL-04",
             List.of(
+                "Built with the robust heart of early industrial workhorses",
+                "Simplified mechanics for unparalleled ease of use and maintenance",
+                "A testament to early agricultural machinery with a dependable engine"
+            ),
+            List.of(
                 new ProductVariant(
                     "Oceanic Blue",
                     "/img/product/[size]/CL-04-BL.webp",
@@ -262,6 +322,11 @@ public class Products {
             "Countryside Commander",
             "CL-05",
             List.of(
+                "Reliable performance with time-tested engineering",
+                "Rugged design for efficient operation across all types of terrain",
+                "Classic operator comfort with modern ergonomic enhancements"
+            ),
+            List.of(
                 new ProductVariant(
                     "Pacific Teal",
                     "/img/product/[size]/CL-05-PT.webp",
@@ -281,6 +346,11 @@ public class Products {
         Map.entry("CL-06", new Product(
             "Danamark Steadfast",
             "CL-06",
+            List.of(
+                "Engineered for the meticulous demands of Danish agriculture",
+                "Sturdy chassis and reliable mechanics for longevity",
+                "Utilitarian design with practical functionality and comfort"
+            ),
             List.of(
                 new ProductVariant(
                     "Emerald Forest",
@@ -302,6 +372,11 @@ public class Products {
             "Greenland Rover",
             "CL-07",
             List.of(
+                "Engineered to tackle the diverse European terrain with ease",
+                "Sturdy and reliable mechanics known for their longevity",
+                "Ergonomically designed for comfort during long working hours"
+            ),
+            List.of(
                 new ProductVariant(
                     "Forest Fern",
                     "/img/product/[size]/CL-07-GR.webp",
@@ -321,6 +396,11 @@ public class Products {
         Map.entry("CL-08", new Product(
             "Holland Hamster",
             "CL-08",
+            List.of(
+                "Dutch craftsmanship for precision and quality",
+                "Optimized for tulip fields and versatile European landscapes",
+                "Ergonomic design with a focus on operator comfort and efficiency"
+            ),
             List.of(
                 new ProductVariant(
                     "Polder Green",
@@ -342,6 +422,11 @@ public class Products {
             "TerraFirma Veneto",
             "CL-09",
             List.of(
+                "Elegant Italian design with sleek lines and a vibrant aesthetic",
+                "Precision mechanics for vineyard and orchard maneuverability",
+                "Comfort-focused design with a flair for the dramatic"
+            ),
+            List.of(
                 new ProductVariant(
                     "Adriatic Blue",
                     "/img/product/[size]/CL-09-BL.webp",
@@ -361,6 +446,11 @@ public class Products {
         Map.entry("CL-10", new Product(
             "Global Gallant",
             "CL-10",
+            List.of(
+                "Retro design with a nod to the golden era of farming",
+                "Engine robustness that stands the test of time",
+                "Functional simplicity for ease of operation in any region"
+            ),
             List.of(
                 new ProductVariant(
                     "Sahara Dawn",
@@ -382,6 +472,11 @@ public class Products {
             "Scandinavia Sower",
             "CL-11",
             List.of(
+                "Authentic Swedish engineering for optimal cold-climate performance",
+                "Sturdy build and mechanics for lifelong reliability",
+                "Iconic design reflecting the simplicity and efficiency of Scandinavian style"
+            ),
+            List.of(
                 new ProductVariant(
                     "Baltic Blue",
                     "/img/product/[size]/CL-11-SK.webp",
@@ -401,6 +496,11 @@ public class Products {
         Map.entry("CL-12", new Product(
             "Celerity Cruiser",
             "CL-12",
+            List.of(
+                "A speedster in the classic tractor segment, unparalleled in quick task completion",
+                "Sleek design with aerodynamic contours for reduced drag",
+                "Enhanced gearbox for smooth acceleration and nimble handling"
+            ),
             List.of(
                 new ProductVariant(
                     "Velocity Blue",
@@ -422,6 +522,11 @@ public class Products {
             "Rapid Racer",
             "CL-13",
             List.of(
+                "Streamlined design for faster field operations",
+                "Optimized gear ratios for efficient power transmission",
+                "Advanced air flow system for superior engine cooling"
+            ),
+            List.of(
                 new ProductVariant(
                     "Speedway Blue",
                     "/img/product/[size]/CL-13-BL.webp",
@@ -441,6 +546,11 @@ public class Products {
         Map.entry("CL-14", new Product(
             "Caribbean Cruiser",
             "CL-14",
+            List.of(
+                "Robust construction for enduring performance",
+                "Time-tested design with a proven track record",
+                "Easy-to-service mechanics for long-term reliability"
+            ),
             List.of(
                 new ProductVariant(
                     "Emerald Grove",
@@ -462,6 +572,11 @@ public class Products {
             "Fieldmaster Classic",
             "CL-15",
             List.of(
+                "Timeless design with a focus on comfort and control",
+                "Efficient fuel consumption with a powerful engine",
+                "Versatile functionality for all types of agricultural work"
+            ),
+            List.of(
                 new ProductVariant(
                     "Vintage Pink",
                     "/img/product/[size]/CL-15-PI.webp",
@@ -480,10 +595,8 @@ public class Products {
         ))
     );
 
-    public static List<Product> get(String... ids) {
-        return Stream.of(ids)
-            .map(ALL::get)
-            .toList();
+    public static Stream<Product> stream() {
+        return ALL.values().stream();
     }
 
     public static Product get(String sku) {
