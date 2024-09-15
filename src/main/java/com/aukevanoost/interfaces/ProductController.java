@@ -33,7 +33,7 @@ public class ProductController implements IProductController {
             .toList();
 
         var recommendations = recommendedDAO
-            .getRecommendationsSimilarColor(dbActiveVariant.rgb(), 4)
+            .getRecommendations(4, dbActiveVariant.sku())
             .map(RecommendationDTO::from)
             .toList();
 

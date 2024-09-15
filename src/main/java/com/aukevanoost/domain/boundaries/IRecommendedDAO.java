@@ -5,6 +5,5 @@ import com.aukevanoost.domain.entities.Recommendation;
 import java.util.stream.Stream;
 
 public interface IRecommendedDAO {
-    Stream<Recommendation> getRecommendations(String ...sku);
-    Stream<Recommendation> getRecommendationsSimilarColor(Integer[] rgb, int length);
+    Stream<Recommendation> getRecommendations(int maxlength, String ...sku);
 }

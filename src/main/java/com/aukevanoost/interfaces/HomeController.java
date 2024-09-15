@@ -22,36 +22,18 @@ public class HomeController implements IHomeController {
     private IRecommendedDAO recommendedDAO;
 
     public HomeViewModel process() {
-        var avgColor = getAverageColor(
-            recommendedDAO.getRecommendations("CL-01-GY", "AU-07-MT")
-                .map(Recommendation::rgb)
-                .toList()
-        );
-
         var teasers = featuredDAO
             .getTeasers()
             .map(TeaserDTO::from)
             .toList();
 
         var recommendations = recommendedDAO
-            .getRecommendationsSimilarColor(avgColor, 4)
+            .getRecommendations(4, "CL-01-GY", "AU-07-MT")
             .map(RecommendationDTO::from)
             .toList();
 
         return new HomeViewModel(teasers, recommendations);
     }
 
-    private Integer[] getAverageColor(List<Integer[]> colors) {
-        int size = colors.size();
-        Integer[] totalRGB = colors.stream().reduce(
-            new Integer[] {0,0,0},
-            (a, b) -> new Integer[] {a[0] + b[0], a[1] + b[1], a[2] + b[2]}
-        );
 
-        return new Integer[] {
-            Math.round((float) totalRGB[0] / size),
-            Math.round((float) totalRGB[1] / size),
-            Math.round((float) totalRGB[2] / size)
-        };
-    }
 }
