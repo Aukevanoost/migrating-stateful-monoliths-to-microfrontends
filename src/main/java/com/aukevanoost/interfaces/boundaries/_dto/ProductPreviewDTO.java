@@ -1,4 +1,4 @@
-package com.aukevanoost.interfaces.boundaries.category.dto;
+package com.aukevanoost.interfaces.boundaries._dto;
 
 import com.aukevanoost.domain.entities.Product;
 import com.aukevanoost.domain.entities.ProductVariant;
@@ -6,22 +6,22 @@ import com.aukevanoost.domain.entities.ProductVariant;
 import java.io.Serial;
 import java.io.Serializable;
 
-public record ProductDTO(
+public record ProductPreviewDTO(
+    String sku,
     String name,
     String image,
-    String url,
     Integer startPrice
 ) implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public static ProductDTO from(Product product) {
+    public static ProductPreviewDTO from(Product product) {
         var firstVariant = product.variants$().findFirst().orElseThrow();
 
-        return new ProductDTO(
+        return new ProductPreviewDTO(
+            product.sku(),
             product.name(),
             firstVariant.image(),
-            String.format("/product/%s", product.sku()),
             product.variants$()
                 .map(ProductVariant::price)
                 .min(Integer::compareTo)

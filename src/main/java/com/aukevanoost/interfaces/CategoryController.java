@@ -3,13 +3,12 @@ package com.aukevanoost.interfaces;
 import com.aukevanoost.domain.boundaries.ICatalogDAO;
 import com.aukevanoost.domain.entities.Category;
 import com.aukevanoost.interfaces.boundaries.category.*;
-import com.aukevanoost.interfaces.boundaries.category.dto.CategoryDTO;
-import com.aukevanoost.interfaces.boundaries.category.dto.CategoryFilterDTO;
-import com.aukevanoost.interfaces.boundaries.category.dto.ProductDTO;
+import com.aukevanoost.interfaces.boundaries._dto.CategoryDTO;
+import com.aukevanoost.interfaces.boundaries._dto.CategoryFilterDTO;
+import com.aukevanoost.interfaces.boundaries._dto.ProductPreviewDTO;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -26,7 +25,7 @@ public class CategoryController implements ICategoryController {
         var category = this.catalogDAO.getProductsByCategory(activeCategoryKey)
             .orElseThrow(() -> new IllegalArgumentException("Category not found"));
 
-        var products = category.products$().map(ProductDTO::from).toList();
+        var products = category.products$().map(ProductPreviewDTO::from).toList();
 
         var filters = getFilters(activeCategoryKey).toList();
 
@@ -43,7 +42,7 @@ public class CategoryController implements ICategoryController {
             ALL_PRODUCTS_KEY
         );
 
-        var products = catalogDAO.getAllProducts().map(ProductDTO::from).toList();
+        var products = catalogDAO.getAllProducts().map(ProductPreviewDTO::from).toList();
 
         var filters = getFilters(ALL_PRODUCTS_KEY).toList();
 

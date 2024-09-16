@@ -1,6 +1,6 @@
 package com.aukevanoost.presentation.pages.category;
 
-import com.aukevanoost.interfaces.boundaries.category.dto.CategoryFilterDTO;
+import com.aukevanoost.interfaces.boundaries._dto.CategoryFilterDTO;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;

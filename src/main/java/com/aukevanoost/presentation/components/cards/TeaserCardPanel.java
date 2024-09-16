@@ -1,12 +1,13 @@
-package com.aukevanoost.presentation.pages.home;
+package com.aukevanoost.presentation.components.cards;
 
-import com.aukevanoost.interfaces.boundaries.home.dto.TeaserDTO;
+import com.aukevanoost.interfaces.boundaries._dto.TeaserDTO;
 import com.aukevanoost.presentation.components.ImagePanel;
+import com.aukevanoost.presentation.handlers.RepeatingViewHandler;
 import com.aukevanoost.presentation.pages.category.CategoryPage;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.image.ExternalImage;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import java.util.List;
@@ -22,11 +23,10 @@ public class TeaserCardPanel extends Panel {
     @Override
     protected void onInitialize() {
         super.onInitialize();
-        Link<Void> link = new Link<>("cardUrl"){
+        Link<Void> link = new Link<>("cardUrl") {
             @Override
             public void onClick() {
-                //we redirect browser to another page.
-                setResponsePage(CategoryPage.class, new PageParameters().add("category", teaser.key()));
+                setResponsePage(CategoryPage.class, new PageParameters().set(0, teaser.key()));
             }
         };
 
@@ -44,3 +44,4 @@ public class TeaserCardPanel extends Panel {
         return url.replace("[size]", String.valueOf(size));
     }
 }
+

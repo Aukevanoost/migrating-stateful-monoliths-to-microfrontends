@@ -1,6 +1,7 @@
-package com.aukevanoost.presentation.pages.stores;
+package com.aukevanoost.presentation.components.cards;
 
-import com.aukevanoost.interfaces.boundaries.stores.dto.StoreDTO;
+import com.aukevanoost.interfaces.boundaries._dto.StoreDTO;
+import com.aukevanoost.presentation.components.ImagePanel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ExternalImage;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -18,17 +19,7 @@ public class StoreCardPanel extends Panel {
     protected void onInitialize() {
         super.onInitialize();
 
-        add(
-            new ExternalImage(
-                "image",
-                getImageSize(store.image(), 200),
-                List.of(
-                    getImageSrcSet(store.image(), 200),
-                    getImageSrcSet(store.image(), 400)
-                )
-            )
-        );
-
+        add(new ImagePanel("image", store.image(), 200, 400));
         add(new Label("name", store.name()));
         add(new Label("street", store.street()));
         add(new Label("city", store.city()));

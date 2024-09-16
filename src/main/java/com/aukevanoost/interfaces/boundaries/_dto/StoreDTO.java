@@ -1,4 +1,4 @@
-package com.aukevanoost.interfaces.boundaries.stores.dto;
+package com.aukevanoost.interfaces.boundaries._dto;
 
 import com.aukevanoost.domain.entities.Store;
 

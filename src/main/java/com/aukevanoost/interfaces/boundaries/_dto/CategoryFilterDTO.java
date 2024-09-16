@@ -1,4 +1,4 @@
-package com.aukevanoost.interfaces.boundaries.category.dto;
+package com.aukevanoost.interfaces.boundaries._dto;
 
 import com.aukevanoost.domain.entities.Category;
 

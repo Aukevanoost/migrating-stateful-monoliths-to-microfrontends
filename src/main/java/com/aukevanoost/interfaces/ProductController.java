@@ -2,11 +2,11 @@ package com.aukevanoost.interfaces;
 
 import com.aukevanoost.domain.boundaries.ICatalogDAO;
 import com.aukevanoost.domain.boundaries.IRecommendedDAO;
-import com.aukevanoost.interfaces.boundaries.home.dto.RecommendationDTO;
+import com.aukevanoost.interfaces.boundaries._dto.RecommendationDTO;
 import com.aukevanoost.interfaces.boundaries.product.IProductController;
 import com.aukevanoost.interfaces.boundaries.product.ProductViewModel;
-import com.aukevanoost.interfaces.boundaries.product.dto.ProductDTO;
-import com.aukevanoost.interfaces.boundaries.product.dto.VariantOptionDTO;
+import com.aukevanoost.interfaces.boundaries._dto.ProductDTO;
+import com.aukevanoost.interfaces.boundaries._dto.VariantOptionDTO;
 import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 

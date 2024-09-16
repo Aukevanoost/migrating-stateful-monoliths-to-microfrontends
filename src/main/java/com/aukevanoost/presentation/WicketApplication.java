@@ -48,10 +48,8 @@ public class WicketApplication extends WebApplication
 			.add(CSPDirective.FONT_SRC, CSPDirectiveSrcValue.SELF);
 
 		// add your configuration here
-		mountPage("/products/${category}", CategoryPage.class);
-		mountPage("/products", CategoryPage.class);
-		mountPage("/product/${product}", ProductPage.class);
-		mountPage("/product/${product}/${variant}", ProductPage.class);
+		mountPage("/products/#{category}", CategoryPage.class);
+		mountPage("/product/${product}/#{variant}", ProductPage.class);
 		mountPage("/stores", StoresPage.class);
 	}
 }

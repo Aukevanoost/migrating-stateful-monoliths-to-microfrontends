@@ -1,6 +1,6 @@
 package com.aukevanoost.interfaces.boundaries.stores;
 
-import com.aukevanoost.interfaces.boundaries.stores.dto.StoreDTO;
+import com.aukevanoost.interfaces.boundaries._dto.StoreDTO;
 
 import java.io.Serial;
 import java.io.Serializable;

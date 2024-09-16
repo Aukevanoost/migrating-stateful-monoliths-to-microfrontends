@@ -1,4 +1,4 @@
-package com.aukevanoost.interfaces.boundaries.home.dto;
+package com.aukevanoost.interfaces.boundaries._dto;
 
 import com.aukevanoost.domain.entities.Recommendation;
 
@@ -6,19 +6,21 @@ import java.io.Serial;
 import java.io.Serializable;
 
 public record RecommendationDTO(
+    String sku,
     String name,
     String image,
-    String url
-) implements Serializable {
+    String productSku
+    ) implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
     public static RecommendationDTO from(Recommendation recommendation) {
         return new RecommendationDTO(
+            recommendation.sku(),
             recommendation.name(),
             recommendation.image(),
-            recommendation.url()
+            recommendation.productSku()
         );
     }
 }

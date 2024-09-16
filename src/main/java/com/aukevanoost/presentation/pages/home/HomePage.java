@@ -2,10 +2,11 @@ package com.aukevanoost.presentation.pages.home;
 
 import com.aukevanoost.interfaces.boundaries.home.HomeViewModel;
 import com.aukevanoost.interfaces.boundaries.home.IHomeController;
-import com.aukevanoost.presentation.components.RecommendationCardPanel;
+import com.aukevanoost.presentation.components.cards.RecommendationCardPanel;
+import com.aukevanoost.presentation.components.cards.TeaserCardPanel;
+import com.aukevanoost.presentation.handlers.RepeatingViewHandler;
 import com.aukevanoost.presentation.template.BaseTemplate;
 import jakarta.inject.Inject;
-import org.apache.wicket.markup.repeater.RepeatingView;
 
 public class HomePage extends BaseTemplate {
     @Inject
@@ -19,23 +20,18 @@ public class HomePage extends BaseTemplate {
     }
 
     protected void onInitialize() {
-        RepeatingView teaserCards = new RepeatingView("teaserCards");
-        vm.teasers()
-            .stream()
-            .map(teaser -> new TeaserCardPanel(teaserCards.newChildId(), teaser))
-            .forEach(teaserCards::add);
-        add(teaserCards);
-
-        RepeatingView recommendationCards = new RepeatingView("recommendationCards");
-        vm.recommended()
-            .stream()
-            .map(r -> new RecommendationCardPanel(
-                recommendationCards.newChildId(),
-                r.name(), r.image(), r.url()
-            ))
-            .forEach(recommendationCards::add);
-        add(recommendationCards);
-
         super.onInitialize();
+
+        add(RepeatingViewHandler.asCards(
+            "teaserCards",
+            vm.teasers(),
+            TeaserCardPanel::new
+        ));
+
+        add(RepeatingViewHandler.asCards(
+            "recommendationCards",
+            vm.recommended(),
+            RecommendationCardPanel::new
+        ));
     }
 }

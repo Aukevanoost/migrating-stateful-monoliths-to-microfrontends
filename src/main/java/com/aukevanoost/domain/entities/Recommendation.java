@@ -4,11 +4,11 @@ import java.io.Serial;
 import java.io.Serializable;
 
 public record Recommendation(
-    String name,
     String sku,
+    String name,
     String image,
-    Integer[] rgb,
-    String url
+    String productSku,
+    Integer[] rgb
 ) implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -24,11 +24,11 @@ public record Recommendation(
             .orElseThrow();
 
         return new Recommendation(
-            product.name(),
             variant.sku(),
+            product.name(),
             variant.image(),
-            variant.rgb(),
-            String.format("/products/%s?sku=%s", product.sku(), variantSKU)
+            product.sku(),
+            variant.rgb()
         );
     }
 }

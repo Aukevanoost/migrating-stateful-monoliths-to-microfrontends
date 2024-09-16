@@ -6,9 +6,7 @@ import com.aukevanoost.domain.entities.Recommendation;
 import jakarta.enterprise.context.RequestScoped;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RequestScoped

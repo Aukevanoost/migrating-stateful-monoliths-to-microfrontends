@@ -3,7 +3,7 @@ package com.aukevanoost.interfaces;
 import com.aukevanoost.domain.boundaries.IStoreDAO;
 import com.aukevanoost.interfaces.boundaries.stores.IStoresController;
 import com.aukevanoost.interfaces.boundaries.stores.StoresViewModel;
-import com.aukevanoost.interfaces.boundaries.stores.dto.StoreDTO;
+import com.aukevanoost.interfaces.boundaries._dto.StoreDTO;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 

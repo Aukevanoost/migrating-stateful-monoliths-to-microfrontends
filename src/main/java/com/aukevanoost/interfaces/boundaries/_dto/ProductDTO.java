@@ -1,4 +1,4 @@
-package com.aukevanoost.interfaces.boundaries.product.dto;
+package com.aukevanoost.interfaces.boundaries._dto;
 
 import com.aukevanoost.domain.entities.Product;
 import com.aukevanoost.domain.entities.ProductVariant;

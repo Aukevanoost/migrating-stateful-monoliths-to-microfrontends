@@ -1,10 +1,9 @@
-package com.aukevanoost.interfaces.boundaries.product.dto;
+package com.aukevanoost.interfaces.boundaries._dto;
 
 import com.aukevanoost.domain.entities.ProductVariant;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.function.Function;
 
 public record VariantOptionDTO(
     String sku,

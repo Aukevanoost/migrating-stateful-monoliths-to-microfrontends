@@ -1,10 +1,10 @@
 package com.aukevanoost.presentation.pages.category;
 
-import com.aukevanoost.interfaces.boundaries.category.dto.CategoryDTO;
 import com.aukevanoost.interfaces.boundaries.category.ICategoryController;
 import com.aukevanoost.interfaces.boundaries.category.CategoryViewModel;
-import com.aukevanoost.interfaces.boundaries.category.dto.ProductDTO;
-import com.aukevanoost.presentation.components.ProductCardPanel;
+import com.aukevanoost.interfaces.boundaries._dto.ProductPreviewDTO;
+import com.aukevanoost.presentation.components.cards.ProductCardPanel;
+import com.aukevanoost.presentation.handlers.RepeatingViewHandler;
 import com.aukevanoost.presentation.template.BaseTemplate;
 import jakarta.inject.Inject;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -14,6 +14,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 public class CategoryPage extends BaseTemplate {
     @Inject
@@ -23,15 +24,14 @@ public class CategoryPage extends BaseTemplate {
 
     public CategoryPage() {
         super();
-        vm = this.controller.process();
+        vm = controller.process();
     }
 
     public CategoryPage(PageParameters parameters) {
         super(parameters);
-        vm = this.controller.process(
+        vm = controller.process(
             parameters.get("category").toString()
         );
-
     }
 
     @Override
@@ -42,34 +42,24 @@ public class CategoryPage extends BaseTemplate {
 
         buildCategoryFilter(vm.products());
 
-        RepeatingView productCards = new RepeatingView("productCards");
-
-        vm.products()
-            .stream()
-            .sorted(Comparator.comparingInt(ProductDTO::startPrice).reversed())
-            .map(p -> new ProductCardPanel(
-                productCards.newChildId(),
-                p.name(),
-                p.url(),
-                p.image(),
-                p.startPrice()
-            ))
-            .forEach(productCards::add);
-
-        add(productCards);
+        add(RepeatingViewHandler.asCards(
+            "productCards",
+            vm.products(),
+            ProductCardPanel::new
+        ));
     }
 
-    private void buildCategoryFilter(List<ProductDTO> products) {
+    private void buildCategoryFilter(List<ProductPreviewDTO> products) {
         WebMarkupContainer actionsContainer = new WebMarkupContainer("actionsContainer");
+
         actionsContainer.add(new Label("productsSize", products.size()));
 
-        RepeatingView filterCards = new RepeatingView("filterCards");
-        vm.filters()
-            .stream()
-            .map(f -> new CategoryFilterPanel(filterCards.newChildId(), f))
-            .forEach(filterCards::add);
+        actionsContainer.add(RepeatingViewHandler.asCards(
+            "filterCards",
+            vm.filters(),
+            CategoryFilterPanel::new
+        ));
 
-        actionsContainer.add(filterCards);
         add(actionsContainer);
     }
 }

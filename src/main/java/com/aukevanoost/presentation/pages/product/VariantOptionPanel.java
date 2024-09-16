@@ -1,21 +1,15 @@
 package com.aukevanoost.presentation.pages.product;
 
-import com.aukevanoost.interfaces.boundaries.category.dto.CategoryFilterDTO;
-import com.aukevanoost.interfaces.boundaries.product.dto.VariantOptionDTO;
+import com.aukevanoost.interfaces.boundaries._dto.VariantOptionDTO;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
-import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.head.CssHeaderItem;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.CssResourceReference;
+
+import java.util.function.Function;
 
 public class VariantOptionPanel extends Panel {
     private final VariantOptionDTO option;
