@@ -9,8 +9,11 @@ import java.util.List;
 
 public record HomeViewModel(
     List<TeaserDTO> teasers,
-    List<RecommendationDTO> recommended
+    List<RecommendationDTO> recommendations
 ) implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
+
+    public static final String TEASERS = "teasers";
+    public static final String RECOMMENDATIONS = "recommendations";
 }

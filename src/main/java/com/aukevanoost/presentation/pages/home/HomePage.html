@@ -4,16 +4,19 @@
 <body>
 <wicket:extend>
     <main class="e_HomePage">
-        <wicket:container wicket:id="teaserCards"></wicket:container>
+        <wicket:container wicket:id="teaserCards">
+            <wicket:container wicket:id="listItemContainer"></wicket:container>
+        </wicket:container>
         <div class="e_HomePage__recommendations">
             <div class="e_Recommendations">
                 <h2>Recommendations</h2>
                 <ul class="e_Recommendations_list">
-                    <li wicket:id="recommendationCards" class="e_Recommendation"></li>
+                    <wicket:container wicket:id="recommendationCards">
+                        <li wicket:id="listItemContainer"></li>
+                    </wicket:container>
                 </ul>
             </div>
         </div>
-
     </main>
 </wicket:extend>
 </body>

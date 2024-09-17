@@ -11,7 +11,9 @@
             following locations:
         </p>
         <ul class="e_StoresPage_list">
-            <li wicket:id="storeCards" class="e_Store"></li>
+            <wicket:container wicket:id="storeCards">
+                <li wicket:id="listItemContainer" class="e_Store"></li>
+            </wicket:container>
         </ul>
     </main>
 </wicket:extend>

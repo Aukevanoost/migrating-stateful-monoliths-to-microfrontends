@@ -2,24 +2,20 @@ package com.aukevanoost.presentation.components;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.image.Image;
-import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.html.panel.GenericPanel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.ContextRelativeResource;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class ImagePanel extends Panel {
-
-
-    private final String url;
+public class ImagePanel extends GenericPanel<String> {
     private final int[] sizes;
 
-    public ImagePanel(String id, String url, int... sizes) {
-        super(id);
-        this.url = url;
+    public ImagePanel(String id, IModel<String> urlModel, int... sizes) {
+        super(id, urlModel);
         this.sizes = sizes;
-
         setRenderBodyOnly(true);
     }
 
@@ -27,16 +23,21 @@ public class ImagePanel extends Panel {
     protected void onInitialize() {
         super.onInitialize();
 
-        var image = new Image("image", new ContextRelativeResource(getImageSize(url, sizes[0])));
+        var image = new Image(
+            "image",
+            getModel().map(u -> new ContextRelativeResource(getImageSrc(u, sizes[0])))
+        );
 
         image.add(new AttributeModifier("width", sizes[0]));
         image.add(new AttributeModifier("sizes", sizes[0] + "px"));
 
         image.add(new AttributeModifier(
             "srcset",
-            IntStream.of(sizes)
-                .mapToObj(size -> getImageSrcSet(url, size))
-                .collect(Collectors.joining(", "))
+            getModel().map(
+                u -> IntStream.of(sizes)
+                    .mapToObj(size -> getImageSrcSet(u, size))
+                    .collect(Collectors.joining(", "))
+            )
         ));
 
         for(String tag : List.of("class", "id", "alt")) {
@@ -48,11 +49,11 @@ public class ImagePanel extends Panel {
         add(image);
     }
 
-    private String getImageSize(String url, int size) {
+    private String getImageSrc(String url, int size) {
         return url.replace("[size]", String.valueOf(size));
     }
 
     private String getImageSrcSet(String url, int size) {
-        return String.format("%s %dw", this.getImageSize(url, size), size);
+        return String.format("%s %dw", this.getImageSrc(url, size), size);
     }
 }

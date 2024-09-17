@@ -23,4 +23,9 @@ public record RecommendationDTO(
             recommendation.productSku()
         );
     }
+
+    public static final String SKU = "sku";
+    public static final String NAME = "name";
+    public static final String IMAGE = "image";
+    public static final String PRODUCT_SKU = "productSku";
 }

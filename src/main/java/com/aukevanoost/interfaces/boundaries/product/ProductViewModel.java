@@ -7,7 +7,6 @@ import com.aukevanoost.interfaces.boundaries._dto.VariantOptionDTO;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
-import java.util.stream.Stream;
 
 public record ProductViewModel(
     ProductDTO product,
@@ -16,4 +15,8 @@ public record ProductViewModel(
 ) implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
+
+    public static final String PRODUCT = "product";
+    public static final String VARIANT_OPTIONS = "variantOptions";
+    public static final String RECOMMENDATIONS = "recommendations";
 }

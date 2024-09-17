@@ -9,12 +9,18 @@
             <p><span wicket:id="productsSize"></span> products</p>
             <div class="e_Filter">
                 Filter:
-                <ul><li wicket:id="filterCards"></li></ul>
+                <ul>
+                    <wicket:container wicket:id="filterCards">
+                        <li wicket:id="listItemContainer"></li>
+                    </wicket:container>
+                </ul>
 
             </div>
         </div>
         <ul class="e_CategoryPage_list">
-            <li class="e_Product" wicket:id="productCards"></li>
+            <wicket:container wicket:id="productCards">
+                <li class="e_Product" wicket:id="listItemContainer"></li>
+            </wicket:container>
         </ul>
     </main>
 </wicket:extend>

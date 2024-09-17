@@ -24,4 +24,10 @@ public record StoreDTO(
             store.image()
         );
     }
+
+    public static final String ID = "id";
+    public static final String NAME = "name";
+    public static final String STREET = "street";
+    public static final String CITY = "city";
+    public static final String IMAGE = "image";
 }
