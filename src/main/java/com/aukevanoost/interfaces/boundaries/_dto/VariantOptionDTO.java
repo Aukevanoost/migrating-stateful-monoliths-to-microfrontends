@@ -22,9 +22,4 @@ public record VariantOptionDTO(
             isActive
         );
     }
-
-    public static final String NAME = "name";
-    public static final String SKU = "sku";
-    public static final String COLOR = "color";
-    public static final String ACTIVE = "active";
 }

@@ -13,7 +13,6 @@ import org.apache.wicket.model.IModel;
 import org.danekja.java.util.function.serializable.SerializableBiFunction;
 
 import java.util.List;
-import java.util.function.BiFunction;
 
 
 public class ListViewHandler {

@@ -7,7 +7,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class RecommendationCardPanel extends GenericPanel<RecommendationDTO> {
@@ -17,8 +16,10 @@ public class RecommendationCardPanel extends GenericPanel<RecommendationDTO> {
     }
 
     protected void onInitialize() {
+        var recommendation = getModel();
+
         super.onInitialize();
-        Link<RecommendationDTO> link = new Link<>("url", getModel()) {
+        Link<RecommendationDTO> link = new Link<>("url", recommendation) {
             @Override
             public void onClick() {
                 setResponsePage(
@@ -30,8 +31,8 @@ public class RecommendationCardPanel extends GenericPanel<RecommendationDTO> {
             }
         };
         link
-            .add(new Label(RecommendationDTO.NAME,PropertyModel.of(getModel(), RecommendationDTO.NAME)))
-            .add(new ImagePanel(RecommendationDTO.IMAGE, PropertyModel.of(getModel(), RecommendationDTO.IMAGE), 200, 400));
+            .add(new Label("name",recommendation.map(RecommendationDTO::name)))
+            .add(new ImagePanel("image", recommendation.map(RecommendationDTO::image), 200, 400));
         add(link);
     }
 }

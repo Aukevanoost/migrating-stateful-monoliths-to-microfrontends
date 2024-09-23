@@ -19,7 +19,4 @@ public record CategoryDTO(
             category.name()
         );
     }
-
-    public static final String NAME = "name";
-    public static final String KEY = "key";
 }

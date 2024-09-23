@@ -23,8 +23,4 @@ public record TeaserDTO(
             teaser.category().key()
         );
     }
-
-    public static final String TITLE = "title";
-    public static final String IMAGE = "image";
-    public static final String KEY = "key";
 }

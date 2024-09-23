@@ -10,7 +10,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import java.util.List;
@@ -37,7 +36,7 @@ public class CategoryPage extends BaseTemplate {
     protected void onInitialize() {
         super.onInitialize();
 
-        add(new Label("title", PropertyModel.of(vm, "category.name")));
+        add(new Label("title", vm.map(x -> x.category().name())));
 
         WebMarkupContainer actionsContainer = new WebMarkupContainer("actionsContainer");
 
@@ -45,7 +44,7 @@ public class CategoryPage extends BaseTemplate {
 
         actionsContainer.add(ListViewHandler.asPanel(
             "filterCards",
-            PropertyModel.of(vm, CategoryViewModel.FILTERS),
+            vm.map(CategoryViewModel::filters),
             CategoryFilterPanel::new
         ));
 
@@ -53,7 +52,7 @@ public class CategoryPage extends BaseTemplate {
 
         add(ListViewHandler.asPanel(
             "productCards",
-            PropertyModel.of(vm, CategoryViewModel.PRODUCTS),
+            vm.map(CategoryViewModel::products),
             ProductCardPanel::new
         ));
     }

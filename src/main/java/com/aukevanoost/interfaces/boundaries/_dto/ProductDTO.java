@@ -27,8 +27,4 @@ public record ProductDTO(
             product.highlights()
         );
     }
-
-    public static final String SKU = "sku";
-    public static final String NAME = "name";
-    public static final String IMAGE = "image";
 }

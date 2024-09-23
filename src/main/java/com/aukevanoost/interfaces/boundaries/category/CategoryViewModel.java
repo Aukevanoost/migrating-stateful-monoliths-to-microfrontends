@@ -15,8 +15,4 @@ public record CategoryViewModel(
 ) implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-
-    public static final String CATEGORY = "category";
-    public static final String PRODUCTS = "products";
-    public static final String FILTERS = "filters";
 }

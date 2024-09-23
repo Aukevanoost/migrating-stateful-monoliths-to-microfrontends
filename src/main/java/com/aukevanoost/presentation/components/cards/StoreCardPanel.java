@@ -5,7 +5,6 @@ import com.aukevanoost.presentation.components.ImagePanel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 
 public class StoreCardPanel extends GenericPanel<StoreDTO> {
     public StoreCardPanel(String id, IModel<StoreDTO> storeModel) {
@@ -14,11 +13,12 @@ public class StoreCardPanel extends GenericPanel<StoreDTO> {
 
     protected void onInitialize() {
         super.onInitialize();
+        var store = getModel();
 
-        add(new ImagePanel(StoreDTO.IMAGE, PropertyModel.of(getModel(), StoreDTO.IMAGE), 200, 400));
-        add(new Label(StoreDTO.NAME, PropertyModel.of(getModel(), StoreDTO.NAME)));
-        add(new Label(StoreDTO.STREET, PropertyModel.of(getModel(), StoreDTO.STREET)));
-        add(new Label(StoreDTO.CITY, PropertyModel.of(getModel(), StoreDTO.CITY)));
+        add(new ImagePanel("image", store.map(StoreDTO::image), 200, 400));
+        add(new Label("name", store.map(StoreDTO::name)));
+        add(new Label("street", store.map(StoreDTO::street)));
+        add(new Label("city", store.map(StoreDTO::city)));
     }
 }
 

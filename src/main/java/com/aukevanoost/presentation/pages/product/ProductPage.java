@@ -10,7 +10,6 @@ import jakarta.inject.Inject;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class ProductPage extends BaseTemplate {
@@ -31,24 +30,24 @@ public class ProductPage extends BaseTemplate {
 
     protected void onInitialize() {
         super.onInitialize();
-        add(new ImagePanel("image", PropertyModel.of(vm, "product.image"), 400, 800));
+        add(new ImagePanel("image", vm.map(x -> x.product().image()), 400, 800));
 
-        add(new Label("name", PropertyModel.of(vm, "product.name")));
+        add(new Label("name", vm.map(x -> x.product().name())));
 
         add(ListViewHandler.asLabel(
             "productHighlights",
-            PropertyModel.of(vm, "product.highlights")
+            vm.map(x -> x.product().highlights())
         ));
 
         add(ListViewHandler.asPanel(
             "variantOptions",
-            PropertyModel.of(vm, ProductViewModel.VARIANT_OPTIONS),
+            vm.map(ProductViewModel::variantOptions),
             VariantOptionPanel::new
         ));
 
         add(ListViewHandler.asPanel(
             "recommendationCards",
-            PropertyModel.of(vm, ProductViewModel.RECOMMENDATIONS),
+            vm.map(ProductViewModel::recommendations),
             RecommendationCardPanel::new
         ));
 

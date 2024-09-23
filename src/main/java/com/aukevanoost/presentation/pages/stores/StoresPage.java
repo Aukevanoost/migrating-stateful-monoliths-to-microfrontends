@@ -8,7 +8,6 @@ import com.aukevanoost.presentation.template.BaseTemplate;
 import jakarta.inject.Inject;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 
 public class StoresPage extends BaseTemplate {
 
@@ -25,7 +24,7 @@ public class StoresPage extends BaseTemplate {
     protected void onInitialize() {
         add(ListViewHandler.asPanel(
             "storeCards",
-            PropertyModel.of(vm, StoresViewModel.STORES),
+            vm.map(StoresViewModel::stores),
             StoreCardPanel::new
         ));
 

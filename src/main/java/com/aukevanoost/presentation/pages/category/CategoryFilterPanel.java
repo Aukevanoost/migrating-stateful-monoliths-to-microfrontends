@@ -1,16 +1,13 @@
 package com.aukevanoost.presentation.pages.category;
 
 import com.aukevanoost.interfaces.boundaries._dto.CategoryFilterDTO;
-import com.aukevanoost.interfaces.boundaries._dto.VariantOptionDTO;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.GenericPanel;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 
 public class CategoryFilterPanel extends GenericPanel<CategoryFilterDTO> {
     private final WebMarkupContainer variantOption;
@@ -41,17 +38,17 @@ public class CategoryFilterPanel extends GenericPanel<CategoryFilterDTO> {
 
     private Fragment createActiveFragment() {
         Fragment fragment = new Fragment("filterContainer", "activeFragment", this);
-        fragment.add(new Label(CategoryFilterDTO.NAME, PropertyModel.of(getModel(), CategoryFilterDTO.NAME)));
-        fragment.setOutputMarkupId(true);
+        fragment.add(new Label("name", getModel().map(CategoryFilterDTO::name)));
+        fragment.setOutputMarkupId(true).setRenderBodyOnly(true);
         return fragment;
     }
 
     private Fragment createInactiveFragment() {
         Fragment fragment = new Fragment("filterContainer", "inactiveFragment", this);
-        ExternalLink link = new ExternalLink(CategoryFilterDTO.URL, PropertyModel.of(getModel(), CategoryFilterDTO.URL));
-        link.add(new Label(CategoryFilterDTO.NAME, PropertyModel.of(getModel(), CategoryFilterDTO.NAME)));
+        ExternalLink link = new ExternalLink("url", getModel().map(CategoryFilterDTO::url));
+        link.add(new Label("name", getModel().map(CategoryFilterDTO::name)));
         fragment.add(link);
-        fragment.setOutputMarkupId(true);
+        fragment.setOutputMarkupId(true).setRenderBodyOnly(true);
         return fragment;
     }
 

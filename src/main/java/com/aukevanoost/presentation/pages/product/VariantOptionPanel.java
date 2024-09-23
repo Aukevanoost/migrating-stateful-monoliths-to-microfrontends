@@ -1,17 +1,13 @@
 package com.aukevanoost.presentation.pages.product;
 
-import com.aukevanoost.interfaces.boundaries._dto.RecommendationDTO;
 import com.aukevanoost.interfaces.boundaries._dto.VariantOptionDTO;
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.GenericPanel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class VariantOptionPanel extends GenericPanel<VariantOptionDTO>{
@@ -33,29 +29,25 @@ public class VariantOptionPanel extends GenericPanel<VariantOptionDTO>{
         super.onInitialize();
 
         variantOption.add(AttributeModifier.append("style",
-            PropertyModel.of(getModel(), VariantOptionDTO.COLOR).map(c -> "--variant-color: " + c)));
+            getModel().map(c -> "--variant-color: " + c.color())));
 
         variantOption.add(getModelObject().active() ? activeFragment : inactiveFragment);
         add(variantOption);
         setOutputMarkupId(true);
+        setRenderBodyOnly(true);
     }
 
     private Fragment createActiveFragment() {
         Fragment fragment = new Fragment("optionContainer", "activeFragment", this);
-        fragment.add(new Label(VariantOptionDTO.NAME, PropertyModel.of(getModel(), VariantOptionDTO.NAME)));
-        fragment.setOutputMarkupId(true);
+        fragment.add(new Label("name", getModel().map(VariantOptionDTO::name)));
+        fragment.setOutputMarkupId(true).setRenderBodyOnly(true);
         return fragment;
     }
 
     private Fragment createInactiveFragment() {
         Fragment fragment = new Fragment("optionContainer", "inactiveFragment", this);
-        fragment.add(createLink());
-        fragment.setOutputMarkupId(true);
-        return fragment;
-    }
 
-    private Link<String> createLink() {
-        Link<String> link = new Link<>("url", PropertyModel.of(getModel(), VariantOptionDTO.SKU)) {
+        Link<String> link = new Link<>("url", getModel().map(VariantOptionDTO::sku)) {
             @Override
             public void onClick() {
                 setResponsePage(
@@ -66,16 +58,19 @@ public class VariantOptionPanel extends GenericPanel<VariantOptionDTO>{
             }
         };
         link.add(new Label(
-            VariantOptionDTO.NAME,
-            PropertyModel.of(getModel(), VariantOptionDTO.NAME)
+            "name",
+            getModel().map(VariantOptionDTO::name)
         ));
-        return link;
+
+        fragment.add(link);
+        fragment.setOutputMarkupId(true).setRenderBodyOnly(true);
+        return fragment;
     }
 
 
     @Override
     protected void onModelChanged() {
-//        variantOption.replace(getModelObject().active() ? activeFragment : inactiveFragment);
+        variantOption.replace(getModelObject().active() ? activeFragment : inactiveFragment);
         super.onModelChanged();
     }
 }

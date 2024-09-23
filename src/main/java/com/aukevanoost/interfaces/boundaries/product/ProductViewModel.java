@@ -15,8 +15,4 @@ public record ProductViewModel(
 ) implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-
-    public static final String PRODUCT = "product";
-    public static final String VARIANT_OPTIONS = "variantOptions";
-    public static final String RECOMMENDATIONS = "recommendations";
 }
