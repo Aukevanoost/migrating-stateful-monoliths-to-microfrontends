@@ -1,7 +1,6 @@
 package com.aukevanoost.interfaces.boundaries.home;
 
-import com.aukevanoost.interfaces.boundaries._dto.RecommendationDTO;
-import com.aukevanoost.interfaces.boundaries._dto.TeaserDTO;
+import com.aukevanoost.interfaces.boundaries.recommendation.RecommendationDTO;
 
 import java.io.Serial;
 import java.io.Serializable;

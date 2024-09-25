@@ -1,4 +1,3 @@
-
 package com.aukevanoost.domain.dao.mock.db;
 
 import com.aukevanoost.domain.entities.*;
@@ -25,7 +24,8 @@ public class Products {
                     "/img/product/[size]/AU-01-SI.webp",
                     "AU-01-SI",
                     "#C0C0C0",
-                    1000
+                    1000,
+                    8
                 )
             )
         )),
@@ -43,21 +43,24 @@ public class Products {
                     "/img/product/[size]/AU-02-OG.webp",
                     "AU-02-OG",
                     "#dd5219",
-                    4100
+                    4100,
+                    4
                 ),
                 new ProductVariant(
                     "Cosmic Sapphire",
                     "/img/product/[size]/AU-02-BL.webp",
                     "AU-02-BL",
                     "#2A52BE",
-                    4000
+                    4000,
+                    3
                 ),
                 new ProductVariant(
                     "Verdant Shadow",
                     "/img/product/[size]/AU-02-GG.webp",
                     "AU-02-GG",
                     "#005A04",
-                    4000
+                    4000,
+                    6
                 )
             )
         )),
@@ -75,28 +78,32 @@ public class Products {
                     "/img/product/[size]/AU-03-TQ.webp",
                     "AU-03-TQ",
                     "#169fb8",
-                    1600
+                    1600,
+                    9
                 ),
                 new ProductVariant(
                     "Majestic Violet",
                     "/img/product/[size]/AU-03-PL.webp",
                     "AU-03-PL",
                     "#9B5FC0",
-                    1700
+                    1700,
+                    7
                 ),
                 new ProductVariant(
                     "Scarlet Dynamo",
                     "/img/product/[size]/AU-03-RD.webp",
                     "AU-03-RD",
                     "#FF2400",
-                    1900
+                    1900,
+                    8
                 ),
                 new ProductVariant(
                     "Sunbeam Yellow",
                     "/img/product/[size]/AU-03-YE.webp",
                     "AU-03-YE",
                     "#faad00",
-                    1800
+                    1800,
+                    3
                 )
             )
         )),
@@ -114,14 +121,16 @@ public class Products {
                     "/img/product/[size]/AU-04-RD.webp",
                     "AU-04-RD",
                     "#9B111E",
-                    8700
+                    8700,
+                    9
                 ),
                 new ProductVariant(
                     "Midnight Onyx",
                     "/img/product/[size]/AU-04-BK.webp",
                     "AU-04-BK",
                     "#353839",
-                    8500
+                    8500,
+                    8
                 )
             )
         )),
@@ -139,7 +148,8 @@ public class Products {
                     "/img/product/[size]/AU-05-ZH.webp",
                     "AU-05-ZH",
                     "#FFA07A",
-                    3400
+                    3400,
+                    8
                 )
             )
         )),
@@ -157,14 +167,16 @@ public class Products {
                     "/img/product/[size]/AU-06-CZ.webp",
                     "AU-06-CZ",
                     "#FFD700",
-                    2200
+                    2200,
+                    3
                 ),
                 new ProductVariant(
                     "Minted Jade",
                     "/img/product/[size]/AU-06-MT.webp",
                     "AU-06-MT",
                     "#628882",
-                    2100
+                    2100,
+                    5
                 )
             )
         )),
@@ -182,14 +194,16 @@ public class Products {
                     "/img/product/[size]/AU-07-MT.webp",
                     "AU-07-MT",
                     "#AFDBD2",
-                    4000
+                    4000,
+                    4
                 ),
                 new ProductVariant(
                     "Sunbeam Yellow",
                     "/img/product/[size]/AU-07-YE.webp",
                     "AU-07-YE",
                     "#FFDA03",
-                    5000
+                    5000,
+                    9
                 )
             )
         )),
@@ -207,7 +221,8 @@ public class Products {
                     "/img/product/[size]/AU-08-WH.webp",
                     "AU-08-WH",
                     "#E8E8E8",
-                    4500
+                    4500,
+                    4
                 )
             )
         )),
@@ -225,14 +240,16 @@ public class Products {
                     "/img/product/[size]/CL-01-GR.webp",
                     "CL-01-GR",
                     "#6B8E23",
-                    5700
+                    5700,
+                    8
                 ),
                 new ProductVariant(
                     "Stormy Sky",
                     "/img/product/[size]/CL-01-GY.webp",
                     "CL-01-GY",
                     "#708090",
-                    6200
+                    6200,
+                    7
                 )
             )
         )),
@@ -250,7 +267,8 @@ public class Products {
                     "/img/product/[size]/CL-02-BL.webp",
                     "CL-02-BL",
                     "#007BA7",
-                    2600
+                    2600,
+                    1
                 )
             )
         )),
@@ -268,21 +286,24 @@ public class Products {
                     "/img/product/[size]/CL-03-GR.webp",
                     "CL-03-GR",
                     "#7CFC00",
-                    2300
+                    2300,
+                    7
                 ),
                 new ProductVariant(
                     "Rustic Rose",
                     "/img/product/[size]/CL-03-PI.webp",
                     "CL-03-PI",
                     "#b50018",
-                    2300
+                    2300,
+                    3
                 ),
                 new ProductVariant(
                     "Harvest Gold",
                     "/img/product/[size]/CL-03-YE.webp",
                     "CL-03-YE",
                     "#DA9100",
-                    2300
+                    2300,
+                    6
                 )
             )
         )),
@@ -300,21 +321,24 @@ public class Products {
                     "/img/product/[size]/CL-04-BL.webp",
                     "CL-04-BL",
                     "#0040a6",
-                    2200
+                    2200,
+                    6
                 ),
                 new ProductVariant(
                     "Rustic Crimson",
                     "/img/product/[size]/CL-04-RD.webp",
                     "CL-04-RD",
                     "#7B3F00",
-                    2200
+                    2200,
+                    3
                 ),
                 new ProductVariant(
                     "Aqua Green",
                     "/img/product/[size]/CL-04-TQ.webp",
                     "CL-04-TQ",
                     "#00b298",
-                    2200
+                    2200,
+                    0
                 )
             )
         )),
@@ -332,14 +356,16 @@ public class Products {
                     "/img/product/[size]/CL-05-PT.webp",
                     "CL-05-PT",
                     "#479da8",
-                    2700
+                    2700,
+                    1
                 ),
                 new ProductVariant(
                     "Barn Red",
                     "/img/product/[size]/CL-05-RD.webp",
                     "CL-05-RD",
                     "#7C0A02",
-                    2700
+                    2700,
+                    1
                 )
             )
         )),
@@ -357,14 +383,16 @@ public class Products {
                     "/img/product/[size]/CL-06-MT.webp",
                     "CL-06-MT",
                     "#46f5bb",
-                    2800
+                    2800,
+                    1
                 ),
                 new ProductVariant(
                     "Golden Wheat",
                     "/img/product/[size]/CL-06-YE.webp",
                     "CL-06-YE",
                     "#faaf3f",
-                    2800
+                    2800,
+                    2
                 )
             )
         )),
@@ -382,14 +410,16 @@ public class Products {
                     "/img/product/[size]/CL-07-GR.webp",
                     "CL-07-GR",
                     "#2ea250",
-                    2900
+                    2900,
+                    4
                 ),
                 new ProductVariant(
                     "Autumn Amber",
                     "/img/product/[size]/CL-07-YE.webp",
                     "CL-07-YE",
                     "#FFBF00",
-                    2900
+                    2900,
+                    4
                 )
             )
         )),
@@ -407,14 +437,16 @@ public class Products {
                     "/img/product/[size]/CL-08-GR.webp",
                     "CL-08-GR",
                     "#C2B280",
-                    7750
+                    7750,
+                    8
                 ),
                 new ProductVariant(
                     "Tulip Magenta",
                     "/img/product/[size]/CL-08-PI.webp",
                     "CL-08-PI",
                     "#D65282",
-                    7900
+                    7900,
+                    3
                 )
             )
         )),
@@ -432,14 +464,16 @@ public class Products {
                     "/img/product/[size]/CL-09-BL.webp",
                     "CL-09-BL",
                     "#2f6ea3",
-                    2950
+                    2950,
+                    4
                 ),
                 new ProductVariant(
                     "Tuscan Green",
                     "/img/product/[size]/CL-09-GR.webp",
                     "CL-09-GR",
                     "#518b2b",
-                    2950
+                    2950,
+                    7
                 )
             )
         )),
@@ -457,14 +491,16 @@ public class Products {
                     "/img/product/[size]/CL-10-SD.webp",
                     "CL-10-SD",
                     "#b8a875",
-                    2600
+                    2600,
+                    6
                 ),
                 new ProductVariant(
                     "Violet Vintage",
                     "/img/product/[size]/CL-10-VI.webp",
                     "CL-10-VI",
                     "#8A2BE2",
-                    2600
+                    2600,
+                    2
                 )
             )
         )),
@@ -482,14 +518,16 @@ public class Products {
                     "/img/product/[size]/CL-11-SK.webp",
                     "CL-11-SK",
                     "#95c1f4",
-                    3100
+                    3100,
+                    0
                 ),
                 new ProductVariant(
                     "Nordic Gold",
                     "/img/product/[size]/CL-11-YE.webp",
                     "CL-11-YE",
                     "#FFD700",
-                    3100
+                    3100,
+                    3
                 )
             )
         )),
@@ -507,14 +545,16 @@ public class Products {
                     "/img/product/[size]/CL-12-BL.webp",
                     "CL-12-BL",
                     "#1E90FF",
-                    3200
+                    3200,
+                    8
                 ),
                 new ProductVariant(
                     "Rally Red",
                     "/img/product/[size]/CL-12-RD.webp",
                     "CL-12-RD",
                     "#ED2939",
-                    3200
+                    3200,
+                    8
                 )
             )
         )),
@@ -532,14 +572,16 @@ public class Products {
                     "/img/product/[size]/CL-13-BL.webp",
                     "CL-13-BL",
                     "#2679a6",
-                    7500
+                    7500,
+                    1
                 ),
                 new ProductVariant(
                     "Raceway Red",
                     "/img/product/[size]/CL-13-RD.webp",
                     "CL-13-RD",
                     "#CF1020",
-                    7500
+                    7500,
+                    5
                 )
             )
         )),
@@ -557,14 +599,16 @@ public class Products {
                     "/img/product/[size]/CL-14-GR.webp",
                     "CL-14-GR",
                     "#57ae13",
-                    2300
+                    2300,
+                    3
                 ),
                 new ProductVariant(
                     "Ruby Fields",
                     "/img/product/[size]/CL-14-RD.webp",
                     "CL-14-RD",
                     "#cd2b1e",
-                    2300
+                    2300,
+                    5
                 )
             )
         )),
@@ -582,14 +626,16 @@ public class Products {
                     "/img/product/[size]/CL-15-PI.webp",
                     "CL-15-PI",
                     "#e1949e",
-                    6200
+                    6200,
+                    0
                 ),
                 new ProductVariant(
                     "Sahara Dust",
                     "/img/product/[size]/CL-15-SD.webp",
                     "CL-15-SD",
                     "#dec78c",
-                    6200
+                    6200,
+                    9
                 )
             )
         ))

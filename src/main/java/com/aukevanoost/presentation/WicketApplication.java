@@ -1,10 +1,9 @@
 package com.aukevanoost.presentation;
 
-import com.aukevanoost.presentation.pages.home.HomePage;
-import com.aukevanoost.presentation.pages.category.CategoryPage;
-import com.aukevanoost.presentation.pages.product.ProductPage;
-import com.aukevanoost.presentation.pages.product.ProductPage;
-import com.aukevanoost.presentation.pages.stores.StoresPage;
+import com.aukevanoost.presentation.home.HomePage;
+import com.aukevanoost.presentation.category.CategoryPage;
+import com.aukevanoost.presentation.product.ProductPage;
+import com.aukevanoost.presentation.store.StoresPage;
 import org.apache.wicket.cdi.CdiConfiguration;
 import org.apache.wicket.csp.CSPDirective;
 import org.apache.wicket.csp.CSPDirectiveSrcValue;

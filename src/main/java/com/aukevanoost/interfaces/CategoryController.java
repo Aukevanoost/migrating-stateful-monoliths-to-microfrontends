@@ -3,9 +3,9 @@ package com.aukevanoost.interfaces;
 import com.aukevanoost.domain.boundaries.ICatalogDAO;
 import com.aukevanoost.domain.entities.Category;
 import com.aukevanoost.interfaces.boundaries.category.*;
-import com.aukevanoost.interfaces.boundaries._dto.CategoryDTO;
-import com.aukevanoost.interfaces.boundaries._dto.CategoryFilterDTO;
-import com.aukevanoost.interfaces.boundaries._dto.ProductPreviewDTO;
+import com.aukevanoost.interfaces.boundaries.category.CategoryDTO;
+import com.aukevanoost.interfaces.boundaries.category.CategoryFilterDTO;
+import com.aukevanoost.interfaces.boundaries.category.ProductPreviewDTO;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
@@ -30,7 +30,7 @@ public class CategoryController implements ICategoryController {
         var filters = getFilters(activeCategoryKey).toList();
 
         return new CategoryViewModel(
-            CategoryDTO.from(category),
+            category.name(),
             products,
             filters
         );
@@ -46,7 +46,7 @@ public class CategoryController implements ICategoryController {
 
         var filters = getFilters(ALL_PRODUCTS_KEY).toList();
 
-        return new CategoryViewModel(category, products, filters);
+        return new CategoryViewModel(category.name(), products, filters);
     }
 
     private Stream<CategoryFilterDTO> getFilters(String activeCategory) {

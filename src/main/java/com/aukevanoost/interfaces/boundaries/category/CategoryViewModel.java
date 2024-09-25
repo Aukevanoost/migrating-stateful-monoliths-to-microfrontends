@@ -1,15 +1,11 @@
 package com.aukevanoost.interfaces.boundaries.category;
 
-import com.aukevanoost.interfaces.boundaries._dto.CategoryDTO;
-import com.aukevanoost.interfaces.boundaries._dto.CategoryFilterDTO;
-import com.aukevanoost.interfaces.boundaries._dto.ProductPreviewDTO;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
 public record CategoryViewModel(
-    CategoryDTO category,
+    String category,
     List<ProductPreviewDTO> products,
     List<CategoryFilterDTO> filters
 ) implements Serializable {

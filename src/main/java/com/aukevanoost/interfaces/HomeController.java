@@ -4,8 +4,8 @@ import com.aukevanoost.domain.boundaries.IFeaturedDAO;
 import com.aukevanoost.domain.boundaries.IRecommendedDAO;
 import com.aukevanoost.interfaces.boundaries.home.IHomeController;
 import com.aukevanoost.interfaces.boundaries.home.HomeViewModel;
-import com.aukevanoost.interfaces.boundaries._dto.RecommendationDTO;
-import com.aukevanoost.interfaces.boundaries._dto.TeaserDTO;
+import com.aukevanoost.interfaces.boundaries.recommendation.RecommendationDTO;
+import com.aukevanoost.interfaces.boundaries.home.TeaserDTO;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 

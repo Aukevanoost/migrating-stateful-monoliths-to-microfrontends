@@ -9,7 +9,8 @@ public record ProductVariant (
     String image,
     String sku,
     String color,
-    Integer price
+    Integer price,
+    Integer inventory
 ) implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
