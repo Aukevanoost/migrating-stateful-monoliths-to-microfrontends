@@ -2,6 +2,7 @@ package com.aukevanoost.presentation.product.components;
 
 import com.aukevanoost.interfaces.boundaries.product.CartInfoDTO;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -28,6 +29,11 @@ public class AddToCartPanel extends GenericPanel<CartInfoDTO> {
         super.onInitialize();
         form.add(new Label("price", getModel().map(x -> String.format("%d Ø", x.price()))));
         form.add(getModelObject().inventory() > 0 ? inStockFragment : outOfStockFragment);
+
+        var btn = new Button("action");
+        btn.setEnabled(getModelObject().inventory() > 0);
+        form.add(btn);
+
         add(form);
     }
 
