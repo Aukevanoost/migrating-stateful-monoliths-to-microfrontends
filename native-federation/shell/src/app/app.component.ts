@@ -1,5 +1,5 @@
 import { Component, HostListener } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
 
 declare global {
   interface Window {
@@ -10,7 +10,7 @@ declare global {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterModule, RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

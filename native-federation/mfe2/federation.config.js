@@ -6,6 +6,7 @@ module.exports = withNativeFederation({
 
   exposes: {
     './Component': './src/app/app.component.ts',
+    './AnimatedBox': './src/app/exposes/expose-animated-box.component.ts'
   },
 
   shared: {
@@ -17,10 +18,5 @@ module.exports = withNativeFederation({
     'rxjs/fetch',
     'rxjs/testing',
     'rxjs/webSocket',
-    // Add further packages you don't need at runtime
   ]
-
-  // Please read our FAQ about sharing libs:
-  // https://shorturl.at/jmzH0
-  
 });
