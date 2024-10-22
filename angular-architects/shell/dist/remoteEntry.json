@@ -1,0 +1,22 @@
+{
+  "name": "host",
+  "shared": [
+    {
+      "packageName": "rxjs",
+      "outFileName": "rxjs.EUw3BLcAkJ.js",
+      "requiredVersion": "^7.8.1",
+      "singleton": true,
+      "strictVersion": true,
+      "version": "7.8.1"
+    },
+    {
+      "packageName": "shared-lib",
+      "outFileName": "shared_lib-CKA2AIRY.js",
+      "requiredVersion": "",
+      "singleton": true,
+      "strictVersion": false,
+      "version": ""
+    }
+  ],
+  "exposes": []
+}
