@@ -1,3 +1,9 @@
 {
-    "mfe1": "http://localhost:4201/remoteEntry.js"
+    "mfe1": {
+        "remoteEntry": "http://localhost:4201/remoteEntry.js",
+        "exposedModule": "./Component",
+        "displayName": "Micro Frontend 1",
+        "routePath": "mfe",
+        "ngComponentName": "AppComponent"
+    }
 }
