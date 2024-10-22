@@ -1,0 +1,16 @@
+[
+    {
+        "type": "module",
+        "remoteEntry": "http://localhost:4201/remoteEntry.js",
+        "exposedModule": "./Component",
+        "displayName": "Micro Frontend 1",
+        "componentName": "AppComponent"
+    },
+    {
+        "type": "module",
+        "remoteEntry": "http://localhost:4202/remoteEntry.js",
+        "exposedModule": "./Component",
+        "displayName": "Micro Frontend 2",
+        "componentName": "AppComponent"
+    }
+]
