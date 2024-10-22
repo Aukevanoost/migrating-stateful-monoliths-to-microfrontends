@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@softarc/native-federation": "^2.0.10"
+  }
+}
