@@ -1,10 +1,12 @@
-import {bootstrap} from '@angular-architects/module-federation-tools';
-import { AppModule } from './app/app.module';
+import { createApplication } from '@angular/platform-browser';
+import { createCustomElement } from '@angular/elements';
+import { AppComponent } from './app/app.component';
+import { provideZoneChangeDetection } from '@angular/core';
+import 'zone.js';
 
-bootstrap(AppModule, {
-  production: false,
-  appType: 'microfrontend',
-  activeLegacyMode: true,
-  ngZoneSharing: true,
-  platformSharing: true
-})
+createApplication({ providers: [provideZoneChangeDetection({ eventCoalescing: true })]})
+    .then((app) => {
+        const wc = createCustomElement(AppComponent, { injector: app.injector });
+        customElements.define('mfe-two', wc);
+    })
+    .catch((err) => console.error(err));

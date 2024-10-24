@@ -8,7 +8,5 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'mfe1';
-  constructor() {
-    console.log();
-  }
+  constructor() { }
 }

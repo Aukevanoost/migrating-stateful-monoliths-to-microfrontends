@@ -4,24 +4,32 @@ module.exports = withModuleFederationPlugin({
   name: 'mfe1',
   exposes: {
     './Component': './projects/mfe1/src/bootstrap.ts',
-
   },
-  shared: []  
+  shared: share({
+    "@angular/core": {
+      singleton: true,
+      strictVersion: true,
+      requiredVersion: 'auto'
+    },
+    "@angular/common": {
+      singleton: true,
+      strictVersion: true,
+      requiredVersion: 'auto'
+    },
+    "@angular/common/http": {
+      singleton: true,
+      strictVersion: true,
+      requiredVersion: 'auto'
+    },
+    "@angular/router": {
+      singleton: true,
+      strictVersion: true,
+      requiredVersion: 'auto'
+    },
+    "zone.js": {
+      singleton: true,
+      strictVersion: true,
+      requiredVersion: 'auto'
+    },
+  })
 });
-
-const blub = withModuleFederationPlugin({
-  name: 'mfe1',
-  exposes: {
-    './Component': './projects/mfe1/src/bootstrap.ts',
-
-  },
-  shared: []  
-});
-console.log("=======================================")
-console.log(blub);
-console.log("=======================================")
-console.log(blub.plugins);
-console.log("=======================================")
-console.log(blub.plugins[0]);
-console.log("=======================================")
-console.log(blub.plugins[0]._options);

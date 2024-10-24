@@ -1,13 +1,10 @@
 const { share, withModuleFederationPlugin } = require('@angular-architects/module-federation/webpack');
 
 module.exports = withModuleFederationPlugin({
-
   name: 'mfe2',
-
   exposes: {
     './Component': './projects/mfe2/src/bootstrap.ts',
   },
-
   shared: share({
     "@angular/core": {
       singleton: true,
@@ -29,8 +26,10 @@ module.exports = withModuleFederationPlugin({
       strictVersion: true,
       requiredVersion: 'auto'
     },
-  }),
-  // shared: {...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' })} ,
-  
-
+    "zone.js": {
+      singleton: true,
+      strictVersion: true,
+      requiredVersion: 'auto'
+    },
+  })
 });
