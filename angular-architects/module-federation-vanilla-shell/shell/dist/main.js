@@ -7,6 +7,7 @@
  * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
  */
 import * as __WEBPACK_EXTERNAL_MODULE_http_localhost_4201_remoteEntry_js_e388847f__ from "http://localhost:4201/remoteEntry.js";
+import * as __WEBPACK_EXTERNAL_MODULE_http_localhost_4202_remoteEntry_js_07d5117b__ from "http://localhost:4202/remoteEntry.js";
 /******/ var __webpack_modules__ = ({
 
 /***/ "./app/app.ts":
@@ -15,7 +16,7 @@ import * as __WEBPACK_EXTERNAL_MODULE_http_localhost_4201_remoteEntry_js_e388847
   \********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\nvar __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {\n    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }\n    return new (P || (P = Promise))(function (resolve, reject) {\n        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }\n        function rejected(value) { try { step(generator[\"throw\"](value)); } catch (e) { reject(e); } }\n        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }\n        step((generator = generator.apply(thisArg, _arguments || [])).next());\n    });\n};\n(function init() {\n    return __awaiter(this, void 0, void 0, function* () {\n        try {\n            const container = document.getElementById('container');\n            if (!container) {\n                throw new Error('Container element not found');\n            }\n            const module = yield __webpack_require__.e(/*! import() */ \"webpack_container_remote_mfe1_Component\").then(__webpack_require__.t.bind(__webpack_require__, /*! mfe1/Component */ \"webpack/container/remote/mfe1/Component\", 23));\n            const wcTest = document.createElement('mfe-one');\n            container.appendChild(wcTest);\n        }\n        catch (error) {\n            console.error('Error initializing application:', error);\n        }\n    });\n})();\n\n\n\n//# sourceURL=webpack://module-federation-vanilla-shell/./app/app.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\nvar __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {\n    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }\n    return new (P || (P = Promise))(function (resolve, reject) {\n        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }\n        function rejected(value) { try { step(generator[\"throw\"](value)); } catch (e) { reject(e); } }\n        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }\n        step((generator = generator.apply(thisArg, _arguments || [])).next());\n    });\n};\n(function init() {\n    return __awaiter(this, void 0, void 0, function* () {\n        try {\n            const container = document.getElementById('container');\n            if (!container) {\n                throw new Error('Container element not found');\n            }\n            const mfe1 = yield __webpack_require__.e(/*! import() */ \"webpack_container_remote_mfe1_Component\").then(__webpack_require__.t.bind(__webpack_require__, /*! mfe1/Component */ \"webpack/container/remote/mfe1/Component\", 23));\n            const mfe1root = document.createElement('mfe-one');\n            container.appendChild(mfe1root);\n            const mfe2 = yield __webpack_require__.e(/*! import() */ \"webpack_container_remote_mfe2_Component\").then(__webpack_require__.t.bind(__webpack_require__, /*! mfe2/Component */ \"webpack/container/remote/mfe2/Component\", 23));\n            const mfe2root = document.createElement('mfe-two');\n            container.appendChild(mfe2root);\n        }\n        catch (error) {\n            console.error('Error initializing application:', error);\n        }\n    });\n})();\n\n\n\n//# sourceURL=webpack://module-federation-vanilla-shell/./app/app.ts?");
 
 /***/ }),
 
@@ -26,6 +27,16 @@ eval("__webpack_require__.r(__webpack_exports__);\nvar __awaiter = (undefined &&
 /***/ ((module) => {
 
 module.exports = __WEBPACK_EXTERNAL_MODULE_http_localhost_4201_remoteEntry_js_e388847f__;
+
+/***/ }),
+
+/***/ "webpack/container/reference/mfe2":
+/*!*******************************************************!*\
+  !*** external "http://localhost:4202/remoteEntry.js" ***!
+  \*******************************************************/
+/***/ ((module) => {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_http_localhost_4202_remoteEntry_js_07d5117b__;
 
 /***/ })
 
@@ -190,6 +201,9 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_http_localhost_4201_remoteEntry_js_e3
 /******/ 	var chunkMapping = {
 /******/ 		"webpack_container_remote_mfe1_Component": [
 /******/ 			"webpack/container/remote/mfe1/Component"
+/******/ 		],
+/******/ 		"webpack_container_remote_mfe2_Component": [
+/******/ 			"webpack/container/remote/mfe2/Component"
 /******/ 		]
 /******/ 	};
 /******/ 	var idToExternalAndNameMapping = {
@@ -197,6 +211,11 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_http_localhost_4201_remoteEntry_js_e3
 /******/ 			"default",
 /******/ 			"./Component",
 /******/ 			"webpack/container/reference/mfe1"
+/******/ 		],
+/******/ 		"webpack/container/remote/mfe2/Component": [
+/******/ 			"default",
+/******/ 			"./Component",
+/******/ 			"webpack/container/reference/mfe2"
 /******/ 		]
 /******/ 	};
 /******/ 	__webpack_require__.f.remotes = (chunkId, promises) => {
@@ -286,6 +305,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE_http_localhost_4201_remoteEntry_js_e3
 /******/ 		switch(name) {
 /******/ 			case "default": {
 /******/ 				initExternal("webpack/container/reference/mfe1");
+/******/ 				initExternal("webpack/container/reference/mfe2");
 /******/ 			}
 /******/ 			break;
 /******/ 		}
