@@ -9,6 +9,9 @@
   padding: 0 var(--outer-space);
   margin: 3rem auto 0;
 }
+.e_HomePage exp-teasers {
+    grid-column: span 2;
+}
 
 .e_HomePage__categoryLink {
   display: block;
