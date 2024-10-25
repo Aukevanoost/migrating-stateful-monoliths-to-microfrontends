@@ -7,6 +7,7 @@
         <wicket:container wicket:id="teaserCards">
             <wicket:container wicket:id="listItemContainer"></wicket:container>
         </wicket:container>
+        <exp-teasers></exp-teasers>
         <div class="e_HomePage__recommendations">
             <div class="e_Recommendations">
                 <h2>Recommendations</h2>
@@ -18,6 +19,13 @@
             </div>
         </div>
     </main>
+
+    <script>
+        window.addEventListener('loader-available', (e) => {
+            e.detail.load('explore', 'exp-teasers')
+                .catch(console.error);
+        });
+    </script>
 </wicket:extend>
 </body>
 </html>

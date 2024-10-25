@@ -41,10 +41,12 @@ public class WicketApplication extends WebApplication
 
 		getMarkupSettings().setStripWicketTags(true);
 
-		getCspSettings().blocking()
-			.remove(CSPDirective.STYLE_SRC)
-			.add(CSPDirective.STYLE_SRC, CSPDirectiveSrcValue.SELF, CSPDirectiveSrcValue.UNSAFE_INLINE)
-			.add(CSPDirective.FONT_SRC, CSPDirectiveSrcValue.SELF);
+		getCspSettings().blocking().disabled();
+//		getCspSettings().blocking()
+//			.remove(CSPDirective.STYLE_SRC)
+//			.add(CSPDirective.STYLE_SRC, CSPDirectiveSrcValue.SELF, CSPDirectiveSrcValue.UNSAFE_INLINE)
+//			.add(CSPDirective.SCRIPT_SRC, "https://ga.jspm.io", CSPDirectiveSrcValue.UNSAFE_INLINE)
+//			.add(CSPDirective.FONT_SRC, CSPDirectiveSrcValue.SELF);
 
 		// add your configuration here
 		mountPage("/products/#{category}", CategoryPage.class);

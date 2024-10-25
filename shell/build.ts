@@ -35,7 +35,7 @@ export async function buildProject(projectName) {
         conditions: ['es2020', 'es2015', 'module'],
         resolveExtensions: ['.ts', '.mjs', '.js'],
         tsconfig: tsConfig,
-        splitting: true
+        splitting: false
     });
 
     fs.copyFileSync(`${projectName}/index.html`, `${outputPath}/index.html`);
