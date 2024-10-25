@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <title>Shell</title>
+        <link href='https://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="styles.css"> </head>   
+    </head>
+    <body>
+        <exp-teasers></exp-teasers>
+
+        <script type="esms-options">{ "shimMode": true }</script>
+        <script src="https://ga.jspm.io/npm:es-module-shims@1.5.17/dist/es-module-shims.js"></script>
+
+        <script type="module-shim" src="main.js"></script>
+        
+        <script>
+            window.addEventListener('loader-available', (e) => {
+                e.detail.load('explore', 'exp-teasers')
+                    .catch(console.error);
+            });
+        </script>
+    </body>
+</html>
