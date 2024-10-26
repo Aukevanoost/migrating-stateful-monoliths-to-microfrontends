@@ -1,9 +1,15 @@
 
 <a class="exp_HomePage__categoryLink" href="products/classic">         
-  <img src="http://localhost:4201/img/scene/1000/classics.webp" width="500" sizes="500px" srcset="/img/scene/500/classics.webp 500w, /img/scene/1000/classics.webp 1000w"/>
+  <img 
+      [src]="'/img/scene/1000/classics.webp' | toPath" 
+      width="500" sizes="500px" 
+      srcset="/img/scene/500/classics.webp 500w, /img/scene/1000/classics.webp 1000w"/>
   <p>Classic Tractors</p>
 </a>
 <a class="exp_HomePage__categoryLink" href="products/autonomous">        
-  <img src="http://localhost:4201/img/scene/1000/autonomous.webp" width="500" sizes="500px" srcset="/img/scene/500/autonomous.webp 500w, /img/scene/1000/autonomous.webp 1000w"/>
-  <p>Margarida's Tractors</p>
+  <img 
+    [src]="'http://localhost:4201' | toPath" 
+    width="500" sizes="500px" 
+    srcset="/img/scene/500/autonomous.webp 500w, /img/scene/1000/autonomous.webp 1000w"/>
+  <p>Autonomous Tractors</p>
 </a>
