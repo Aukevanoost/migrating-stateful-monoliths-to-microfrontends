@@ -3,13 +3,11 @@ package com.aukevanoost.domain.dao.mock;
 import com.aukevanoost.domain.boundaries.IRecommendedDAO;
 import com.aukevanoost.domain.dao.mock.db.Recommendations;
 import com.aukevanoost.domain.entities.Recommendation;
-import jakarta.enterprise.context.RequestScoped;
 
 import java.util.*;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.Stream;
 
-@RequestScoped
 public class MockRecommendedDAO implements IRecommendedDAO {
 
     public Stream<Recommendation> getRecommendations(int maxlength, String... sku) {

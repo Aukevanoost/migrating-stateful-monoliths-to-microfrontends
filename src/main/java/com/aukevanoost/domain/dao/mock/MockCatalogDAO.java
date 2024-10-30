@@ -10,7 +10,6 @@ import jakarta.enterprise.context.RequestScoped;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-@RequestScoped
 public class MockCatalogDAO implements ICatalogDAO {
     @Override
     public Optional<Category> getProductsByCategory(String key) {

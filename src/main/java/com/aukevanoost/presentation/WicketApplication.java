@@ -4,9 +4,6 @@ import com.aukevanoost.presentation.home.HomePage;
 import com.aukevanoost.presentation.category.CategoryPage;
 import com.aukevanoost.presentation.product.ProductPage;
 import com.aukevanoost.presentation.store.StoresPage;
-import org.apache.wicket.cdi.CdiConfiguration;
-import org.apache.wicket.csp.CSPDirective;
-import org.apache.wicket.csp.CSPDirectiveSrcValue;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 
@@ -34,10 +31,6 @@ public class WicketApplication extends WebApplication
 	public void init()
 	{
 		super.init();
-
-		CdiConfiguration cdiConfiguration =
-				new CdiConfiguration();
-		cdiConfiguration.configure(this);
 
 		getMarkupSettings().setStripWicketTags(true);
 

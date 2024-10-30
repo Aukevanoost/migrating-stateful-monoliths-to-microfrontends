@@ -11,13 +11,13 @@ import org.apache.wicket.model.Model;
 
 public class StoresPage extends BaseTemplate {
 
-    @Inject
     private transient IStoreController storesController;
 
     private final IModel<StoreViewModel> vm;
 
     public StoresPage(){
         super();
+        this.storesController = IStoreController.inject();
         vm = Model.of(storesController.process());
     }
 

@@ -6,7 +6,6 @@ import com.aukevanoost.presentation.category.components.CategoryFilterPanel;
 import com.aukevanoost.presentation.category.components.ProductCardPanel;
 import com.aukevanoost.presentation._core.ListViewHandler;
 import com.aukevanoost.presentation._core.layout.BaseTemplate;
-import jakarta.inject.Inject;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
@@ -16,13 +15,13 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import java.util.List;
 
 public class CategoryPage extends BaseTemplate {
-    @Inject
     private transient ICategoryController controller;
 
     private final IModel<CategoryViewModel> vm;
 
     public CategoryPage() {
         super();
+        this.controller = ICategoryController.inject();
         vm = Model.of(controller.process());
     }
 

@@ -5,14 +5,16 @@ import com.aukevanoost.domain.boundaries.IRecommendedDAO;
 import com.aukevanoost.interfaces.boundaries.product.*;
 import com.aukevanoost.interfaces.boundaries.recommendation.RecommendationDTO;
 import jakarta.annotation.Nullable;
-import jakarta.inject.Inject;
 
 public class ProductController implements IProductController {
-    @Inject
-    private ICatalogDAO catalogDAO;
+    private final ICatalogDAO catalogDAO;
 
-    @Inject
-    private IRecommendedDAO recommendedDAO;
+    private final IRecommendedDAO recommendedDAO;
+
+    public ProductController(ICatalogDAO catalogDAO, IRecommendedDAO recommendedDAO) {
+        this.catalogDAO = catalogDAO;
+        this.recommendedDAO = recommendedDAO;
+    }
 
     public ProductViewModel process(String productSku, @Nullable String variantSku) {
         var dbProduct = catalogDAO

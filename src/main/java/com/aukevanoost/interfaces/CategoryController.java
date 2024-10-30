@@ -6,20 +6,20 @@ import com.aukevanoost.interfaces.boundaries.category.*;
 import com.aukevanoost.interfaces.boundaries.category.CategoryDTO;
 import com.aukevanoost.interfaces.boundaries.category.CategoryFilterDTO;
 import com.aukevanoost.interfaces.boundaries.category.ProductPreviewDTO;
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
 
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-@RequestScoped
 public class CategoryController implements ICategoryController {
     private static final String ALL_PRODUCTS_KEY = "all";
     private static final String ALL_PRODUCTS_NAME = "All machines";
     private static final String CATEGORY_BASE_URL = "/products";
 
-    @Inject
-    private ICatalogDAO catalogDAO;
+    private final ICatalogDAO catalogDAO;
+
+    public CategoryController(ICatalogDAO catalogDAO) {
+        this.catalogDAO = catalogDAO;
+    }
 
     public CategoryViewModel process(String activeCategoryKey) {
         var category = this.catalogDAO.getProductsByCategory(activeCategoryKey)

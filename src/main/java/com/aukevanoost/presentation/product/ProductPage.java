@@ -8,20 +8,19 @@ import com.aukevanoost.presentation.recommendation.RecommendationCardPanel;
 import com.aukevanoost.presentation._core.ListViewHandler;
 import com.aukevanoost.presentation._core.layout.BaseTemplate;
 import com.aukevanoost.presentation.product.components.VariantOptionPanel;
-import jakarta.inject.Inject;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class ProductPage extends BaseTemplate {
-    @Inject
     private transient IProductController controller;
 
     private final IModel<ProductViewModel> vm;
 
     public ProductPage(PageParameters parameters){
         super(parameters);
+        controller = IProductController.inject();
         vm = Model.of(
             this.controller.process(
                 parameters.get("product").toString(),
