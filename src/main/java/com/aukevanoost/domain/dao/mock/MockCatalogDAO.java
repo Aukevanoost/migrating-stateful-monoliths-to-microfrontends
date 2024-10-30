@@ -6,13 +6,14 @@ import com.aukevanoost.domain.dao.mock.db.Products;
 import com.aukevanoost.domain.entities.Category;
 import com.aukevanoost.domain.entities.Product;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 public class MockCatalogDAO implements ICatalogDAO {
     @Override
-    public Optional<Category> getProductsByCategory(String key) {
-        return Optional.of(Categories.ALL.get(key));
+    public Optional<List<Product>> getProductsByCategory(String key) {
+        return Optional.of(Categories.PRODUCTS.get(key));
     }
 
     @Override
@@ -29,6 +30,8 @@ public class MockCatalogDAO implements ICatalogDAO {
     public Stream<Category> getAllCategories() {
         return Categories.stream();
     }
-
+    public Optional<Category> getCategory(String key) {
+        return Optional.of(Categories.ALL.get(key));
+    }
 
 }

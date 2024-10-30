@@ -20,7 +20,7 @@ public class CategoryController implements ICategoryController {
 
     public CategoryDTO get(String categoryID) {
         return this.catalogDAO
-            .getProductsByCategory(categoryID)
+            .getCategory(categoryID)
             .map(CategoryDTO::from)
             .orElseThrow(() -> new IllegalArgumentException("Category not found"));
     }
@@ -34,8 +34,9 @@ public class CategoryController implements ICategoryController {
     public Stream<ProductPreviewDTO> getProducts(String categoryID) {
         return this.catalogDAO
             .getProductsByCategory(categoryID)
-            .map(c -> c.products$().map(ProductPreviewDTO::from))
-            .orElseThrow(() -> new IllegalArgumentException("Category not found"));
+            .orElseThrow(() -> new IllegalArgumentException("Category not found"))
+            .stream()
+            .map(ProductPreviewDTO::from);
     }
 
     private Function<Category, CategoryFilterDTO> mapToFilter(String activeCategory) {
