@@ -3,12 +3,10 @@ package com.aukevanoost;
 import java.lang.management.ManagementFactory;
 import javax.management.MBeanServer;
 
-import jakarta.inject.Inject;
 import org.apache.wicket.protocol.ws.javax.WicketServerEndpointConfig;
 import org.eclipse.jetty.jmx.MBeanContainer;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
-import org.eclipse.jetty.server.SecureRequestCustomizer;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
@@ -18,27 +16,24 @@ import org.jboss.weld.environment.servlet.Listener;
 
 public class Start {
 
-//	@Inject
-//	private BeanManager beanManager;
-
 	public static void main(String[] args) throws Exception {
 		System.setProperty("wicket.configuration", "development");
 
-		Server server = new Server();
+		Server wicketServer = new Server();
 
 		HttpConfiguration httpConfig = new HttpConfiguration();
 		httpConfig.setSecureScheme("https");
 		httpConfig.setSecurePort(8443);
 		httpConfig.setOutputBufferSize(32768);
 
-		ServerConnector http = new ServerConnector(server, new HttpConnectionFactory(httpConfig));
+		ServerConnector http = new ServerConnector(wicketServer, new HttpConnectionFactory(httpConfig));
 		http.setPort(8080);
 		http.setIdleTimeout(1000 * 60 * 60);
 
-		server.addConnector(http);
+		wicketServer.addConnector(http);
 
 		WebAppContext bb = new WebAppContext();
-		bb.setServer(server);
+		bb.setServer(wicketServer);
 		bb.setContextPath("/");
 		bb.setWar("src/main/webapp");
 
@@ -48,16 +43,31 @@ public class Start {
 		JakartaWebSocketServletContainerInitializer.configure(contextHandler,
 				(servletContext, container) -> container.addEndpoint(new WicketServerEndpointConfig()));
 
-		server.setHandler(bb);
+		wicketServer.setHandler(bb);
 
 		MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
 		MBeanContainer mBeanContainer = new MBeanContainer(mBeanServer);
-		server.addEventListener(mBeanContainer);
-		server.addBean(mBeanContainer);
+		wicketServer.addEventListener(mBeanContainer);
+		wicketServer.addBean(mBeanContainer);
+
+		// REST
+		RestApiServer restServer = new RestApiServer(8081);
+
+//		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+//			try {
+//				restServer.stop();
+//				wicketServer.stop();
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		}));
 
 		try {
-			server.start();
-			server.join();
+			wicketServer.start();
+			restServer.start();
+
+			wicketServer.join();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(100);
