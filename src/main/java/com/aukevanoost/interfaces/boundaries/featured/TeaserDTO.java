@@ -1,4 +1,4 @@
-package com.aukevanoost.interfaces.boundaries.home;
+package com.aukevanoost.interfaces.boundaries.featured;
 
 import com.aukevanoost.domain.entities.Teaser;
 

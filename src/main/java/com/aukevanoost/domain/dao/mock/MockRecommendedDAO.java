@@ -1,6 +1,6 @@
 package com.aukevanoost.domain.dao.mock;
 
-import com.aukevanoost.domain.boundaries.IRecommendedDAO;
+import com.aukevanoost.domain.boundaries.recommended.IRecommendedDAO;
 import com.aukevanoost.domain.dao.mock.db.Recommendations;
 import com.aukevanoost.domain.entities.Recommendation;
 

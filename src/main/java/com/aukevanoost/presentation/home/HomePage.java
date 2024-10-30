@@ -1,7 +1,6 @@
 package com.aukevanoost.presentation.home;
 
-import com.aukevanoost.interfaces.boundaries.home.HomeViewModel;
-import com.aukevanoost.interfaces.boundaries.home.IHomeController;
+import com.aukevanoost.interfaces.boundaries.featured.FeaturedControllerFactory;
 import com.aukevanoost.presentation.recommendation.RecommendationCardPanel;
 import com.aukevanoost.presentation._core.ListViewHandler;
 import com.aukevanoost.presentation._core.layout.BaseTemplate;
@@ -9,14 +8,12 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 public class HomePage extends BaseTemplate {
-    private transient IHomeController controller;
-
     private final IModel<HomeViewModel> vm;
 
     public HomePage(){
         super();
-        this.controller = IHomeController.inject();
-        vm = Model.of(controller.process());
+        var controller = FeaturedControllerFactory.inject();
+        vm = Model.of(HomeViewModel.from(controller));
     }
 
     protected void onInitialize() {

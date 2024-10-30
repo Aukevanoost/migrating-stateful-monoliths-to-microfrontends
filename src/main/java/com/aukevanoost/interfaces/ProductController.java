@@ -1,7 +1,7 @@
 package com.aukevanoost.interfaces;
 
 import com.aukevanoost.domain.boundaries.ICatalogDAO;
-import com.aukevanoost.domain.boundaries.IRecommendedDAO;
+import com.aukevanoost.domain.boundaries.recommended.IRecommendedDAO;
 import com.aukevanoost.interfaces.boundaries.product.*;
 import com.aukevanoost.interfaces.boundaries.recommendation.RecommendationDTO;
 import jakarta.annotation.Nullable;

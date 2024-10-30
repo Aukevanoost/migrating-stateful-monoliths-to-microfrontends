@@ -1,5 +1,6 @@
 package com.aukevanoost;
 
+import com.aukevanoost.api.RestApplication;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
@@ -37,10 +38,10 @@ public class RestApiServer {
 
         ServletHolder resteasyServlet = new ServletHolder(new HttpServletDispatcher());
         resteasyServlet.setInitParameter("jakarta.ws.rs.Application", RestApplication.class.getName());
-        resteasyServlet.setInitParameter("resteasy.servlet.mapping.prefix", "/api");
+        resteasyServlet.setInitParameter("resteasy.servlet.mapping.prefix", "/v1");
 
-        log.info("Adding RESTEasy servlet mapping for /api/*");
-        context.addServlet(resteasyServlet, "/api/*");
+        log.info("Adding RESTEasy servlet mapping for /v1/*");
+        context.addServlet(resteasyServlet, "/v1/*");
         context.setAttribute(ResteasyDeploymentImpl.class.getName(), deployment);
 
         server.setHandler(context);
