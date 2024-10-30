@@ -1,6 +1,6 @@
 package com.aukevanoost.interfaces;
 
-import com.aukevanoost.domain.boundaries.IStoreDAO;
+import com.aukevanoost.domain.boundaries.store.IStoreDAO;
 import com.aukevanoost.interfaces.boundaries.store.IStoreController;
 import com.aukevanoost.interfaces.boundaries.store.StoreViewModel;
 import com.aukevanoost.interfaces.boundaries.store.StoreDTO;

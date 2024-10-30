@@ -1,4 +1,4 @@
-package com.aukevanoost.domain.boundaries;
+package com.aukevanoost.domain.boundaries.catalog;
 
 import com.aukevanoost.domain.dao.mock.MockCatalogDAO;
 import com.aukevanoost.domain.entities.Category;
@@ -13,7 +13,4 @@ public interface ICatalogDAO {
     Stream<Product> getAllProducts();
     Stream<Category> getAllCategories();
 
-    static ICatalogDAO inject() {
-        return new MockCatalogDAO();
-    }
 }

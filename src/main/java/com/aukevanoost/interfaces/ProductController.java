@@ -1,6 +1,6 @@
 package com.aukevanoost.interfaces;
 
-import com.aukevanoost.domain.boundaries.ICatalogDAO;
+import com.aukevanoost.domain.boundaries.catalog.ICatalogDAO;
 import com.aukevanoost.domain.boundaries.recommended.IRecommendedDAO;
 import com.aukevanoost.interfaces.boundaries.product.*;
 import com.aukevanoost.interfaces.boundaries.recommendation.RecommendationDTO;

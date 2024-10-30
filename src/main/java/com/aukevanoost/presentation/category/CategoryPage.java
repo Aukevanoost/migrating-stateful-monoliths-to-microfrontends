@@ -1,8 +1,7 @@
 package com.aukevanoost.presentation.category;
 
+import com.aukevanoost.interfaces.boundaries.category.CategoryControllerFactory;
 import com.aukevanoost.interfaces.boundaries.category.ICategoryController;
-import com.aukevanoost.interfaces.boundaries.category.CategoryViewModel;
-import com.aukevanoost.interfaces.boundaries.product.IProductController;
 import com.aukevanoost.presentation.category.components.CategoryFilterPanel;
 import com.aukevanoost.presentation.category.components.ProductCardPanel;
 import com.aukevanoost.presentation._core.ListViewHandler;
@@ -16,22 +15,18 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import java.util.List;
 
 public class CategoryPage extends BaseTemplate {
-    private transient ICategoryController controller;
-
     private final IModel<CategoryViewModel> vm;
 
     public CategoryPage() {
         super();
-        this.controller = ICategoryController.inject();
-        vm = Model.of(controller.process());
+        var controller = CategoryControllerFactory.inject();
+        vm = Model.of(CategoryViewModel.from(controller, "all"));
     }
 
     public CategoryPage(PageParameters parameters) {
         super(parameters);
-        this.controller = ICategoryController.inject();
-        vm = Model.of(
-            controller.process(parameters.get("category").toString())
-        );
+        var controller = CategoryControllerFactory.inject();
+        vm = Model.of(CategoryViewModel.from(controller, parameters.get("category").toString()));
     }
 
     @Override

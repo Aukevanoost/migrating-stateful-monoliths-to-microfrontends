@@ -1,7 +1,7 @@
 package com.aukevanoost.interfaces.boundaries.product;
 
-import com.aukevanoost.domain.boundaries.ICatalogDAO;
-import com.aukevanoost.domain.boundaries.recommended.IRecommendedDAO;
+import com.aukevanoost.domain.boundaries.catalog.CatalogDAOFactory;
+import com.aukevanoost.domain.boundaries.catalog.ICatalogDAO;
 import com.aukevanoost.domain.boundaries.recommended.RecommendedDAOFactory;
 import com.aukevanoost.interfaces.ProductController;
 import jakarta.annotation.Nullable;
@@ -11,7 +11,7 @@ public interface IProductController {
 
      static IProductController inject() {
           return new ProductController(
-              ICatalogDAO.inject(),
+              CatalogDAOFactory.inject(),
               RecommendedDAOFactory.inject()
           );
      }

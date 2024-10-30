@@ -1,11 +1,10 @@
 package com.aukevanoost.domain.dao.mock;
 
-import com.aukevanoost.domain.boundaries.ICatalogDAO;
+import com.aukevanoost.domain.boundaries.catalog.ICatalogDAO;
 import com.aukevanoost.domain.dao.mock.db.Categories;
 import com.aukevanoost.domain.dao.mock.db.Products;
 import com.aukevanoost.domain.entities.Category;
 import com.aukevanoost.domain.entities.Product;
-import jakarta.enterprise.context.RequestScoped;
 
 import java.util.Optional;
 import java.util.stream.Stream;

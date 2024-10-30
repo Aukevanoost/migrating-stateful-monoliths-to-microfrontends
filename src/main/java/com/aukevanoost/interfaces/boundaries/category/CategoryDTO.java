@@ -16,7 +16,7 @@ public record CategoryDTO(
     public static CategoryDTO from(Category category) {
         return new CategoryDTO(
             category.name(),
-            category.name()
+            category.key()
         );
     }
 }

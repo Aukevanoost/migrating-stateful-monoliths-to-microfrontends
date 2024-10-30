@@ -16,6 +16,11 @@ public class Categories {
             "autonomous",
             "Autonomous",
             IntStream.rangeClosed(1, 8).mapToObj(Products.getByID("AU")).toList()
+        )),
+        Map.entry("all", new Category(
+            "all",
+            "All machines",
+            Products.ALL.values().stream().toList()
         ))
     );
 

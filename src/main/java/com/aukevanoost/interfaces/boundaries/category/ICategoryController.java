@@ -1,15 +1,12 @@
 package com.aukevanoost.interfaces.boundaries.category;
 
-import com.aukevanoost.domain.boundaries.ICatalogDAO;
-import com.aukevanoost.interfaces.CategoryController;
+import com.aukevanoost.presentation.category.CategoryViewModel;
+
+import java.util.stream.Stream;
 
 public interface ICategoryController {
-    CategoryViewModel process(String category);
-    CategoryViewModel process();
+    CategoryDTO get(String categoryID);
+    Stream<CategoryFilterDTO> getFilters(String activeCategoryID);
+    Stream<ProductPreviewDTO> getProducts(String categoryID);
 
-    static ICategoryController inject() {
-        return new CategoryController(
-            ICatalogDAO.inject()
-        );
-    }
 }

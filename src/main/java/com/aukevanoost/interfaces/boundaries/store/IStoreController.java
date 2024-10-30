@@ -1,6 +1,6 @@
 package com.aukevanoost.interfaces.boundaries.store;
 
-import com.aukevanoost.domain.boundaries.IStoreDAO;
+import com.aukevanoost.domain.boundaries.store.StoreDAOFactory;
 import com.aukevanoost.interfaces.StoresController;
 
 public interface IStoreController {
@@ -8,7 +8,7 @@ public interface IStoreController {
 
     static IStoreController inject() {
         return new StoresController(
-            IStoreDAO.inject()
+            StoreDAOFactory.inject()
         );
     }
 }
