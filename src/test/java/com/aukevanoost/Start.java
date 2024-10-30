@@ -44,17 +44,17 @@ public class Start {
 			wicketServer.setHandler(bb);
 
 			// Initialize REST Server
-//			log.info("Initializing REST server on port 8081...");
-//			restServer = new RestApiServer(8081);
+			log.info("Initializing REST server on port 8081...");
+			restServer = new RestApiServer(8081);
 
 			// Start both servers
 			log.info("Starting Wicket server...");
 			LifeCycle.start(wicketServer);
 			log.info("Wicket server started successfully");
 
-//			log.info("Starting REST server...");
-			//restServer.start();
-//			log.info("REST server started successfully");
+			log.info("Starting REST server...");
+			restServer.start();
+			log.info("REST server started successfully");
 
 //			log.info("Both servers started successfully. Press Ctrl+C to stop.");
 			wicketServer.join();
