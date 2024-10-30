@@ -2,10 +2,10 @@ package com.aukevanoost;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
+import org.eclipse.jetty.ee10.servlet.ServletHolder;
 import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
-import org.jboss.resteasy.core.ResteasyDeployment;
+import org.jboss.resteasy.core.ResteasyDeploymentImpl;
 
 public class RestApiServer {
     private final Server server;
@@ -25,14 +25,14 @@ public class RestApiServer {
         context.setContextPath("/");
 
         // RESTEasy configuration
-        ResteasyDeployment deployment = new ResteasyDeployment();
+        ResteasyDeploymentImpl deployment = new ResteasyDeploymentImpl();
         deployment.setApplication(new RestApplication());
 
         ServletHolder servlet = new ServletHolder(new HttpServletDispatcher());
         servlet.setInitParameter("javax.ws.rs.Application", RestApplication.class.getName());
         context.addServlet(servlet, "/api/*");
 
-        context.setAttribute(ResteasyDeployment.class.getName(), deployment);
+        context.setAttribute(ResteasyDeploymentImpl.class.getName(), deployment);
 
         server.setHandler(context);
         server.start();
