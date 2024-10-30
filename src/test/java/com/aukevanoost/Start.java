@@ -21,7 +21,6 @@ public class Start {
 		RestApiServer restServer = null;
 
 		try {
-			// Initialize Wicket Server
 			log.info("Initializing Wicket server on port 8080...");
 			wicketServer = new Server();
 
@@ -56,9 +55,7 @@ public class Start {
 			restServer.start();
 			log.info("REST server started successfully");
 
-//			log.info("Both servers started successfully. Press Ctrl+C to stop.");
 			wicketServer.join();
-
 		} catch (Exception e) {
 			log.error("Error starting servers", e);
 			throw e;

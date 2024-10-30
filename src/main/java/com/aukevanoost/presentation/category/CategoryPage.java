@@ -2,6 +2,7 @@ package com.aukevanoost.presentation.category;
 
 import com.aukevanoost.interfaces.boundaries.category.ICategoryController;
 import com.aukevanoost.interfaces.boundaries.category.CategoryViewModel;
+import com.aukevanoost.interfaces.boundaries.product.IProductController;
 import com.aukevanoost.presentation.category.components.CategoryFilterPanel;
 import com.aukevanoost.presentation.category.components.ProductCardPanel;
 import com.aukevanoost.presentation._core.ListViewHandler;
@@ -27,6 +28,7 @@ public class CategoryPage extends BaseTemplate {
 
     public CategoryPage(PageParameters parameters) {
         super(parameters);
+        this.controller = ICategoryController.inject();
         vm = Model.of(
             controller.process(parameters.get("category").toString())
         );
