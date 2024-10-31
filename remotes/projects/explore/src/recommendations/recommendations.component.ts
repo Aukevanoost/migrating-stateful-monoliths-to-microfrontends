@@ -4,15 +4,15 @@ import { AsyncPipe, CommonModule } from '@angular/common';
 import { fromCDNPipe } from '../shared/from-cdn.pipe';
 
 @Component({
-  selector: 'exp-root',
+  selector: 'exp-recommendations',
   standalone: true,
   imports: [fromCDNPipe, CommonModule, AsyncPipe],
   providers: [FeaturedHttpService],
-  templateUrl: './teasers.component.html',
-  styleUrls: ['./teasers.component.scss'],
+  templateUrl: './recommendations.component.html',
+  styleUrls: ['./recommendations.component.scss'],
   encapsulation: ViewEncapsulation.ShadowDom
 })
-export class TeasersComponent {
+export class RecommendationsComponent {
   http = inject(FeaturedHttpService);
-  teasers$ = this.http.teasers$();
+  recommendations$ = this.http.recommendations$();
 }

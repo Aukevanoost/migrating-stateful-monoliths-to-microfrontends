@@ -4,7 +4,6 @@ export const ENV = new InjectionToken<AppEnv>('ENV');
 
 export interface AppEnv {
   stage: "dev"|"pr"|"test"|"accp"|"prod";
-  frontendUrl: string;
   api: string;
-  shell: string;
+  cdn: string;
 }

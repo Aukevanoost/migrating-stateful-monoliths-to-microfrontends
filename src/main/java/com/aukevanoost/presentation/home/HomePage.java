@@ -18,17 +18,5 @@ public class HomePage extends BaseTemplate {
 
     protected void onInitialize() {
         super.onInitialize();
-
-//        add(ListViewHandler.asPanel(
-//            "teaserCards",
-//            vm.map(HomeViewModel::teasers),
-//            TeaserCardPanel::new
-//        ));
-
-        add(ListViewHandler.asPanel(
-            "recommendationCards",
-            vm.map(HomeViewModel::recommendations),
-            RecommendationCardPanel::new
-        ));
     }
 }

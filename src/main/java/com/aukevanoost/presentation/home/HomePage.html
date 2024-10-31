@@ -4,25 +4,14 @@
 <body>
 <wicket:extend>
     <main class="e_HomePage">
-<!--        <wicket:container wicket:id="teaserCards">-->
-<!--            <wicket:container wicket:id="listItemContainer"></wicket:container>-->
-<!--        </wicket:container>-->
         <exp-teasers></exp-teasers>
-        <div class="e_HomePage__recommendations">
-            <div class="e_Recommendations">
-                <h2>Recommendations</h2>
-                <ul class="e_Recommendations_list">
-                    <wicket:container wicket:id="recommendationCards">
-                        <li wicket:id="listItemContainer"></li>
-                    </wicket:container>
-                </ul>
-            </div>
-        </div>
+        <exp-recommendations class="e_HomePage__recommendations"></exp-recommendations>
     </main>
 
     <script>
         window.addEventListener('loader-available', (e) => {
             e.detail.load('explore', 'exp-teasers')
+                .then(_ => e.detail.load('explore', 'exp-recommendations'))
                 .catch(console.error);
         });
     </script>

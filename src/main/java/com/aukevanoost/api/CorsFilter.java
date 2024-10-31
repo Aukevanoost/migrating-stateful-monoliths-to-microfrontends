@@ -7,7 +7,6 @@ import jakarta.ws.rs.ext.Provider;
 
 import java.util.Set;
 
-
 @Provider
 public class CorsFilter implements ContainerResponseFilter {
     private static final Set<String> WHITELIST = Set.of(
