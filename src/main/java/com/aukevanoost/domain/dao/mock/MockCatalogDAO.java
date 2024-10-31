@@ -22,14 +22,10 @@ public class MockCatalogDAO implements ICatalogDAO {
     }
 
     @Override
-    public Stream<Product> getAllProducts() {
-        return Products.stream();
-    }
-
-    @Override
     public Stream<Category> getAllCategories() {
         return Categories.stream();
     }
+    
     public Optional<Category> getCategory(String key) {
         return Optional.of(Categories.ALL.get(key));
     }

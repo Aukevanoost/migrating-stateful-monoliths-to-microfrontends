@@ -1,4 +1,4 @@
-package com.aukevanoost.interfaces.boundaries.product;
+package com.aukevanoost.interfaces.boundaries.inventory;
 
 import com.aukevanoost.domain.entities.Product;
 import com.aukevanoost.domain.entities.ProductVariant;
@@ -6,7 +6,7 @@ import com.aukevanoost.domain.entities.ProductVariant;
 import java.io.Serial;
 import java.io.Serializable;
 
-public record CartInfoDTO(
+public record StockInfoDTO(
     String sku,
     Integer price,
     Integer inventory
@@ -15,8 +15,8 @@ public record CartInfoDTO(
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public static CartInfoDTO from(Product product, ProductVariant variant){
-        return new CartInfoDTO(
+    public static StockInfoDTO from(Product product, ProductVariant variant){
+        return new StockInfoDTO(
             product.sku(),
             variant.price(),
             variant.inventory()

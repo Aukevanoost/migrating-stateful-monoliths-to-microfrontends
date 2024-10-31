@@ -3,6 +3,7 @@ package com.aukevanoost.presentation.category;
 import com.aukevanoost.interfaces.boundaries.category.CategoryFilterDTO;
 import com.aukevanoost.interfaces.boundaries.category.ICategoryController;
 import com.aukevanoost.interfaces.boundaries.category.ProductPreviewDTO;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -16,7 +17,8 @@ public record CategoryViewModel(
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public static CategoryViewModel from(ICategoryController controller, String activeCategory) {
+    public static CategoryViewModel from(ICategoryController controller, PageParameters param) {
+        String activeCategory = param.get("category").toString();
         return new CategoryViewModel(
             controller.get(activeCategory).name(),
             controller.getProducts(activeCategory).toList(),

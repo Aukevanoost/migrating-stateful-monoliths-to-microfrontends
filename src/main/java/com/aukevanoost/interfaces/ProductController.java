@@ -1,48 +1,57 @@
 package com.aukevanoost.interfaces;
 
 import com.aukevanoost.domain.boundaries.catalog.ICatalogDAO;
-import com.aukevanoost.domain.boundaries.recommended.IRecommendedDAO;
+import com.aukevanoost.domain.boundaries.recommendations.IRecommendationsDAO;
 import com.aukevanoost.interfaces.boundaries.product.*;
-import com.aukevanoost.interfaces.boundaries.recommendation.RecommendationDTO;
+import com.aukevanoost.interfaces.boundaries.featured.RecommendationDTO;
+import com.aukevanoost.presentation.product.ProductViewModel;
 import jakarta.annotation.Nullable;
+
+import java.util.List;
 
 public class ProductController implements IProductController {
     private final ICatalogDAO catalogDAO;
 
-    private final IRecommendedDAO recommendedDAO;
-
-    public ProductController(ICatalogDAO catalogDAO, IRecommendedDAO recommendedDAO) {
+    public ProductController(ICatalogDAO catalogDAO) {
         this.catalogDAO = catalogDAO;
-        this.recommendedDAO = recommendedDAO;
     }
 
-    public ProductViewModel process(String productSku, @Nullable String variantSku) {
-        var dbProduct = catalogDAO
-            .getProductBySKU(productSku)
+    public ProductDTO getProductBySKU(String sku, @Nullable String variantSku) {
+        return catalogDAO
+            .getProductBySKU(sku)
+            .map(p -> p.variants$()
+                    .filter(v -> variantSku == null || v.sku().equals(variantSku))
+                    .findFirst()
+                    .map(v -> ProductDTO.from(p, v))
+                    .orElseThrow(() -> new IllegalArgumentException("Product variant not found"))
+            )
             .orElseThrow(() -> new IllegalArgumentException("Product not found"));
-
-        var dbActiveVariant = dbProduct.variants$()
-            .filter(v -> variantSku == null || v.sku().equals(variantSku))
-            .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("Product variant not found"));
-
-        var product = ProductDTO.from(dbProduct, dbActiveVariant);
-        var variants = dbProduct.variants$()
-            .map(v -> VariantOptionDTO.from(v, v.sku().equals(dbActiveVariant.sku())))
-            .toList();
-
-        var cartInfo = CartInfoDTO.from(dbProduct, dbActiveVariant);
-
-        var recommendations = recommendedDAO
-            .getRecommendations(4, dbActiveVariant.sku())
-            .map(RecommendationDTO::from)
-            .toList();
-
-        return new ProductViewModel(
-            product,
-            cartInfo,
-            variants,
-            recommendations
-        );
     }
+
+    public List<VariantOptionDTO> getVariantsBySKU(String sku, @Nullable String variantSku) {
+        return catalogDAO
+            .getProductBySKU(sku)
+            .map(p -> p.variants$()
+                .map(v -> VariantOptionDTO.from(v, v.sku().equals(variantSku)))
+                .toList()
+            )
+            .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+    }
+
+
+
+//    public ProductViewModel process(String productSku, @Nullable String variantSku) {
+//
+//        var recommendations = recommendedDAO
+//            .getRecommendations(4, dbActiveVariant.sku())
+//            .map(RecommendationDTO::from)
+//            .toList();
+//
+//        return new ProductViewModel(
+//            product,
+//            cartInfo,
+//            variants,
+//            recommendations
+//        );
+//    }
 }

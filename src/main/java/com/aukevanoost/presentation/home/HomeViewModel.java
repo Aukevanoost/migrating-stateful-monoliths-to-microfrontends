@@ -2,7 +2,7 @@ package com.aukevanoost.presentation.home;
 
 import com.aukevanoost.interfaces.boundaries.featured.IFeaturedController;
 import com.aukevanoost.interfaces.boundaries.featured.TeaserDTO;
-import com.aukevanoost.interfaces.boundaries.recommendation.RecommendationDTO;
+import com.aukevanoost.interfaces.boundaries.featured.RecommendationDTO;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -18,7 +18,7 @@ public record HomeViewModel(
     public static HomeViewModel from(IFeaturedController controller) {
         return new HomeViewModel(
             controller.getTeasers(),
-            controller.getRecommendations()
+            controller.getRecommendations("CL-01-GY", "AU-07-MT")
         );
     }
 }

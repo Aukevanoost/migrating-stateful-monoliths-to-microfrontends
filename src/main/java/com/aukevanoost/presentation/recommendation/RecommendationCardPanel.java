@@ -1,6 +1,6 @@
 package com.aukevanoost.presentation.recommendation;
 
-import com.aukevanoost.interfaces.boundaries.recommendation.RecommendationDTO;
+import com.aukevanoost.interfaces.boundaries.featured.RecommendationDTO;
 import com.aukevanoost.presentation._core.components.ImagePanel;
 import com.aukevanoost.presentation.product.ProductPage;
 import org.apache.wicket.markup.html.basic.Label;

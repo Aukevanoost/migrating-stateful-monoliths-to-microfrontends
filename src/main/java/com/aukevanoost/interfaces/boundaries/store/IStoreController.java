@@ -1,14 +1,7 @@
 package com.aukevanoost.interfaces.boundaries.store;
 
-import com.aukevanoost.domain.boundaries.store.StoreDAOFactory;
-import com.aukevanoost.interfaces.StoresController;
+import java.util.List;
 
 public interface IStoreController {
-    StoreViewModel process();
-
-    static IStoreController inject() {
-        return new StoresController(
-            StoreDAOFactory.inject()
-        );
-    }
+    List<StoreDTO> getStores();
 }

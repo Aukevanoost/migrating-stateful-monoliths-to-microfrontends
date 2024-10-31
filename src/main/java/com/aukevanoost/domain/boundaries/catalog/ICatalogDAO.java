@@ -11,7 +11,6 @@ import java.util.stream.Stream;
 public interface ICatalogDAO {
     Optional<List<Product>> getProductsByCategory(String category);
     Optional<Product> getProductBySKU(String sku);
-    Stream<Product> getAllProducts();
     Stream<Category> getAllCategories();
     Optional<Category> getCategory(String category);
 

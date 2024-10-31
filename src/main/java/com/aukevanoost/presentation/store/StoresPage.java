@@ -1,7 +1,6 @@
 package com.aukevanoost.presentation.store;
 
-import com.aukevanoost.interfaces.boundaries.store.IStoreController;
-import com.aukevanoost.interfaces.boundaries.store.StoreViewModel;
+import com.aukevanoost.interfaces.boundaries.store.StoreControllerFactory;
 import com.aukevanoost.presentation.store.components.StoreCardPanel;
 import com.aukevanoost.presentation._core.ListViewHandler;
 import com.aukevanoost.presentation._core.layout.BaseTemplate;
@@ -10,14 +9,13 @@ import org.apache.wicket.model.Model;
 
 public class StoresPage extends BaseTemplate {
 
-    private transient final IStoreController storesController;
-
     private final IModel<StoreViewModel> vm;
 
     public StoresPage(){
         super();
-        storesController = IStoreController.inject();
-        vm = Model.of(storesController.process());
+        var controller = StoreControllerFactory.inject();
+
+        vm = Model.of(StoreViewModel.from(controller));
     }
 
     protected void onInitialize() {

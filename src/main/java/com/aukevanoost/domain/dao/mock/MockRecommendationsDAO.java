@@ -1,6 +1,6 @@
 package com.aukevanoost.domain.dao.mock;
 
-import com.aukevanoost.domain.boundaries.recommended.IRecommendedDAO;
+import com.aukevanoost.domain.boundaries.recommendations.IRecommendationsDAO;
 import com.aukevanoost.domain.dao.mock.db.Recommendations;
 import com.aukevanoost.domain.entities.Recommendation;
 
@@ -8,7 +8,7 @@ import java.util.*;
 import java.util.function.ToDoubleFunction;
 import java.util.stream.Stream;
 
-public class MockRecommendedDAO implements IRecommendedDAO {
+public class MockRecommendationsDAO implements IRecommendationsDAO {
 
     public Stream<Recommendation> getRecommendations(int maxlength, String... sku) {
         var averageColor = getAverageColor(sku);
