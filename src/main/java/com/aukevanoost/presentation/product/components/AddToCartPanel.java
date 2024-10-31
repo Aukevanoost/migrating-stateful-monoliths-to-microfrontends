@@ -1,6 +1,6 @@
 package com.aukevanoost.presentation.product.components;
 
-import com.aukevanoost.interfaces.boundaries.product.CartInfoDTO;
+import com.aukevanoost.interfaces.boundaries.inventory.StockInfoDTO;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -12,12 +12,12 @@ import org.apache.wicket.model.IModel;
 
 import java.io.Serial;
 
-public class AddToCartPanel extends GenericPanel<CartInfoDTO> {
+public class AddToCartPanel extends GenericPanel<StockInfoDTO> {
     private final Form<Void> form;
     private final Fragment inStockFragment;
     private final Fragment outOfStockFragment;
 
-    public AddToCartPanel(String id, IModel<CartInfoDTO> model) {
+    public AddToCartPanel(String id, IModel<StockInfoDTO> model) {
         super(id, model);
         inStockFragment = createInStockFragment();
         outOfStockFragment = createOutOfStockFragment();
@@ -39,7 +39,7 @@ public class AddToCartPanel extends GenericPanel<CartInfoDTO> {
 
     private Fragment createInStockFragment() {
         Fragment fragment = new Fragment("inventoryState", "inStockFragment", this);
-        fragment.add(new Label("inventory", getModel().map(CartInfoDTO::inventory)));
+        fragment.add(new Label("inventory", getModel().map(StockInfoDTO::inventory)));
         fragment.setOutputMarkupId(true).setRenderBodyOnly(true);
         return fragment;
     }

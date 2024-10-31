@@ -1,5 +1,7 @@
 package com.aukevanoost.interfaces.boundaries.store;
 
+import java.util.List;
+
 public interface IStoreController {
-    StoreViewModel process();
+    List<StoreDTO> getStores();
 }

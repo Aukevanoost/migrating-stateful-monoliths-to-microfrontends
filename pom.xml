@@ -46,7 +46,6 @@
 		<jetty.version>12.0.7</jetty.version>
 		<junit.version>5.10.2</junit.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<!-- allowed values: R7, 1.0, 1.5, 2.0 or none -->
 		<wtp.version>none</wtp.version>
 	</properties>
 	<dependencies>
@@ -67,27 +66,15 @@
 			<version>${wicket.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>jakarta.enterprise</groupId>
-			<artifactId>jakarta.enterprise.cdi-api</artifactId>
-			<version>4.0.1</version>
+			<groupId>jakarta.ws.rs</groupId>
+			<artifactId>jakarta.ws.rs-api</artifactId>
+			<version>4.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>wicketstuff-javaee-inject</artifactId>
 			<version>10.1.1</version>
 		</dependency>
-		<dependency>
-			<groupId>org.jboss.weld.servlet</groupId>
-			<artifactId>weld-servlet-core</artifactId>
-			<version>5.1.3.Final</version>
-		</dependency>
-		<!-- OPTIONAL DEPENDENCY
-		<dependency>
-			<groupId>org.apache.wicket</groupId>
-			<artifactId>wicket-extensions</artifactId>
-			<version>${wicket.version}</version>
-		</dependency>
-		-->
 
 		<!-- LOGGING DEPENDENCIES - SLF4J-SIMPLE -->
 		<dependency>
@@ -104,14 +91,11 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!--  JETTY DEPENDENCIES FOR TESTING  -->
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-jmx</artifactId>
-			<scope>test</scope>
-			<version>${jetty.version}</version>
+			<artifactId>jetty-util</artifactId>
+			<version>12.0.13</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.eclipse.jetty.ee10.websocket</groupId>
 			<artifactId>jetty-ee10-websocket-jakarta-server</artifactId>
@@ -124,15 +108,31 @@
 			<scope>test</scope>
 		</dependency>
 
-
-		<!-- uncomment if WebSocket support is needed
 		<dependency>
-			<groupId>org.eclipse.jetty.websocket</groupId>
-			<artifactId>websocket-jakarta-server</artifactId>
-			<version>${jetty.version}</version>
-			<scope>test</scope>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-core</artifactId>
+			<version>6.2.6.Final</version>
 		</dependency>
-		-->
+<!--		<dependency>-->
+<!--			<groupId>org.jboss.resteasy</groupId>-->
+<!--			<artifactId>resteasy-core-spi</artifactId>-->
+<!--			<version>6.2.6.Final</version>-->
+<!--		</dependency>-->
+<!--		<dependency>-->
+<!--			<groupId>org.jboss.resteasy</groupId>-->
+<!--			<artifactId>resteasy-servlet-initializer</artifactId>-->
+<!--			<version>6.2.6.Final</version>-->
+<!--		</dependency>-->
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jackson2-provider</artifactId>
+			<version>6.2.6.Final</version>
+		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.jboss.resteasy</groupId>-->
+<!--			<artifactId>resteasy-cdi</artifactId>-->
+<!--			<version>6.2.6.Final</version>-->
+<!--		</dependency>-->
 	</dependencies>
 	<build>
 		<resources>
@@ -216,4 +216,3 @@
 		</repository>
 	</repositories>
 </project>
-

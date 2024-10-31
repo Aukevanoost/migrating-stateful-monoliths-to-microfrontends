@@ -1,6 +1,6 @@
 package com.aukevanoost.presentation.home.components;
 
-import com.aukevanoost.interfaces.boundaries.home.TeaserDTO;
+import com.aukevanoost.interfaces.boundaries.featured.TeaserDTO;
 import com.aukevanoost.presentation._core.components.ImagePanel;
 import com.aukevanoost.presentation.category.CategoryPage;
 import org.apache.wicket.markup.html.basic.Label;

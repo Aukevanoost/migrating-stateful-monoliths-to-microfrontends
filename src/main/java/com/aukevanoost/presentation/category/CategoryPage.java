@@ -1,43 +1,38 @@
 package com.aukevanoost.presentation.category;
 
+import com.aukevanoost.interfaces.boundaries.category.CategoryControllerFactory;
 import com.aukevanoost.interfaces.boundaries.category.ICategoryController;
-import com.aukevanoost.interfaces.boundaries.category.CategoryViewModel;
 import com.aukevanoost.presentation.category.components.CategoryFilterPanel;
 import com.aukevanoost.presentation.category.components.ProductCardPanel;
 import com.aukevanoost.presentation._core.ListViewHandler;
 import com.aukevanoost.presentation._core.layout.BaseTemplate;
-import jakarta.inject.Inject;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.StringValue;
 
 import java.util.List;
 
 public class CategoryPage extends BaseTemplate {
-    @Inject
-    private transient ICategoryController controller;
-
     private final IModel<CategoryViewModel> vm;
-
-    public CategoryPage() {
-        super();
-        vm = Model.of(controller.process());
-    }
 
     public CategoryPage(PageParameters parameters) {
         super(parameters);
-        vm = Model.of(
-            controller.process(parameters.get("category").toString())
-        );
+        var controller = CategoryControllerFactory.inject();
+        vm = Model.of(CategoryViewModel.from(controller, parameters));
+    }
+
+    public CategoryPage() {
+        this(new PageParameters().add("category", StringValue.valueOf("all")));
     }
 
     @Override
     protected void onInitialize() {
         super.onInitialize();
 
-        add(new Label("title", vm.map(x -> x.category())));
+        add(new Label("title", vm.map(CategoryViewModel::category)));
 
         WebMarkupContainer actionsContainer = new WebMarkupContainer("actionsContainer");
 

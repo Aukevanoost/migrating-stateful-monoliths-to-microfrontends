@@ -1,20 +1,19 @@
 package com.aukevanoost.domain.dao.mock;
 
-import com.aukevanoost.domain.boundaries.ICatalogDAO;
+import com.aukevanoost.domain.boundaries.catalog.ICatalogDAO;
 import com.aukevanoost.domain.dao.mock.db.Categories;
 import com.aukevanoost.domain.dao.mock.db.Products;
 import com.aukevanoost.domain.entities.Category;
 import com.aukevanoost.domain.entities.Product;
-import jakarta.enterprise.context.RequestScoped;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-@RequestScoped
 public class MockCatalogDAO implements ICatalogDAO {
     @Override
-    public Optional<Category> getProductsByCategory(String key) {
-        return Optional.of(Categories.ALL.get(key));
+    public Optional<List<Product>> getProductsByCategory(String key) {
+        return Optional.of(Categories.PRODUCTS.get(key));
     }
 
     @Override
@@ -23,14 +22,12 @@ public class MockCatalogDAO implements ICatalogDAO {
     }
 
     @Override
-    public Stream<Product> getAllProducts() {
-        return Products.stream();
-    }
-
-    @Override
     public Stream<Category> getAllCategories() {
         return Categories.stream();
     }
-
+    
+    public Optional<Category> getCategory(String key) {
+        return Optional.of(Categories.ALL.get(key));
+    }
 
 }

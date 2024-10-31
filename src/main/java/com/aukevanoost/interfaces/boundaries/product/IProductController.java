@@ -1,8 +1,11 @@
 package com.aukevanoost.interfaces.boundaries.product;
 
-import com.aukevanoost.interfaces.boundaries.product.ProductViewModel;
+import com.aukevanoost.presentation.product.ProductViewModel;
 import jakarta.annotation.Nullable;
 
+import java.util.List;
+
 public interface IProductController {
-     ProductViewModel process(String sku, @Nullable String variant);
+     ProductDTO getProductBySKU(String sku, @Nullable String variantSku);
+     List<VariantOptionDTO> getVariantsBySKU(String sku, @Nullable String variantSku);
 }

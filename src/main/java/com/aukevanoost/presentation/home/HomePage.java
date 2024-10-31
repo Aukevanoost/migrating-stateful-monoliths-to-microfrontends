@@ -1,24 +1,20 @@
 package com.aukevanoost.presentation.home;
 
-import com.aukevanoost.interfaces.boundaries.home.HomeViewModel;
-import com.aukevanoost.interfaces.boundaries.home.IHomeController;
-import com.aukevanoost.presentation.recommendation.RecommendationCardPanel;
+import com.aukevanoost.interfaces.boundaries.featured.FeaturedControllerFactory;
 import com.aukevanoost.presentation.home.components.TeaserCardPanel;
+import com.aukevanoost.presentation.recommendation.RecommendationCardPanel;
 import com.aukevanoost.presentation._core.ListViewHandler;
 import com.aukevanoost.presentation._core.layout.BaseTemplate;
-import jakarta.inject.Inject;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 public class HomePage extends BaseTemplate {
-    @Inject
-    private transient IHomeController controller;
-
     private final IModel<HomeViewModel> vm;
 
     public HomePage(){
         super();
-        vm = Model.of(controller.process());
+        var controller = FeaturedControllerFactory.inject();
+        vm = Model.of(HomeViewModel.from(controller));
     }
 
     protected void onInitialize() {

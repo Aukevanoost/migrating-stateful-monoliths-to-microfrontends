@@ -1,31 +1,31 @@
 package com.aukevanoost.presentation.product;
 
-import com.aukevanoost.interfaces.boundaries.product.IProductController;
-import com.aukevanoost.interfaces.boundaries.product.ProductViewModel;
-import com.aukevanoost.presentation.product.components.AddToCartPanel;
+import com.aukevanoost.interfaces.boundaries.featured.FeaturedControllerFactory;
+import com.aukevanoost.interfaces.boundaries.inventory.InventoryControllerFactory;
+import com.aukevanoost.interfaces.boundaries.product.ProductControllerFactory;
 import com.aukevanoost.presentation._core.components.ImagePanel;
+import com.aukevanoost.presentation.product.components.AddToCartPanel;
 import com.aukevanoost.presentation.recommendation.RecommendationCardPanel;
 import com.aukevanoost.presentation._core.ListViewHandler;
 import com.aukevanoost.presentation._core.layout.BaseTemplate;
 import com.aukevanoost.presentation.product.components.VariantOptionPanel;
-import jakarta.inject.Inject;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class ProductPage extends BaseTemplate {
-    @Inject
-    private transient IProductController controller;
-
     private final IModel<ProductViewModel> vm;
 
     public ProductPage(PageParameters parameters){
         super(parameters);
+
         vm = Model.of(
-            this.controller.process(
-                parameters.get("product").toString(),
-                parameters.get("variant").toString()
+            ProductViewModel.from(
+                ProductControllerFactory.inject(),
+                FeaturedControllerFactory.inject(),
+                InventoryControllerFactory.inject(),
+                parameters
             )
         );
     }
@@ -53,7 +53,7 @@ public class ProductPage extends BaseTemplate {
             RecommendationCardPanel::new
         ));
 
-        add(new AddToCartPanel("addToCartPanel", vm.map(ProductViewModel::cartInfo)));
+        add(new AddToCartPanel("addToCartPanel", vm.map(ProductViewModel::stockInfo)));
 
     }
 }

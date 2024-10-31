@@ -1,69 +1,48 @@
 package com.aukevanoost.interfaces;
 
-import com.aukevanoost.domain.boundaries.ICatalogDAO;
+import com.aukevanoost.domain.boundaries.catalog.ICatalogDAO;
 import com.aukevanoost.domain.entities.Category;
 import com.aukevanoost.interfaces.boundaries.category.*;
 import com.aukevanoost.interfaces.boundaries.category.CategoryDTO;
 import com.aukevanoost.interfaces.boundaries.category.CategoryFilterDTO;
 import com.aukevanoost.interfaces.boundaries.category.ProductPreviewDTO;
-import jakarta.enterprise.context.RequestScoped;
-import jakarta.inject.Inject;
+import com.aukevanoost.presentation.category.CategoryViewModel;
 
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-@RequestScoped
 public class CategoryController implements ICategoryController {
-    private static final String ALL_PRODUCTS_KEY = "all";
-    private static final String ALL_PRODUCTS_NAME = "All machines";
-    private static final String CATEGORY_BASE_URL = "/products";
+    private final ICatalogDAO catalogDAO;
 
-    @Inject
-    private ICatalogDAO catalogDAO;
+    public CategoryController(ICatalogDAO catalogDAO) {
+        this.catalogDAO = catalogDAO;
+    }
 
-    public CategoryViewModel process(String activeCategoryKey) {
-        var category = this.catalogDAO.getProductsByCategory(activeCategoryKey)
+    public CategoryDTO get(String categoryID) {
+        return this.catalogDAO
+            .getCategory(categoryID)
+            .map(CategoryDTO::from)
             .orElseThrow(() -> new IllegalArgumentException("Category not found"));
-
-        var products = category.products$().map(ProductPreviewDTO::from).toList();
-
-        var filters = getFilters(activeCategoryKey).toList();
-
-        return new CategoryViewModel(
-            category.name(),
-            products,
-            filters
-        );
     }
 
-    public CategoryViewModel process() {
-        var category = new CategoryDTO(
-            ALL_PRODUCTS_NAME,
-            ALL_PRODUCTS_KEY
-        );
-
-        var products = catalogDAO.getAllProducts().map(ProductPreviewDTO::from).toList();
-
-        var filters = getFilters(ALL_PRODUCTS_KEY).toList();
-
-        return new CategoryViewModel(category.name(), products, filters);
+    public Stream<CategoryFilterDTO> getFilters(String activeCategoryID) {
+        return this.catalogDAO
+            .getAllCategories()
+            .map(this.mapToFilter(activeCategoryID));
     }
 
-    private Stream<CategoryFilterDTO> getFilters(String activeCategory) {
-        return Stream.concat(
-            Stream.of(new CategoryFilterDTO(
-                CATEGORY_BASE_URL,
-                ALL_PRODUCTS_NAME,
-                ALL_PRODUCTS_KEY.equals(activeCategory)
-            )),
-            this.catalogDAO.getAllCategories().map(this.mapToFilter(activeCategory))
-        );
+    public Stream<ProductPreviewDTO> getProducts(String categoryID) {
+        return this.catalogDAO
+            .getProductsByCategory(categoryID)
+            .orElseThrow(() -> new IllegalArgumentException("Category not found"))
+            .stream()
+            .map(ProductPreviewDTO::from);
     }
 
     private Function<Category, CategoryFilterDTO> mapToFilter(String activeCategory) {
         return category -> CategoryFilterDTO.from(
             category,
-            String.format("%s/%s", CATEGORY_BASE_URL, category.key()),
+            String.format("/%s/%s", "products", category.key()),
             category.key().equals(activeCategory)
         );
     }

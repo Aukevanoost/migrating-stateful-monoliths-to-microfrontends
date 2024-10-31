@@ -1,0 +1,25 @@
+{
+  "hash": "5e4086e2",
+  "configHash": "754df750",
+  "lockfileHash": "45ce9c31",
+  "browserHash": "f9eaa043",
+  "optimized": {
+    "@angular-architects/native-federation": {
+      "src": "../../../../../../node_modules/@angular-architects/native-federation/src/index.js",
+      "file": "@angular-architects_native-federation.js",
+      "fileHash": "f7f4804c",
+      "needsInterop": false
+    },
+    "zone.js": {
+      "src": "../../../../../../node_modules/zone.js/fesm2015/zone.js",
+      "file": "zone__js.js",
+      "fileHash": "89c0528a",
+      "needsInterop": true
+    }
+  },
+  "chunks": {
+    "chunk-Y5RQAIA6": {
+      "file": "chunk-Y5RQAIA6.js"
+    }
+  }
+}
