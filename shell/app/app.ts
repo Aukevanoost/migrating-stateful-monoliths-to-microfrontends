@@ -1,4 +1,4 @@
-import { loadRemoteModule } from "@softarc/native-federation-runtime";
+import { loadRemoteModule } from "./native-federation";
 
 /**
  * Renders a micro frontend component into the specified DOM element.

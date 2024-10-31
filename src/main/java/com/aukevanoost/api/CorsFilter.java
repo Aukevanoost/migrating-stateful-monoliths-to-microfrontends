@@ -10,7 +10,11 @@ import java.util.Set;
 
 @Provider
 public class CorsFilter implements ContainerResponseFilter {
-    private static final Set<String> WHITELIST = Set.of("http://localhost:4201", "http://localhost:8080");
+    private static final Set<String> WHITELIST = Set.of(
+        "http://localhost:4201",
+        "http://localhost:8080",
+        "http://localhost:3000"
+    );
     @Override
     public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext) {
         String origin = requestContext.getHeaderString("Origin");
