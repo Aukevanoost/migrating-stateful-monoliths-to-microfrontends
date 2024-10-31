@@ -1,42 +1,35 @@
 import { loadRemoteModule } from "./native-federation";
 
 /**
- * Renders a micro frontend component into the specified DOM element.
- * 
- * @param {string} id - The ID of the DOM element where the component should be rendered
- * @param {string} team - The team identifier for the remote module
- * @param {string} component - The name of the component to be rendered
- * @returns {Promise<void>} A promise that resolves when the component is rendered
- * @throws {Error} If the DOM element with the specified ID is not found
- * @example
- * // Render a teaser component from the 'explore' team into element with id 'teasers'
- * await renderMicroFrontend('teasers', 'explore', 'exp-teasers');
- */
-async function renderMicroFrontend(id: string, team: string, component: string): Promise<void> {
-    return loadRemoteModule(team, `./${component}`)
-        .then(_ => {
-            const comp = document.createElement(component);
-            const container = document.getElementById(id);
-            if (!container) {
-                throw new Error(`Container element with id '${id}' not found`);
-            }
-            container.appendChild(comp);
-        });
-}
-
-/**
  * Loads a micro frontend module without rendering it.
  * Useful when you need to access the module's exports directly.
  * 
  * @param {string} team - The team identifier for the remote module
  * @param {string} component - The name of the component to be loaded
+ * @param {string} containerID - (optional) ID of parent HTML element in DOM tree where MFE should be rendered
  * @returns {Promise<any>} A promise that resolves with the loaded module
  * @example
  * // Load a module from the 'explore' team
- * const module = await loadMicroFrontend('explore', 'exp-teasers');
- */
-async function loadMicroFrontend(team: string, component: string): Promise<any> {
-    return loadRemoteModule(team, `./${component}`);
+ * <body>
+ *   <main id="mfe-container"></main>
+ *  
+ *   <script>
+ *     loadMicroFrontend("explore", "exp-teasers", "mfe-container")
+ *   </script>
+ * </body>
+*/
+async function loadMicroFrontend(team: string, component: string, containerID?: string): Promise<any> {
+    return loadRemoteModule(team, `./${component}`)
+    .then(_ => {
+        if(!!containerID) {
+            const comp = document.createElement(component);
+            const container = document.getElementById(containerID);
+            if (!container) {
+                throw new Error(`Container element with id '${containerID}' not found`);
+            }
+            container.appendChild(comp);
+        }
+    });
 }
 
-export { renderMicroFrontend, loadMicroFrontend };
+export { loadMicroFrontend };

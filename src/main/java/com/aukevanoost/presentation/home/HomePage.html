@@ -3,17 +3,18 @@
 </head>
 <body>
 <wicket:extend>
-    <main class="e_HomePage">
+    <main class="e_HomePage" id="homepage">
         <exp-teasers></exp-teasers>
-        <exp-recommendations class="e_HomePage__recommendations"></exp-recommendations>
+        <!-- exp-recommendations automatically loaded by the loader -->
     </main>
 
     <script>
         window.addEventListener('loader-available', (e) => {
-            e.detail.load('explore', 'exp-teasers')
-                .then(_ => e.detail.load('explore', 'exp-recommendations'))
-                .catch(console.error);
-        });
+          Promise.all([
+            e.detail('explore', 'exp-teasers'),
+            e.detail('explore', 'exp-recommendations', 'homepage')
+          ]).catch(console.error);
+        }, {once: true});
     </script>
 </wicket:extend>
 </body>

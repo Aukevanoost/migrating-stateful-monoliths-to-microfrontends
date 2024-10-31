@@ -4,7 +4,7 @@ import { AsyncPipe, CommonModule } from '@angular/common';
 import { fromCDNPipe } from '../shared/from-cdn.pipe';
 
 @Component({
-  selector: 'exp-root',
+  selector: 'exp-teasers',
   standalone: true,
   imports: [fromCDNPipe, CommonModule, AsyncPipe],
   providers: [FeaturedHttpService],

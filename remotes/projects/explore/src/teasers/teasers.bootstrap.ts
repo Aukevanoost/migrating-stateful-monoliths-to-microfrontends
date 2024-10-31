@@ -6,8 +6,8 @@ import 'zone.js';
 
 (async () => {
   await createApplication(appConfig)
-    .then(app => customElements.define(
+    .then(({injector}) => customElements.define(
       'exp-teasers', 
-      createCustomElement(TeasersComponent, {injector: app.injector})
+      createCustomElement(TeasersComponent, {injector})
     ))
 })()

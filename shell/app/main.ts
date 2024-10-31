@@ -5,9 +5,6 @@ import { initFederation } from './native-federation';
         "explore": "http://localhost:4201/remoteEntry.json"
     });
     
-    const { loadMicroFrontend, renderMicroFrontend } = await import('./app');
-    window.dispatchEvent(new CustomEvent("loader-available", {detail: { 
-        load: loadMicroFrontend, 
-        render: renderMicroFrontend 
-    }}));
+    const { loadMicroFrontend } = await import('./app');
+    window.dispatchEvent(new CustomEvent("loader-available", {detail: loadMicroFrontend}));
 })();

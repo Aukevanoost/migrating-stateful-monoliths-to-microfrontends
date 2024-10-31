@@ -219,21 +219,19 @@ var init_native_federation = __esm({
 // app/app.ts
 var app_exports = {};
 __export(app_exports, {
-  loadMicroFrontend: () => loadMicroFrontend,
-  renderMicroFrontend: () => renderMicroFrontend
+  loadMicroFrontend: () => loadMicroFrontend
 });
-async function renderMicroFrontend(id, team, component) {
+async function loadMicroFrontend(team, component, containerID) {
   return loadRemoteModule(team, `./${component}`).then((_) => {
-    const comp = document.createElement(component);
-    const container = document.getElementById(id);
-    if (!container) {
-      throw new Error(`Container element with id '${id}' not found`);
+    if (!!containerID) {
+      const comp = document.createElement(component);
+      const container = document.getElementById(containerID);
+      if (!container) {
+        throw new Error(`Container element with id '${containerID}' not found`);
+      }
+      container.appendChild(comp);
     }
-    container.appendChild(comp);
   });
-}
-async function loadMicroFrontend(team, component) {
-  return loadRemoteModule(team, `./${component}`);
 }
 var init_app = __esm({
   "app/app.ts"() {
@@ -247,9 +245,6 @@ init_native_federation();
   await initFederation({
     "explore": "http://localhost:4201/remoteEntry.json"
   });
-  const { loadMicroFrontend: loadMicroFrontend2, renderMicroFrontend: renderMicroFrontend2 } = await Promise.resolve().then(() => (init_app(), app_exports));
-  window.dispatchEvent(new CustomEvent("loader-available", { detail: {
-    load: loadMicroFrontend2,
-    render: renderMicroFrontend2
-  } }));
+  const { loadMicroFrontend: loadMicroFrontend2 } = await Promise.resolve().then(() => (init_app(), app_exports));
+  window.dispatchEvent(new CustomEvent("loader-available", { detail: loadMicroFrontend2 }));
 })();
