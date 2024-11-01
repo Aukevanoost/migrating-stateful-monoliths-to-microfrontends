@@ -33,13 +33,16 @@ const createRemoteImportMap = (remoteInfo: RemoteInfo, remoteName: string, baseU
     };
 }
 
-const mergeImportMaps = (importMaps: ImportMap[]) => importMaps.reduce(
-    (acc: ImportMap, importMap: ImportMap) => ({
-        imports: { ...acc.imports, ...importMap.imports },
-        scopes: { ...acc.scopes, ...importMap.scopes },
-    }),
-    createEmptyImportMap()
-);
+const mergeImportMaps = (importMaps: ImportMap[]) => {
+    return importMaps.reduce(
+        (acc: ImportMap, importMap: ImportMap) => ({
+            imports: { ...acc.imports, ...importMap.imports },
+            scopes: { ...acc.scopes, ...importMap.scopes },
+        }),
+        createEmptyImportMap()
+    );
+}
+
 
 const appendImportMapToBody = (importMap: ImportMap): void => {
     document.head.appendChild(

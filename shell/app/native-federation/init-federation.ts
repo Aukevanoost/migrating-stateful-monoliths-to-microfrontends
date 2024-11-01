@@ -1,7 +1,7 @@
 import { appendImportMapToBody, ImportMap } from './import-map'; 
 import { processRemoteInfos } from './remote-info';
 
-const initFederation = async (remotesOrManifestUrl: string | Record<string, string> = {}) => {
+const initFederation = (remotesOrManifestUrl: string | Record<string, string> = {}) => {
     return fetchRemotes(remotesOrManifestUrl)
         .then(processRemoteInfos)
         .then(importMap => {
