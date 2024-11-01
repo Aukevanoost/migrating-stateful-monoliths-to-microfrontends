@@ -18,7 +18,9 @@ global[NAMESPACE] ??= {
 const globalCache = global[NAMESPACE];
 
 
-const toExternalKey = (shared: SharedConfig): string => `${shared.packageName}@${shared.version}`;
+const toExternalKey = (shared: SharedConfig): string => {
+    return `${shared.packageName}@${shared.version}`;
+}
 
 const getExternalUrl = (shared: SharedConfig): string | undefined => {
     return globalCache.externals.get(toExternalKey(shared));
@@ -28,7 +30,6 @@ const setExternalUrl = (shared: SharedConfig, url: string): void => {
     globalCache.externals.set(toExternalKey(shared), url)
 }
 
-// Remote management methods
 const addRemote = (remoteName: string, remote: RemoteInfo): void => {
     globalCache.remoteNamesToRemote.set(remoteName, remote);
     globalCache.baseUrlToRemoteNames.set(remote.baseUrl!, remoteName);
@@ -46,22 +47,8 @@ const getRemote = (remoteName: string): RemoteInfo | undefined => {
     return globalCache.remoteNamesToRemote.get(remoteName);
 }
 
-// private hasRemote(remoteName: string): boolean {
-//     return FederationRuntime.globalCache.remoteNamesToRemote.has(remoteName);
-// }
+const importRemoteScript = (url: string) => {
+    return global.importShim(url)
+}
 
-// public processRemoteImports(remoteInfo: RemoteInfo, baseUrl: string): Record<string, Record<string, string>> {
-//     const scopes: Record<string, Record<string, string>> = {};
-//     const scopedImports: Record<string, string> = {};
-
-//     for (const shared of remoteInfo.shared) {
-//         const outFileName = this.getExternalUrl(shared) ?? this.joinPaths(baseUrl, shared.outFileName);
-//         this.setExternalUrl(shared, outFileName);
-//         scopedImports[shared.packageName] = outFileName;
-//     }
-
-//     scopes[baseUrl + '/'] = scopedImports;
-//     return scopes;
-// }
-
-export {NativeFederationCache, getExternalUrl, setExternalUrl, addRemote, getRemote, isRemoteInitialized, getRemoteNameByBaseUrl}
+export {NativeFederationCache, getExternalUrl, setExternalUrl, addRemote, getRemote, isRemoteInitialized, getRemoteNameByBaseUrl, importRemoteScript}

@@ -1,7 +1,8 @@
-import { Component, inject, ViewEncapsulation } from '@angular/core';
+import { Component, inject, Input, ViewEncapsulation } from '@angular/core';
 import { FeaturedHttpService } from './http/featured-http.service';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { fromCDNPipe } from '../shared/from-cdn.pipe';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'exp-recommendations',
@@ -14,5 +15,11 @@ import { fromCDNPipe } from '../shared/from-cdn.pipe';
 })
 export class RecommendationsComponent {
   http = inject(FeaturedHttpService);
-  recommendations$ = this.http.recommendations$();
+
+  @Input() set product(value: string) {
+    const skus = value.split(',');
+    this.recommendations$ = this.http.recommendations$(skus);
+  }
+  
+  recommendations$ = of([] as any[]);
 }

@@ -3,7 +3,7 @@ import * as globalCache from './global-cache';
 import { processRemoteInfo } from "./remote-info";
 import { appendImportMapToBody } from "./import-map";
 
-const loadRemoteModule = async (
+const loadRemoteModule = (
     optionsOrRemoteName: RemoteOptions | string,
     exposedModule?: string
 ): Promise<any> => {
@@ -13,45 +13,30 @@ const loadRemoteModule = async (
         .then(_ => {
             const remoteName = getRemoteNameByOptions(options);
             const remote = globalCache.getRemote(remoteName);
-            
-            if (!remote) {
-                throw new Error('unknown remote ' + remoteName);
-            }
+            if (!remote) throw new Error('unknown remote ' + remoteName);
         
             const exposed = remote.exposes.find(e => e.key === options.exposedModule);
-            if (!exposed) {
-                throw new Error(`Unknown exposed module ${options.exposedModule} in remote ${remoteName}`);
-            }
+            if (!exposed) throw new Error(`Unknown exposed module ${options.exposedModule} in remote ${remoteName}`);
         
             return joinPaths(remote.baseUrl!, exposed.outFileName);
         })
-        .then(url => (globalThis as any).importShim(url))
+        .then(url => globalCache.importRemoteScript(url))
 }
 
-const initRemoteInfoIfUninitialized = async (options: RemoteOptions): Promise<void> => {
-    return (options.remoteEntry && !globalCache.isRemoteInitialized(getDirectory(options.remoteEntry)))
-        ? processRemoteInfo(options.remoteEntry).then(appendImportMapToBody)
-        : Promise.resolve();
+const initRemoteInfoIfUninitialized = (options: RemoteOptions): Promise<void> => {
+    if (!options.remoteEntry || globalCache.isRemoteInitialized(getDirectory(options.remoteEntry))) {
+        return Promise.resolve();
+    }
+    return processRemoteInfo(options.remoteEntry)
+            .then(appendImportMapToBody)
 }
-
-
 
 const getRemoteNameByOptions = (options: RemoteOptions): string => {
-    let remoteName: string | undefined;
+    let remoteName = options.remoteName
+                  ?? globalCache.getRemoteNameByBaseUrl(getDirectory(options.remoteEntry));
     
-    if (options.remoteName) {
-        remoteName = options.remoteName;
-    } else if (options.remoteEntry) {
-        const baseUrl = getDirectory(options.remoteEntry);
-        remoteName = globalCache.getRemoteNameByBaseUrl(baseUrl);
-    } else {
-        throw new Error('unexpected arguments: Please pass remoteName or remoteEntry');
-    }
-
-    if (!remoteName) {
-        throw new Error('unknown remoteName ' + remoteName);
-    }
-
+    if (!remoteName) throw new Error('unexpected arguments: Please pass remoteName or remoteEntry');
+    
     return remoteName;
 }
 

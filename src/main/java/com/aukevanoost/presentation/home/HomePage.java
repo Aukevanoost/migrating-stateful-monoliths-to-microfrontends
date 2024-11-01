@@ -1,8 +1,6 @@
 package com.aukevanoost.presentation.home;
 
 import com.aukevanoost.interfaces.boundaries.featured.FeaturedControllerFactory;
-import com.aukevanoost.presentation.recommendation.RecommendationCardPanel;
-import com.aukevanoost.presentation._core.ListViewHandler;
 import com.aukevanoost.presentation._core.layout.BaseTemplate;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;

@@ -22,7 +22,7 @@ interface RemoteInfo {
 
 const processRemoteInfos = async (remotes: Record<string, string>): Promise<ImportMap> => {
     return Promise.all(
-        Object.keys(remotes).map(async remoteName => {
+        Object.keys(remotes).map(remoteName => {
             return processRemoteInfo(remotes[remoteName], remoteName)
                 .catch(_ => {
                     console.error(`Error loading remote entry for ${remoteName} from file ${remotes[remoteName]}`);

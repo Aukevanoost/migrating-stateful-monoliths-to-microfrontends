@@ -1,11 +1,8 @@
-package com.aukevanoost.api.resources;
+package com.aukevanoost.api.featured;
 
 import com.aukevanoost.interfaces.boundaries.featured.FeaturedControllerFactory;
 import com.aukevanoost.interfaces.boundaries.featured.IFeaturedController;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -25,9 +22,11 @@ public class FeaturedResource {
         return Response.ok().entity(controller.getTeasers()).build();
     }
 
-    @GET
+    @POST
     @Path("/recommendations")
-    public Response getRecommendations() {
-        return Response.ok().entity(controller.getRecommendations()).build();
+    public Response getRecommendations(RecommendationsRequest request) {
+        return Response.ok().entity(
+            controller.getRecommendations(request.getSku().toArray(String[]::new))
+        ).build();
     }
 }

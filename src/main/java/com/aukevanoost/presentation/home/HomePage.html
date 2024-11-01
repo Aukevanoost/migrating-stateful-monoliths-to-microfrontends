@@ -5,14 +5,14 @@
 <wicket:extend>
     <main class="e_HomePage" id="homepage">
         <exp-teasers></exp-teasers>
-        <!-- exp-recommendations automatically loaded by the loader -->
+        <exp-recommendations product='CL-01-GY,AU-07-MT'></exp-recommendations>
     </main>
 
     <script>
         window.addEventListener('loader-available', (e) => {
           Promise.all([
             e.detail('explore', 'exp-teasers'),
-            e.detail('explore', 'exp-recommendations', 'homepage')
+            e.detail('explore', 'exp-recommendations')
           ]).catch(console.error);
         }, {once: true});
     </script>

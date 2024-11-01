@@ -18,7 +18,7 @@ import { loadRemoteModule } from "./native-federation";
  *   </script>
  * </body>
 */
-async function loadMicroFrontend(team: string, component: string, containerID?: string): Promise<any> {
+function loadMicroFrontend(team: string, component: string, containerID?: string): Promise<any> {
     return loadRemoteModule(team, `./${component}`)
     .then(_ => {
         if(!!containerID) {

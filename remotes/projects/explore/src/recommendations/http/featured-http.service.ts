@@ -8,7 +8,7 @@ export class FeaturedHttpService {
     http = inject(HttpClient);
     env = inject(ENV);
 
-    public recommendations$(): Observable<any> {
-        return this.http.get(`${this.env.api}/featured/recommendations`);
+    public recommendations$(sku: string[]): Observable<any> {
+        return this.http.post(`${this.env.api}/featured/recommendations`, {sku});
     }
 }

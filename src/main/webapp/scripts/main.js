@@ -41,7 +41,7 @@ var init_util = __esm({
 });
 
 // app/native-federation/global-cache.ts
-var NAMESPACE, global, globalCache, toExternalKey, getExternalUrl, setExternalUrl, addRemote, getRemoteNameByBaseUrl, isRemoteInitialized, getRemote;
+var NAMESPACE, global, globalCache, toExternalKey, getExternalUrl, setExternalUrl, addRemote, getRemoteNameByBaseUrl, isRemoteInitialized, getRemote, importRemoteScript;
 var init_global_cache = __esm({
   "app/native-federation/global-cache.ts"() {
     NAMESPACE = "__NATIVE_FEDERATION__";
@@ -52,7 +52,9 @@ var init_global_cache = __esm({
       baseUrlToRemoteNames: /* @__PURE__ */ new Map()
     };
     globalCache = global[NAMESPACE];
-    toExternalKey = (shared) => `${shared.packageName}@${shared.version}`;
+    toExternalKey = (shared) => {
+      return `${shared.packageName}@${shared.version}`;
+    };
     getExternalUrl = (shared) => {
       return globalCache.externals.get(toExternalKey(shared));
     };
@@ -71,6 +73,9 @@ var init_global_cache = __esm({
     };
     getRemote = (remoteName) => {
       return globalCache.remoteNamesToRemote.get(remoteName);
+    };
+    importRemoteScript = (url) => {
+      return global.importShim(url);
     };
   }
 });
@@ -129,7 +134,7 @@ var init_remote_info = __esm({
     init_global_cache();
     processRemoteInfos = async (remotes) => {
       return Promise.all(
-        Object.keys(remotes).map(async (remoteName) => {
+        Object.keys(remotes).map((remoteName) => {
           return processRemoteInfo(remotes[remoteName], remoteName).catch((_) => {
             console.error(`Error loading remote entry for ${remoteName} from file ${remotes[remoteName]}`);
             return createEmptyImportMap();
@@ -156,37 +161,26 @@ var init_load_remote_module = __esm({
     init_global_cache();
     init_remote_info();
     init_import_map();
-    loadRemoteModule = async (optionsOrRemoteName, exposedModule) => {
+    loadRemoteModule = (optionsOrRemoteName, exposedModule) => {
       const options = normalizeOptions(optionsOrRemoteName, exposedModule);
       return initRemoteInfoIfUninitialized(options).then((_) => {
         const remoteName = getRemoteNameByOptions(options);
         const remote = getRemote(remoteName);
-        if (!remote) {
-          throw new Error("unknown remote " + remoteName);
-        }
+        if (!remote) throw new Error("unknown remote " + remoteName);
         const exposed = remote.exposes.find((e) => e.key === options.exposedModule);
-        if (!exposed) {
-          throw new Error(`Unknown exposed module ${options.exposedModule} in remote ${remoteName}`);
-        }
+        if (!exposed) throw new Error(`Unknown exposed module ${options.exposedModule} in remote ${remoteName}`);
         return joinPaths(remote.baseUrl, exposed.outFileName);
-      }).then((url) => globalThis.importShim(url));
+      }).then((url) => importRemoteScript(url));
     };
-    initRemoteInfoIfUninitialized = async (options) => {
-      return options.remoteEntry && !isRemoteInitialized(getDirectory(options.remoteEntry)) ? processRemoteInfo(options.remoteEntry).then(appendImportMapToBody) : Promise.resolve();
+    initRemoteInfoIfUninitialized = (options) => {
+      if (!options.remoteEntry || isRemoteInitialized(getDirectory(options.remoteEntry))) {
+        return Promise.resolve();
+      }
+      return processRemoteInfo(options.remoteEntry).then(appendImportMapToBody);
     };
     getRemoteNameByOptions = (options) => {
-      let remoteName;
-      if (options.remoteName) {
-        remoteName = options.remoteName;
-      } else if (options.remoteEntry) {
-        const baseUrl = getDirectory(options.remoteEntry);
-        remoteName = getRemoteNameByBaseUrl(baseUrl);
-      } else {
-        throw new Error("unexpected arguments: Please pass remoteName or remoteEntry");
-      }
-      if (!remoteName) {
-        throw new Error("unknown remoteName " + remoteName);
-      }
+      let remoteName = options.remoteName ?? getRemoteNameByBaseUrl(getDirectory(options.remoteEntry));
+      if (!remoteName) throw new Error("unexpected arguments: Please pass remoteName or remoteEntry");
       return remoteName;
     };
   }
@@ -221,7 +215,7 @@ var app_exports = {};
 __export(app_exports, {
   loadMicroFrontend: () => loadMicroFrontend
 });
-async function loadMicroFrontend(team, component, containerID) {
+function loadMicroFrontend(team, component, containerID) {
   return loadRemoteModule(team, `./${component}`).then((_) => {
     if (!!containerID) {
       const comp = document.createElement(component);
