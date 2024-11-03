@@ -1,11 +1,15 @@
 package com.aukevanoost.presentation;
 
+import com.aukevanoost.presentation.cart.CartPage;
 import com.aukevanoost.presentation.home.HomePage;
 import com.aukevanoost.presentation.category.CategoryPage;
 import com.aukevanoost.presentation.product.ProductPage;
 import com.aukevanoost.presentation.store.StoresPage;
+import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.Response;
 
 /**
  * Application object for your web application.
@@ -45,5 +49,11 @@ public class WicketApplication extends WebApplication
 		mountPage("/products/#{category}", CategoryPage.class);
 		mountPage("/product/${product}/#{variant}", ProductPage.class);
 		mountPage("/stores", StoresPage.class);
+		mountPage("/cart", CartPage.class);
+	}
+
+	@Override
+	public Session newSession(Request request, Response response) {
+		return new StoreSession(request);
 	}
 }

@@ -1,0 +1,25 @@
+<html>
+<head>
+</head>
+<body>
+<wicket:extend>
+    <div class="cart">
+        <h2>Shopping Cart</h2>
+        <table>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+            </tr>
+            <tr wicket:id="cartItems">
+                <td wicket:id="sku"></td>
+                <td wicket:id="price"></td>
+                <td wicket:id="quantity"></td>
+                <td wicket:id="total"></td>
+            </tr>
+        </table>
+    </div>
+</wicket:extend>
+</body>
+</html>

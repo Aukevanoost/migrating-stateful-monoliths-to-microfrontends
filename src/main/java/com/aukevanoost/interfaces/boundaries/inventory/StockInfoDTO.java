@@ -17,7 +17,7 @@ public record StockInfoDTO(
 
     public static StockInfoDTO from(Product product, ProductVariant variant){
         return new StockInfoDTO(
-            product.sku(),
+            variant.sku(),
             variant.price(),
             variant.inventory()
         );

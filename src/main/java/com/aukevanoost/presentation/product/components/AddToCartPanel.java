@@ -1,6 +1,10 @@
 package com.aukevanoost.presentation.product.components;
 
 import com.aukevanoost.interfaces.boundaries.inventory.StockInfoDTO;
+import com.aukevanoost.presentation.StoreSession;
+import com.aukevanoost.presentation.cart.CartItem;
+import com.aukevanoost.presentation.cart.CartPage;
+import com.aukevanoost.presentation.cart.CartState;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -21,7 +25,9 @@ public class AddToCartPanel extends GenericPanel<StockInfoDTO> {
         super(id, model);
         inStockFragment = createInStockFragment();
         outOfStockFragment = createOutOfStockFragment();
-        form = new AddToCartForm("form", getModelObject().sku());
+        form = new AddToCartForm("form",
+            getModelObject().sku(),
+            getModelObject().price());
     }
 
      @Override
@@ -61,12 +67,14 @@ public class AddToCartPanel extends GenericPanel<StockInfoDTO> {
         private static final long serialVersionUID = 1L;
 
         private String sku;
+        private int price;
 
-        public AddToCartForm(String id, String sku) {
+        public AddToCartForm(String id, String sku, int price) {
             super(id);
             setDefaultModel(new CompoundPropertyModel<>(this));
 
             this.sku = sku;
+            this.price = price;
         }
 
         @Override
@@ -76,8 +84,13 @@ public class AddToCartPanel extends GenericPanel<StockInfoDTO> {
         }
 
         @Override
-        public final void onSubmit() {
-            System.out.println("Add to cart: " + sku);
+        protected void onSubmit() {
+            CartItem item = new CartItem(sku, price);
+            StoreSession.get().updateCart(cart -> cart.add(item));
+
+            success("Item added to cart");
+
+            setResponsePage(CartPage.class);
         }
     }
 }
