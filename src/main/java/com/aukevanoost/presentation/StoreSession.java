@@ -1,6 +1,6 @@
 package com.aukevanoost.presentation;
 
-import com.aukevanoost.presentation.cart.CartState;
+import com.aukevanoost.interfaces.boundaries.cart.CartDTO;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.Request;
 
@@ -11,7 +11,7 @@ public class StoreSession extends WebSession {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private CartState cart = CartState.empty();
+    private CartDTO cart = CartDTO.empty();
 
     public StoreSession(Request request) {
         super(request);
@@ -21,13 +21,12 @@ public class StoreSession extends WebSession {
         return (StoreSession) WebSession.get();
     }
 
-    public void updateCart(UnaryOperator<CartState> update) {
-        var newCart =  update.apply(cart);
-        this.cart = newCart;
+    public void updateCart(UnaryOperator<CartDTO> update) {
+        this.cart = update.apply(cart);
         dirty();
     }
 
-    public CartState cart() {
+    public CartDTO cart() {
         return this.cart;
     }
 }

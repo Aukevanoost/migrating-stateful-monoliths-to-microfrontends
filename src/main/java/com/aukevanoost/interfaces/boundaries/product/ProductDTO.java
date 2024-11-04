@@ -1,7 +1,7 @@
 package com.aukevanoost.interfaces.boundaries.product;
 
 import com.aukevanoost.domain.entities.Product;
-import com.aukevanoost.domain.entities.ProductVariant;
+import com.aukevanoost.domain.entities.Variant;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -18,7 +18,7 @@ public record ProductDTO(
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public static ProductDTO from(Product product, ProductVariant variant){
+    public static ProductDTO from(Product product, Variant variant){
         return new ProductDTO(
             product.sku(),
             product.name(),

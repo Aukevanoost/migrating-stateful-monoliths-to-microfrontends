@@ -9,12 +9,12 @@ public record Product(
     String name,
     String sku,
     List<String> highlights,
-    List<ProductVariant> variants
+    List<Variant> variants
 ) implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public Stream<ProductVariant> variants$() {
+    public Stream<Variant> variants$() {
         return variants.stream();
     }
 

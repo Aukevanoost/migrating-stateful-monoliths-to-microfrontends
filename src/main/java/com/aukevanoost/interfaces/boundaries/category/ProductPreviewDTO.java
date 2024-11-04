@@ -1,7 +1,7 @@
 package com.aukevanoost.interfaces.boundaries.category;
 
 import com.aukevanoost.domain.entities.Product;
-import com.aukevanoost.domain.entities.ProductVariant;
+import com.aukevanoost.domain.entities.Variant;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -23,7 +23,7 @@ public record ProductPreviewDTO(
             product.name(),
             firstVariant.image(),
             product.variants$()
-                .map(ProductVariant::price)
+                .map(Variant::price)
                 .min(Integer::compareTo)
                 .orElse(0)
         );
