@@ -1,6 +1,5 @@
 package com.aukevanoost.interfaces.boundaries.product;
 
-import com.aukevanoost.presentation.product.ProductViewModel;
 import jakarta.annotation.Nullable;
 
 import java.util.List;

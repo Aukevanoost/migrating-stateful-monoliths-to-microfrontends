@@ -19,7 +19,7 @@ public class Products {
                 "Fully autonomous with smart obstacle detection and terrain adaptation."
             ),
             List.of(
-                new ProductVariant(
+                new Variant(
                     "Silver",
                     "/img/product/[size]/AU-01-SI.webp",
                     "AU-01-SI",
@@ -38,7 +38,7 @@ public class Products {
                 "Intelligent AI for real-time field analysis and automated adjustments."
             ),
             List.of(
-                new ProductVariant(
+                new Variant(
                     "Sunset Copper",
                     "/img/product/[size]/AU-02-OG.webp",
                     "AU-02-OG",
@@ -46,7 +46,7 @@ public class Products {
                     4100,
                     4
                 ),
-                new ProductVariant(
+                new Variant(
                     "Cosmic Sapphire",
                     "/img/product/[size]/AU-02-BL.webp",
                     "AU-02-BL",
@@ -54,7 +54,7 @@ public class Products {
                     4000,
                     3
                 ),
-                new ProductVariant(
+                new Variant(
                     "Verdant Shadow",
                     "/img/product/[size]/AU-02-GG.webp",
                     "AU-02-GG",
@@ -73,7 +73,7 @@ public class Products {
                 "Real-time crop and soil health analytics"
             ),
             List.of(
-                new ProductVariant(
+                new Variant(
                     "Turquoise Titan",
                     "/img/product/[size]/AU-03-TQ.webp",
                     "AU-03-TQ",
@@ -81,7 +81,7 @@ public class Products {
                     1600,
                     9
                 ),
-                new ProductVariant(
+                new Variant(
                     "Majestic Violet",
                     "/img/product/[size]/AU-03-PL.webp",
                     "AU-03-PL",
@@ -89,7 +89,7 @@ public class Products {
                     1700,
                     7
                 ),
-                new ProductVariant(
+                new Variant(
                     "Scarlet Dynamo",
                     "/img/product/[size]/AU-03-RD.webp",
                     "AU-03-RD",
@@ -97,7 +97,7 @@ public class Products {
                     1900,
                     8
                 ),
-                new ProductVariant(
+                new Variant(
                     "Sunbeam Yellow",
                     "/img/product/[size]/AU-03-YE.webp",
                     "AU-03-YE",
@@ -116,7 +116,7 @@ public class Products {
                 "Advanced analytics suite for precision soil and plant health management"
             ),
             List.of(
-                new ProductVariant(
+                new Variant(
                     "Ruby Red",
                     "/img/product/[size]/AU-04-RD.webp",
                     "AU-04-RD",
@@ -124,7 +124,7 @@ public class Products {
                     8700,
                     9
                 ),
-                new ProductVariant(
+                new Variant(
                     "Midnight Onyx",
                     "/img/product/[size]/AU-04-BK.webp",
                     "AU-04-BK",
@@ -143,7 +143,7 @@ public class Products {
                 "On-the-go field data analysis for smart farming decisions"
             ),
             List.of(
-                new ProductVariant(
+                new Variant(
                     "Zestful Horizon",
                     "/img/product/[size]/AU-05-ZH.webp",
                     "AU-05-ZH",
@@ -162,7 +162,7 @@ public class Products {
                 "Integrated crop management system with advanced diagnostics"
             ),
             List.of(
-                new ProductVariant(
+                new Variant(
                     "Canary Zenith",
                     "/img/product/[size]/AU-06-CZ.webp",
                     "AU-06-CZ",
@@ -170,7 +170,7 @@ public class Products {
                     2200,
                     3
                 ),
-                new ProductVariant(
+                new Variant(
                     "Minted Jade",
                     "/img/product/[size]/AU-06-MT.webp",
                     "AU-06-MT",
@@ -189,7 +189,7 @@ public class Products {
                 "High-resolution field scanners for precise agronomy insights"
             ),
             List.of(
-                new ProductVariant(
+                new Variant(
                     "Glacial Mint",
                     "/img/product/[size]/AU-07-MT.webp",
                     "AU-07-MT",
@@ -197,7 +197,7 @@ public class Products {
                     4000,
                     4
                 ),
-                new ProductVariant(
+                new Variant(
                     "Sunbeam Yellow",
                     "/img/product/[size]/AU-07-YE.webp",
                     "AU-07-YE",
@@ -216,7 +216,7 @@ public class Products {
                 "Real-time environmental monitoring for optimal crop growth"
             ),
             List.of(
-                new ProductVariant(
+                new Variant(
                     "Polar White",
                     "/img/product/[size]/AU-08-WH.webp",
                     "AU-08-WH",
@@ -235,7 +235,7 @@ public class Products {
                 "User-friendly operation with traditional manual controls"
             ),
             List.of(
-                new ProductVariant(
+                new Variant(
                     "Verdant Field",
                     "/img/product/[size]/CL-01-GR.webp",
                     "CL-01-GR",
@@ -243,7 +243,7 @@ public class Products {
                     5700,
                     8
                 ),
-                new ProductVariant(
+                new Variant(
                     "Stormy Sky",
                     "/img/product/[size]/CL-01-GY.webp",
                     "CL-01-GY",
@@ -262,7 +262,7 @@ public class Products {
                 "Ease of control with straightforward mechanical systems"
             ),
             List.of(
-                new ProductVariant(
+                new Variant(
                     "Cerulean Classic",
                     "/img/product/[size]/CL-02-BL.webp",
                     "CL-02-BL",
@@ -281,7 +281,7 @@ public class Products {
                 "Classic aesthetics with a robust body, built to last"
             ),
             List.of(
-                new ProductVariant(
+                new Variant(
                     "Meadow Green",
                     "/img/product/[size]/CL-03-GR.webp",
                     "CL-03-GR",
@@ -289,7 +289,7 @@ public class Products {
                     2300,
                     7
                 ),
-                new ProductVariant(
+                new Variant(
                     "Rustic Rose",
                     "/img/product/[size]/CL-03-PI.webp",
                     "CL-03-PI",
@@ -297,7 +297,7 @@ public class Products {
                     2300,
                     3
                 ),
-                new ProductVariant(
+                new Variant(
                     "Harvest Gold",
                     "/img/product/[size]/CL-03-YE.webp",
                     "CL-03-YE",
@@ -316,7 +316,7 @@ public class Products {
                 "A testament to early agricultural machinery with a dependable engine"
             ),
             List.of(
-                new ProductVariant(
+                new Variant(
                     "Oceanic Blue",
                     "/img/product/[size]/CL-04-BL.webp",
                     "CL-04-BL",
@@ -324,7 +324,7 @@ public class Products {
                     2200,
                     6
                 ),
-                new ProductVariant(
+                new Variant(
                     "Rustic Crimson",
                     "/img/product/[size]/CL-04-RD.webp",
                     "CL-04-RD",
@@ -332,7 +332,7 @@ public class Products {
                     2200,
                     3
                 ),
-                new ProductVariant(
+                new Variant(
                     "Aqua Green",
                     "/img/product/[size]/CL-04-TQ.webp",
                     "CL-04-TQ",
@@ -351,7 +351,7 @@ public class Products {
                 "Classic operator comfort with modern ergonomic enhancements"
             ),
             List.of(
-                new ProductVariant(
+                new Variant(
                     "Pacific Teal",
                     "/img/product/[size]/CL-05-PT.webp",
                     "CL-05-PT",
@@ -359,7 +359,7 @@ public class Products {
                     2700,
                     1
                 ),
-                new ProductVariant(
+                new Variant(
                     "Barn Red",
                     "/img/product/[size]/CL-05-RD.webp",
                     "CL-05-RD",
@@ -378,7 +378,7 @@ public class Products {
                 "Utilitarian design with practical functionality and comfort"
             ),
             List.of(
-                new ProductVariant(
+                new Variant(
                     "Emerald Forest",
                     "/img/product/[size]/CL-06-MT.webp",
                     "CL-06-MT",
@@ -386,7 +386,7 @@ public class Products {
                     2800,
                     1
                 ),
-                new ProductVariant(
+                new Variant(
                     "Golden Wheat",
                     "/img/product/[size]/CL-06-YE.webp",
                     "CL-06-YE",
@@ -405,7 +405,7 @@ public class Products {
                 "Ergonomically designed for comfort during long working hours"
             ),
             List.of(
-                new ProductVariant(
+                new Variant(
                     "Forest Fern",
                     "/img/product/[size]/CL-07-GR.webp",
                     "CL-07-GR",
@@ -413,7 +413,7 @@ public class Products {
                     2900,
                     4
                 ),
-                new ProductVariant(
+                new Variant(
                     "Autumn Amber",
                     "/img/product/[size]/CL-07-YE.webp",
                     "CL-07-YE",
@@ -432,7 +432,7 @@ public class Products {
                 "Ergonomic design with a focus on operator comfort and efficiency"
             ),
             List.of(
-                new ProductVariant(
+                new Variant(
                     "Polder Green",
                     "/img/product/[size]/CL-08-GR.webp",
                     "CL-08-GR",
@@ -440,7 +440,7 @@ public class Products {
                     7750,
                     8
                 ),
-                new ProductVariant(
+                new Variant(
                     "Tulip Magenta",
                     "/img/product/[size]/CL-08-PI.webp",
                     "CL-08-PI",
@@ -459,7 +459,7 @@ public class Products {
                 "Comfort-focused design with a flair for the dramatic"
             ),
             List.of(
-                new ProductVariant(
+                new Variant(
                     "Adriatic Blue",
                     "/img/product/[size]/CL-09-BL.webp",
                     "CL-09-BL",
@@ -467,7 +467,7 @@ public class Products {
                     2950,
                     4
                 ),
-                new ProductVariant(
+                new Variant(
                     "Tuscan Green",
                     "/img/product/[size]/CL-09-GR.webp",
                     "CL-09-GR",
@@ -486,7 +486,7 @@ public class Products {
                 "Functional simplicity for ease of operation in any region"
             ),
             List.of(
-                new ProductVariant(
+                new Variant(
                     "Sahara Dawn",
                     "/img/product/[size]/CL-10-SD.webp",
                     "CL-10-SD",
@@ -494,7 +494,7 @@ public class Products {
                     2600,
                     6
                 ),
-                new ProductVariant(
+                new Variant(
                     "Violet Vintage",
                     "/img/product/[size]/CL-10-VI.webp",
                     "CL-10-VI",
@@ -513,7 +513,7 @@ public class Products {
                 "Iconic design reflecting the simplicity and efficiency of Scandinavian style"
             ),
             List.of(
-                new ProductVariant(
+                new Variant(
                     "Baltic Blue",
                     "/img/product/[size]/CL-11-SK.webp",
                     "CL-11-SK",
@@ -521,7 +521,7 @@ public class Products {
                     3100,
                     0
                 ),
-                new ProductVariant(
+                new Variant(
                     "Nordic Gold",
                     "/img/product/[size]/CL-11-YE.webp",
                     "CL-11-YE",
@@ -540,7 +540,7 @@ public class Products {
                 "Enhanced gearbox for smooth acceleration and nimble handling"
             ),
             List.of(
-                new ProductVariant(
+                new Variant(
                     "Velocity Blue",
                     "/img/product/[size]/CL-12-BL.webp",
                     "CL-12-BL",
@@ -548,7 +548,7 @@ public class Products {
                     3200,
                     8
                 ),
-                new ProductVariant(
+                new Variant(
                     "Rally Red",
                     "/img/product/[size]/CL-12-RD.webp",
                     "CL-12-RD",
@@ -567,7 +567,7 @@ public class Products {
                 "Advanced air flow system for superior engine cooling"
             ),
             List.of(
-                new ProductVariant(
+                new Variant(
                     "Speedway Blue",
                     "/img/product/[size]/CL-13-BL.webp",
                     "CL-13-BL",
@@ -575,7 +575,7 @@ public class Products {
                     7500,
                     1
                 ),
-                new ProductVariant(
+                new Variant(
                     "Raceway Red",
                     "/img/product/[size]/CL-13-RD.webp",
                     "CL-13-RD",
@@ -594,7 +594,7 @@ public class Products {
                 "Easy-to-service mechanics for long-term reliability"
             ),
             List.of(
-                new ProductVariant(
+                new Variant(
                     "Emerald Grove",
                     "/img/product/[size]/CL-14-GR.webp",
                     "CL-14-GR",
@@ -602,7 +602,7 @@ public class Products {
                     2300,
                     3
                 ),
-                new ProductVariant(
+                new Variant(
                     "Ruby Fields",
                     "/img/product/[size]/CL-14-RD.webp",
                     "CL-14-RD",
@@ -621,7 +621,7 @@ public class Products {
                 "Versatile functionality for all types of agricultural work"
             ),
             List.of(
-                new ProductVariant(
+                new Variant(
                     "Vintage Pink",
                     "/img/product/[size]/CL-15-PI.webp",
                     "CL-15-PI",
@@ -629,7 +629,7 @@ public class Products {
                     6200,
                     0
                 ),
-                new ProductVariant(
+                new Variant(
                     "Sahara Dust",
                     "/img/product/[size]/CL-15-SD.webp",
                     "CL-15-SD",
