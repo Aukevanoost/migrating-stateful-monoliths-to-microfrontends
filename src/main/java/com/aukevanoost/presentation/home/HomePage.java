@@ -37,6 +37,8 @@ public class HomePage extends BaseTemplate {
             String.format("%s=%s; Path=/; Max-Age=%d; Secure; SameSite=Strict",
                 "auth-token",
                 token,
-                (int) (IAuthController.JWT_EXPIRATION / 1000)));
+                (IAuthController.JWT_EXPIRATION / 1000)
+            )
+        );
     }
 }
