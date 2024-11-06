@@ -3,6 +3,7 @@ bin/
 .classpath
 .project
 .settings
+.angular/
 .factorypath
 .externalToolBuilders
 .fbExcludeFilterFile
