@@ -9,12 +9,10 @@
     </main>
 
     <script>
-        window.addEventListener('loader-available', (e) => {
-          Promise.all([
-            e.detail('explore', 'exp-teasers'),
-            e.detail('explore', 'exp-recommendations')
-          ]).catch(console.error);
+        window.addEventListener('mfe-discovered', (e) => {
+            e.detail({'explore': ['teasers', 'recommendations']})
         }, {once: true});
+        window.addEventListener('mfe-loaded', console.warn);
     </script>
 </wicket:extend>
 </body>
