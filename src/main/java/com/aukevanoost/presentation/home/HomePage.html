@@ -8,12 +8,26 @@
         <exp-recommendations product='CL-01-GY,AU-07-MT'></exp-recommendations>
     </main>
 
+    <!-- WITHOUT DISCOVERY -->
+    <script type="module-shim" src="scripts/loader.js"></script>
     <script>
-        window.addEventListener('mfe-discovered', (e) => {
-            e.detail({'explore': ['teasers', 'recommendations']})
+        window.addEventListener('mfe-loader-available', (e) => {
+            Promise.all([
+                e.detail.load('explore', './exp-teasers'),
+                e.detail.load('explore', './exp-recommendations'),
+            ])
+                .catch(console.error);
         }, {once: true});
-        window.addEventListener('mfe-loaded', console.warn);
     </script>
+
+    <!-- WITH DISCOVERY -->
+<!--    <script type="module-shim" src="scripts/loader-with-discovery.js"></script>-->
+<!--    <script>-->
+<!--        window.addEventListener('mfe-loaded', console.warn);-->
+<!--        window.addEventListener('mfe-loader-available', (e) => {-->
+<!--            e.detail.load({'explore': ['teasers', 'recommendations']})-->
+<!--        }, {once: true});-->
+<!--    </script>-->
 </wicket:extend>
 </body>
 </html>

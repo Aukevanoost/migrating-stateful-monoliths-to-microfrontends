@@ -153,58 +153,10 @@ var initFederation = (remotesOrManifestUrl = {}) => {
 };
 var fetchRemotes = (remotesOrManifestUrl = {}) => typeof remotesOrManifestUrl === "string" ? fetch(remotesOrManifestUrl).then((r) => r.json()) : Promise.resolve(remotesOrManifestUrl);
 
-// app/native-federation/custom-discovery.ts
-var MFEDiscoveryError = class extends Error {
-  constructor(message) {
-    super(message);
-    this.name = "MFEDiscoveryError";
-  }
-};
-var fetchDiscovery = ({ disableCache, url } = { disableCache: false, url: "http://localhost:3000/teams" }) => {
-  if (disableCache) sessionStorage.removeItem(NAMESPACE + ".discovery");
-  const cache = sessionStorage.getItem(NAMESPACE + ".discovery");
-  const mfe_discovery_manifest = !!cache ? Promise.resolve(JSON.parse(cache)) : fetch(url).then((r) => r.json());
-  return mfe_discovery_manifest.then((r) => {
-    if (!disableCache) sessionStorage.setItem(NAMESPACE + ".discovery", JSON.stringify(r));
-    return r;
+// app/loader.ts
+(async () => {
+  await initFederation({
+    "explore": "http://localhost:4200/remoteEntry.json"
   });
-};
-var verifyMicroFrontendsAvailable = (requested) => (manifest) => {
-  Object.entries(requested).forEach(([team, mfe]) => {
-    if (!manifest[team]) Promise.reject(new MFEDiscoveryError(`Team '${team}' not found.`));
-    const discMfe = Object.keys(manifest[team].microfrontends);
-    mfe.forEach((reqMfe) => {
-      if (!discMfe.includes(reqMfe)) Promise.reject(new MFEDiscoveryError(`Micro frontend not found in team '${team}', available: [${discMfe.join(", ")}]`));
-    });
-  });
-  return Promise.resolve(manifest);
-};
-
-// app/main.ts
-var loadMicroFrontends = (manifest) => (mfe) => {
-  return verifyMicroFrontendsAvailable(mfe)(manifest).then((_) => {
-    return initFederation(
-      Object.keys(manifest).reduce((a, b) => {
-        return { ...a, [b]: manifest[b].manifest };
-      }, {})
-    );
-  }).then((_) => window.dispatchEvent(new Event("mfe-initialized"))).then((_) => {
-    window.dispatchEvent(new Event("mfe-initialized"));
-    return Promise.all(
-      Object.entries(mfe).flatMap(
-        ([team, components]) => components.map((comp) => [team, comp]).map(([team2, c]) => [team2, manifest[team2].microfrontends[c][0]]).map(
-          ([team2, c]) => loadRemoteModule(team2, c.extras.nativefederation.key).then((_2) => window.dispatchEvent(new CustomEvent("mfe-loaded", {
-            detail: { ...c.metadata, ...c.extras.nativefederation }
-          })))
-        )
-      )
-    );
-  });
-};
-(() => {
-  fetchDiscovery().then((manifest) => {
-    window.dispatchEvent(new CustomEvent("mfe-discovered", {
-      detail: loadMicroFrontends(manifest)
-    }));
-  });
+  window.dispatchEvent(new CustomEvent("mfe-loader-available", { detail: { load: loadRemoteModule } }));
 })();

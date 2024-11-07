@@ -1,8 +1,6 @@
 <html>
     <head>
         <title>Shell</title>
-        <link href='https://fonts.googleapis.com/css?family=Comfortaa' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="styles.css"> </head>   
     </head>
     <body>
         <exp-teasers></exp-teasers>
@@ -11,14 +9,27 @@
         <script type="esms-options">{ "shimMode": true }</script>
         <script src="https://ga.jspm.io/npm:es-module-shims@1.5.17/dist/es-module-shims.js"></script>
 
-        <script type="module-shim" src="main.js"></script>
-        
+        <!-- WITHOUT DISCOVERY -->    
+        <script type="module-shim" src="loader.js"></script>
         <script>
-            window.addEventListener('mfe-initialized', console.log, {once: true});
-            window.addEventListener('mfe-loaded', console.log, {once: true});
-            window.addEventListener('mfe-discovered', (e) => {
-                e.detail({'explore': ['teasers', 'recommendations']})
+            window.addEventListener('mfe-loader-available', (e) => {
+                Promise.all([
+                    e.detail.load('explore', './exp-teasers'),
+                    e.detail.load('explore', './exp-recommendations'),
+                ])
+                    .catch(console.error);
             }, {once: true});
-        </script>
+        </script>    
+    
+        <!-- WITH DISCOVERY -->
+        <!--         
+            <script type="module-shim" src="loader-with-discovery.js"></script>
+            <script>
+                window.addEventListener('mfe-loaded', console.warn);
+                window.addEventListener('mfe-loader-available', (e) => {
+                    e.detail.load({'explore': ['teasers', 'recommendations']})
+                }, {once: true});
+            </script>
+        -->
     </body>
 </html>

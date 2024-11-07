@@ -1,48 +1,43 @@
-import * as esbuild from 'esbuild';
-import * as path from 'path';
-import * as fs from 'fs';
+import * as esbuild from "esbuild";
+import * as path from "path";
+import * as fs from "fs";
 
-import { esBuildAdapter } from '@softarc/native-federation-esbuild';
-import { federationBuilder } from '@softarc/native-federation/build';
+import { esBuildAdapter } from "@softarc/native-federation-esbuild";
+import { federationBuilder } from "@softarc/native-federation/build";
 
-export async function buildProject(projectName) {
-
-    const tsConfig = 'tsconfig.json';
-    const outputPath = `dist`;
-
+(async () => {
     await federationBuilder.init({
         options: {
-            workspaceRoot: path.join(__dirname, '..'),
-            outputPath,
-            tsConfig,
-            federationConfig: `${projectName}/federation.config.js`,
+            workspaceRoot: path.join(__dirname, ".."),
+            outputPath: "dist",
+            tsConfig: "tsconfig.json",
+            federationConfig: "app/federation.config.js",
             verbose: false,
         },
         adapter: esBuildAdapter
     });
 
 
-    fs.rmSync(outputPath, { force: true, recursive: true });
+    fs.rmSync("dist", { force: true, recursive: true });
 
     await esbuild.build({
-        entryPoints: [`${projectName}/main.ts`],
+        entryPoints: [
+            "app/loader-with-discovery.ts",
+            "app/loader.ts",
+        ],
         external: federationBuilder.externals,
-        outdir: outputPath,
+        outdir: "dist",
         bundle: true,
-        platform: 'browser',
-        format: 'esm',
-        mainFields: ['es2020', 'browser', 'module', 'main'],
-        conditions: ['es2020', 'es2015', 'module'],
-        resolveExtensions: ['.ts', '.mjs', '.js'],
-        tsconfig: tsConfig,
+        platform: "browser",
+        format: "esm",
+        mainFields: ["es2020", "browser", "module", "main"],
+        conditions: ["es2020", "es2015", "module"],
+        resolveExtensions: [".ts", ".mjs", ".js"],
+        tsconfig: "tsconfig.json",
         splitting: false
     });
 
-    fs.copyFileSync(`${projectName}/index.html`, `${outputPath}/index.html`);
-    fs.copyFileSync(`${projectName}/favicon.ico`, `${outputPath}/favicon.ico`);
-    fs.copyFileSync(`${projectName}/styles.css`, `${outputPath}/styles.css`);
+    fs.copyFileSync("app/index.html", "dist/index.html");
 
     await federationBuilder.build();
-}
-
-buildProject('app');
+})()
