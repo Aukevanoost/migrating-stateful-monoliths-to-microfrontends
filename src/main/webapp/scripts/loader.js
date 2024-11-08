@@ -25,40 +25,69 @@ var normalizeOptions = (optionsOrRemoteName, exposedModule) => {
   throw new Error("unexpected arguments: please pass options or a remoteName/exposedModule-pair");
 };
 
-// app/native-federation/global-cache.ts
+// app/native-federation/cache/cache.ts
 var NAMESPACE = "__NATIVE_FEDERATION__";
-var global = globalThis;
-global[NAMESPACE] ??= {
-  externals: /* @__PURE__ */ new Map(),
-  remoteNamesToRemote: /* @__PURE__ */ new Map(),
-  baseUrlToRemoteNames: /* @__PURE__ */ new Map()
-};
-var globalCache = global[NAMESPACE];
-var toExternalKey = (shared) => {
-  return `${shared.packageName}@${shared.version}`;
-};
-var getExternalUrl = (shared) => {
-  return globalCache.externals.get(toExternalKey(shared));
-};
-var setExternalUrl = (shared, url) => {
-  globalCache.externals.set(toExternalKey(shared), url);
-};
-var addRemote = (remoteName, remote) => {
-  globalCache.remoteNamesToRemote.set(remoteName, remote);
-  globalCache.baseUrlToRemoteNames.set(remote.baseUrl, remoteName);
-};
-var getRemoteNameByBaseUrl = (baseUrl) => {
-  return globalCache.baseUrlToRemoteNames.get(baseUrl);
-};
-var isRemoteInitialized = (baseUrl) => {
-  return globalCache.baseUrlToRemoteNames.has(baseUrl);
-};
-var getRemote = (remoteName) => {
-  return globalCache.remoteNamesToRemote.get(remoteName);
-};
-var importRemoteScript = (url) => {
-  return global.importShim(url);
-};
+
+// app/native-federation/cache/session-cache.ts
+function sessionEntry(key, _init) {
+  function set(value) {
+    const clean = typeof value === "string" ? value : JSON.stringify(value);
+    sessionStorage.setItem(`${NAMESPACE}.${key}`, clean);
+    return this;
+  }
+  function get() {
+    return JSON.parse(sessionStorage.getItem(`${NAMESPACE}.${key}`)) ?? _init;
+  }
+  function exists() {
+    return !!sessionStorage.getItem(`${NAMESPACE}.${key}`);
+  }
+  return { get, set, exists };
+}
+var getSessionCache = () => ({
+  externals: sessionEntry("externals", {}),
+  remoteNamesToRemote: sessionEntry("remoteNamesToRemote", {}),
+  baseUrlToRemoteNames: sessionEntry("baseUrlToRemoteNames", {}),
+  discovery: sessionEntry("discovery", void 0)
+});
+
+// app/native-federation/cache/cache-handler.ts
+function cacheHandler(_cache) {
+  const toExternalKey = (shared) => {
+    return `${shared.packageName}@${shared.version}`;
+  };
+  const getExternalUrl = (shared) => {
+    return _cache.externals.get()[toExternalKey(shared)];
+  };
+  const setExternalUrl = (shared, url) => {
+    _cache.externals.set({
+      ..._cache.externals.get(),
+      [toExternalKey(shared)]: url
+    });
+  };
+  const addRemote = (remoteName, remote) => {
+    _cache.remoteNamesToRemote.set({
+      ..._cache.remoteNamesToRemote.get(),
+      [remoteName]: remote
+    });
+    _cache.baseUrlToRemoteNames.set({
+      ..._cache.baseUrlToRemoteNames.get(),
+      [remote.baseUrl]: remoteName
+    });
+  };
+  const entry = (key) => {
+    return _cache[key];
+  };
+  const fetch2 = (key) => {
+    return _cache[key].get();
+  };
+  const getRemoteNameByBaseUrl = (baseUrl) => {
+    return _cache.baseUrlToRemoteNames.get()[baseUrl];
+  };
+  return { fetch: fetch2, entry, getExternalUrl, setExternalUrl, addRemote, getRemoteNameByBaseUrl };
+}
+var CACHE = cacheHandler(
+  getSessionCache()
+);
 
 // app/native-federation/import-map.ts
 var createEmptyImportMap = () => ({
@@ -72,10 +101,10 @@ var createRemoteImportMap = (remoteInfo, remoteName, baseUrl) => {
   }), {});
   const scopedImports = remoteInfo.shared.reduce((acc, shared) => ({
     ...acc,
-    [shared.packageName]: getExternalUrl(shared) ?? joinPaths(baseUrl, shared.outFileName)
+    [shared.packageName]: CACHE.getExternalUrl(shared) ?? joinPaths(baseUrl, shared.outFileName)
   }), {});
   remoteInfo.shared.forEach((shared) => {
-    setExternalUrl(shared, scopedImports[shared.packageName]);
+    CACHE.setExternalUrl(shared, scopedImports[shared.packageName]);
   });
   return {
     imports,
@@ -115,7 +144,7 @@ var processRemoteInfo = (federationInfoUrl, remoteName) => {
   return fetch(federationInfoUrl).then((r) => r.json()).then((info) => {
     if (!remoteName) remoteName = info.name;
     const baseUrl = getDirectory(federationInfoUrl);
-    addRemote(remoteName, { ...info, baseUrl });
+    CACHE.addRemote(remoteName, { ...info, baseUrl });
     return createRemoteImportMap(info, remoteName, baseUrl);
   });
 };
@@ -125,21 +154,23 @@ var loadRemoteModule = (optionsOrRemoteName, exposedModule) => {
   const options = normalizeOptions(optionsOrRemoteName, exposedModule);
   return initRemoteInfoIfUninitialized(options).then((_) => {
     const remoteName = getRemoteNameByOptions(options);
-    const remote = getRemote(remoteName);
+    const remote = CACHE.fetch("remoteNamesToRemote")[remoteName];
     if (!remote) throw new Error("unknown remote " + remoteName);
     const exposed = remote.exposes.find((e) => e.key === options.exposedModule);
     if (!exposed) throw new Error(`Unknown exposed module ${options.exposedModule} in remote ${remoteName}`);
     return joinPaths(remote.baseUrl, exposed.outFileName);
-  }).then((url) => importRemoteScript(url));
+  }).then((url) => {
+    return globalThis.importShim(url);
+  });
 };
 var initRemoteInfoIfUninitialized = (options) => {
-  if (!options.remoteEntry || isRemoteInitialized(getDirectory(options.remoteEntry))) {
+  if (!options.remoteEntry || CACHE.getRemoteNameByBaseUrl(getDirectory(options.remoteEntry))) {
     return Promise.resolve();
   }
   return processRemoteInfo(options.remoteEntry).then(appendImportMapToBody);
 };
 var getRemoteNameByOptions = (options) => {
-  let remoteName = options.remoteName ?? getRemoteNameByBaseUrl(getDirectory(options.remoteEntry));
+  let remoteName = options.remoteName ?? CACHE.getRemoteNameByBaseUrl(getDirectory(options.remoteEntry));
   if (!remoteName) throw new Error("unexpected arguments: Please pass remoteName or remoteEntry");
   return remoteName;
 };

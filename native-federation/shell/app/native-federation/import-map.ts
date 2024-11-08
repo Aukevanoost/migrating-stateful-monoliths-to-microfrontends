@@ -1,4 +1,4 @@
-import * as globalCache from "./global-cache";
+import { CACHE } from "./cache/cache-handler";
 import { RemoteInfo } from "./remote-info";
 import { joinPaths } from "./util";
 
@@ -20,11 +20,11 @@ const createRemoteImportMap = (remoteInfo: RemoteInfo, remoteName: string, baseU
         
     const scopedImports: Record<string, string> = remoteInfo.shared.reduce((acc, shared) => ({
         ...acc,
-        [shared.packageName]: globalCache.getExternalUrl(shared) ?? joinPaths(baseUrl, shared.outFileName)
+        [shared.packageName]: CACHE.getExternalUrl(shared) ?? joinPaths(baseUrl, shared.outFileName)
     }), {});
 
     remoteInfo.shared.forEach(shared => {
-        globalCache.setExternalUrl(shared, scopedImports[shared.packageName])
+        CACHE.setExternalUrl(shared, scopedImports[shared.packageName])
     })
 
     return { 

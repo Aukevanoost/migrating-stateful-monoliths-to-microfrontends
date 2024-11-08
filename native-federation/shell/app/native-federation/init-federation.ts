@@ -1,4 +1,4 @@
-import { appendImportMapToBody, ImportMap } from './import-map'; 
+import { appendImportMapToBody } from './import-map'; 
 import { processRemoteInfos } from './remote-info';
 
 const initFederation = (remotesOrManifestUrl: string | Record<string, string> = {}) => {

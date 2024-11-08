@@ -1,6 +1,7 @@
+import { CACHE } from "./cache/cache-handler";
 import { ImportMap, createEmptyImportMap, mergeImportMaps, createRemoteImportMap } from "./import-map";
 import { getDirectory } from "./util";
-import * as globalCache from './global-cache';
+
 
 interface SharedConfig {
     packageName: string;
@@ -38,7 +39,7 @@ const processRemoteInfo = (federationInfoUrl: string, remoteName?: string): Prom
         .then(info => {
             if(!remoteName) remoteName = info.name;
             const baseUrl = getDirectory(federationInfoUrl);
-            globalCache.addRemote(remoteName, {...info, baseUrl})
+            CACHE.addRemote(remoteName, {...info, baseUrl})
 
             return createRemoteImportMap(info, remoteName, baseUrl);
         })

@@ -1,15 +1,22 @@
 import { fetchDiscovery, initFederation, loadRemoteModule } from './native-federation';
-import { MfeDiscoveryManifest, TeamDiscoveryManifest, verifyMicroFrontendsAvailable } from './native-federation/custom-discovery';
+import { TeamDiscoveryManifest, verifyMicroFrontendsAvailable } from './native-federation/discovery';
+
+const loadMicroFrontend = (manifest: TeamDiscoveryManifest) => ([team, comp]): Promise<boolean> => {
+    const entry = manifest[team].microfrontends[comp][0];
+    return loadRemoteModule(team, entry.extras.nativefederation.key)
+        .then(_ => window.dispatchEvent(new CustomEvent('mfe-loaded', {
+            detail: {...entry.metadata, ...entry.extras.nativefederation}
+        })))
+}
 
 const loadMicroFrontends = (manifest: TeamDiscoveryManifest) => (mfe: Record<string, string[]>) => {
     return verifyMicroFrontendsAvailable(mfe)(manifest)
-        .then(_ => {
-            return initFederation(
-                Object.keys(manifest).reduce((a,b) => {
-                    return {...a, [b]: manifest[b].manifest};
-                }, {})
-            )
-        })
+        .then(_ => initFederation(
+            Object.entries(manifest).reduce((ngConfig, [team,cfg]) => ({
+                ...ngConfig, 
+                [team]: cfg.manifest
+            }), {})
+        ))
         .then(_ => window.dispatchEvent(new Event('mfe-initialized')))
         .then(_ => {
             window.dispatchEvent(new Event('mfe-initialized'));
@@ -18,13 +25,7 @@ const loadMicroFrontends = (manifest: TeamDiscoveryManifest) => (mfe: Record<str
                     .flatMap(([team, components]) => 
                         components
                             .map(comp => [team, comp])
-                            .map(([team, c]) => [team, manifest[team].microfrontends[c][0]]) 
-                            .map(([team, c]: [string, MfeDiscoveryManifest]) => 
-                                loadRemoteModule(team, c.extras.nativefederation.key)
-                                    .then(_ => window.dispatchEvent(new CustomEvent('mfe-loaded', {
-                                        detail: {...c.metadata, ...c.extras.nativefederation}
-                                    })))
-                            )
+                            .map(loadMicroFrontend(manifest))
                     )
             )
         })

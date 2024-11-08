@@ -1,4 +1,4 @@
-import { NAMESPACE } from "./global-cache";
+import { CACHE } from "./cache/cache-handler";
 
 class MFEDiscoveryError extends Error {
     constructor(message) {
@@ -25,17 +25,17 @@ interface TeamDiscoveryManifest extends Record<string, {
     microfrontends: Record<string, MfeDiscoveryManifest[]>;
 }> {}
 
-const fetchDiscovery = ({disableCache, url} = {disableCache: false, url: "http://localhost:3000/teams"}): Promise<TeamDiscoveryManifest> => {
-    if(disableCache) sessionStorage.removeItem(NAMESPACE + ".discovery");
-    const cache = sessionStorage.getItem(NAMESPACE + ".discovery");
 
-    const mfe_discovery_manifest = !!cache 
-        ? Promise.resolve(JSON.parse(cache)) 
-        : fetch(url).then(r => r.json());
+const fetchDiscovery = ({url} = {url: "http://localhost:3000/teams"}): Promise<TeamDiscoveryManifest> => {
+    const cachedDiscovery = CACHE.entry("discovery")
+    const mfe_discovery_manifest = 
+        (cachedDiscovery.exists())
+            ? Promise.resolve(cachedDiscovery.get()) 
+            : fetch(url).then(r => r.json());
 
     return mfe_discovery_manifest
         .then(r => {
-            if(!disableCache) sessionStorage.setItem(NAMESPACE + ".discovery", JSON.stringify(r));
+            cachedDiscovery.set(r);
             return r;
         })
 }

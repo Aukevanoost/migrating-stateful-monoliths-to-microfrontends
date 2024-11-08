@@ -1,5 +1,5 @@
 import { getDirectory, joinPaths, normalizeOptions, RemoteOptions } from "./util";
-import * as globalCache from './global-cache';
+import { CACHE } from './cache/cache-handler';
 import { processRemoteInfo } from "./remote-info";
 import { appendImportMapToBody } from "./import-map";
 
@@ -12,7 +12,7 @@ const loadRemoteModule = (
     return initRemoteInfoIfUninitialized(options)
         .then(_ => {
             const remoteName = getRemoteNameByOptions(options);
-            const remote = globalCache.getRemote(remoteName);
+            const remote = CACHE.fetch("remoteNamesToRemote")[remoteName];
             if (!remote) throw new Error('unknown remote ' + remoteName);
         
             const exposed = remote.exposes.find(e => e.key === options.exposedModule);
@@ -20,11 +20,13 @@ const loadRemoteModule = (
         
             return joinPaths(remote.baseUrl!, exposed.outFileName);
         })
-        .then(url => globalCache.importRemoteScript(url))
+        .then(url => {
+            return (globalThis as any).importShim(url)
+        })
 }
 
 const initRemoteInfoIfUninitialized = (options: RemoteOptions): Promise<void> => {
-    if (!options.remoteEntry || globalCache.isRemoteInitialized(getDirectory(options.remoteEntry))) {
+    if (!options.remoteEntry || CACHE.getRemoteNameByBaseUrl(getDirectory(options.remoteEntry))) {
         return Promise.resolve();
     }
     return processRemoteInfo(options.remoteEntry)
@@ -33,7 +35,7 @@ const initRemoteInfoIfUninitialized = (options: RemoteOptions): Promise<void> =>
 
 const getRemoteNameByOptions = (options: RemoteOptions): string => {
     let remoteName = options.remoteName
-                  ?? globalCache.getRemoteNameByBaseUrl(getDirectory(options.remoteEntry));
+                  ?? CACHE.getRemoteNameByBaseUrl(getDirectory(options.remoteEntry));
     
     if (!remoteName) throw new Error('unexpected arguments: Please pass remoteName or remoteEntry');
     
