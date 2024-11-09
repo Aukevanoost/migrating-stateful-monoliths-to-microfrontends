@@ -5,11 +5,11 @@
 <wicket:extend>
     <main class="e_HomePage" id="homepage">
         <exp-teasers></exp-teasers>
-        <exp-recommendations product='CL-01-GY,AU-07-MT'></exp-recommendations>
+        <exp-recommendations product="AU-07-MT"></exp-recommendations>
     </main>
 
-    <!-- WITHOUT DISCOVERY -->
     <script type="module-shim" src="scripts/loader.js"></script>
+    <script type="module-shim" src="scripts/loader-with-discovery.js"></script>
     <script>
         window.addEventListener('mfe-loader-available', (e) => {
             Promise.all([
@@ -19,15 +19,6 @@
                 .catch(console.error);
         }, {once: true});
     </script>
-
-    <!-- WITH DISCOVERY -->
-<!--    <script type="module-shim" src="scripts/loader-with-discovery.js"></script>-->
-<!--    <script>-->
-<!--        window.addEventListener('mfe-loaded', console.warn);-->
-<!--        window.addEventListener('mfe-loader-available', (e) => {-->
-<!--            e.detail.load({'explore': ['teasers', 'recommendations']})-->
-<!--        }, {once: true});-->
-<!--    </script>-->
 </wicket:extend>
 </body>
 </html>

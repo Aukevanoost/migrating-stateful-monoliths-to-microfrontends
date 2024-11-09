@@ -1,45 +1,67 @@
-import { getDirectory, joinPaths, normalizeOptions, RemoteOptions } from "./util";
-import { CACHE } from './cache/cache-handler';
-import { processRemoteInfo } from "./remote-info";
-import { appendImportMapToBody } from "./import-map";
+import * as _path from "./utils/path";
+import * as _dom from "./utils/dom";
+import * as _remoteOptions from './utils/remote-options';
 
-const loadRemoteModule = (
-    optionsOrRemoteName: RemoteOptions | string,
-    exposedModule?: string
-): Promise<any> => {
-    const options = normalizeOptions(optionsOrRemoteName, exposedModule);
+import { TCacheHandler } from "./cache";
+import { RemoteOptions } from "./models/remote-options";
+import { TImportMapBuilder } from "./utils/import-map-builder";
+import { CacheOf, NativeFederationProps } from "./models/cache";
 
-    return initRemoteInfoIfUninitialized(options)
-        .then(_ => {
-            const remoteName = getRemoteNameByOptions(options);
-            const remote = CACHE.fetch("remoteNamesToRemote")[remoteName];
-            if (!remote) throw new Error('unknown remote ' + remoteName);
-        
-            const exposed = remote.exposes.find(e => e.key === options.exposedModule);
-            if (!exposed) throw new Error(`Unknown exposed module ${options.exposedModule} in remote ${remoteName}`);
-        
-            return joinPaths(remote.baseUrl!, exposed.outFileName);
-        })
-        .then(url => {
-            return (globalThis as any).importShim(url)
-        })
-}
+type fnLoadRemoteModule = ( optionsOrRemoteName: RemoteOptions | string, exposedModule?: string ) => Promise<void>
 
-const initRemoteInfoIfUninitialized = (options: RemoteOptions): Promise<void> => {
-    if (!options.remoteEntry || CACHE.getRemoteNameByBaseUrl(getDirectory(options.remoteEntry))) {
-        return Promise.resolve();
+const loadRemoteModule = (ctx: {
+    cacheHandler: TCacheHandler<CacheOf<NativeFederationProps>>,
+    importMapBuilder: TImportMapBuilder
+}): fnLoadRemoteModule => {
+
+    const getRemoteNameByBaseUrl = (url: string) => {
+        return ctx.cacheHandler.fetch("baseUrlToRemoteNames")[url];
     }
-    return processRemoteInfo(options.remoteEntry)
-            .then(appendImportMapToBody)
+
+    const initRemoteInfoIfUninitialized = (options: RemoteOptions): Promise<void> => {
+        if (!options.remoteEntry || getRemoteNameByBaseUrl(_path.getDir(options.remoteEntry))) {
+            return Promise.resolve();
+        }
+        return ctx.importMapBuilder
+                .fromRemoteEntryJson(options.remoteEntry)
+                .then(_dom.appendImportMapToBody)
+    }
+    
+    const getRemoteNameByOptions = (options: RemoteOptions): string => {
+        if(!!options?.remoteName) return options.remoteName;
+    
+        if(!options.remoteEntry) {
+            throw new Error('unexpected arguments: Please pass remoteName or remoteEntry');
+        }
+    
+        const remoteName =  getRemoteNameByBaseUrl(_path.getDir(options.remoteEntry));
+        if (!remoteName) throw new Error(`RemoteName: '${options.remoteEntry}' not found.`);
+    
+        return remoteName;
+    }
+
+    const getRemoteUrl = (options: RemoteOptions): string => {
+        const remoteName = getRemoteNameByOptions(options);
+    
+        const remote = ctx.cacheHandler.fetch("remoteNamesToRemote")[remoteName];
+        if (!remote) throw new Error('unknown remote ' + remoteName);
+    
+        const exposed = remote.exposes.find(e => e.key === options.exposedModule);
+        if (!exposed) throw new Error(`Unknown exposed module ${options.exposedModule} in remote ${remoteName}`);
+    
+        return _path.join(remote.baseUrl!, exposed.outFileName);
+    }
+
+    return (
+        optionsOrRemoteName: RemoteOptions | string,
+        exposedModule?: string
+    ): Promise<void> => {
+        const options = _remoteOptions.normalize(optionsOrRemoteName, exposedModule);
+    
+        return initRemoteInfoIfUninitialized(options)
+            .then(_ => getRemoteUrl(options))
+            .then(url => {(globalThis as any).importShim(url)})
+    }
 }
 
-const getRemoteNameByOptions = (options: RemoteOptions): string => {
-    let remoteName = options.remoteName
-                  ?? CACHE.getRemoteNameByBaseUrl(getDirectory(options.remoteEntry));
-    
-    if (!remoteName) throw new Error('unexpected arguments: Please pass remoteName or remoteEntry');
-    
-    return remoteName;
-}
-
-export { loadRemoteModule }
+export { loadRemoteModule, fnLoadRemoteModule }

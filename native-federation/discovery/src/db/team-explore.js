@@ -36,7 +36,7 @@ const RECOMMENDATIONS = [
         extras: {
             nativefederation: {
                 url: "http://localhost:4200",
-                manifest: "./remoteEntry.json",
+                entryPoint: "./remoteEntry.json",
                 key: "./exp-recommendations",
                 element: "exp-recommendations"
             },

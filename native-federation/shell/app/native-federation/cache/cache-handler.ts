@@ -1,54 +1,47 @@
-import { RemoteInfo, SharedConfig } from "../remote-info";
-import { CacheEntryValue, NativeFederationCache, TCacheEntry } from "./cache";
-import { getSessionCache } from "./session-cache";
+import { CacheEntryCreator, CacheEntryValue, CacheOf, TCacheHandler } from "../models/cache";
 
-
-function cacheHandler(_cache: NativeFederationCache) {
-    const toExternalKey = (shared: SharedConfig): string => {
-        return `${shared.packageName}@${shared.version}`;
-    }
-    
-    const getExternalUrl = (shared: SharedConfig): string | undefined => {
-        return _cache.externals.get()[toExternalKey(shared)];
-    }
-    
-    const setExternalUrl = (shared: SharedConfig, url: string): void => {
-        _cache.externals.set({
-            ..._cache.externals.get(),
-            [toExternalKey(shared)]: url
-        });
-    }
-
-    const addRemote = (remoteName: string, remote: RemoteInfo): void => {
-        _cache.remoteNamesToRemote.set({
-            ..._cache.remoteNamesToRemote.get(),
-            [remoteName]: remote
-        });
-        _cache.baseUrlToRemoteNames.set({
-            ..._cache.baseUrlToRemoteNames.get(),
-            [remote.baseUrl]: remoteName
-        });
-    }
-
-    const entry = <K extends keyof NativeFederationCache>(key: K): NativeFederationCache[K] => {
+function getCacheHandler<TCache extends CacheOf<Record<keyof TCache, any>>>(
+    _cache: TCache
+): TCacheHandler<TCache> {
+    const entry = <K extends keyof TCache>(key: K): TCache[K] => {
         return _cache[key];
     };
 
-    const fetch = <K extends keyof NativeFederationCache>(
-        key: K
-    ): CacheEntryValue<NativeFederationCache[K]> => {
-        return _cache[key].get() as CacheEntryValue<NativeFederationCache[K]>;
+    const fetch = <K extends keyof TCache>(key: K): CacheEntryValue<TCache[K]> => {
+        return _cache[key].get();
     };
-    
-    const getRemoteNameByBaseUrl = (baseUrl: string): string | undefined => {
-        return _cache.baseUrlToRemoteNames.get()[baseUrl];
-    }
-    
-    return {fetch, entry, getExternalUrl, setExternalUrl, addRemote, getRemoteNameByBaseUrl};
+
+    const mutate = <K extends keyof TCache>(
+        key: K,
+        mutateFn: (v: CacheEntryValue<TCache[K]>) => CacheEntryValue<TCache[K]>
+    ): TCacheHandler<TCache> => {
+        const newVal = mutateFn(fetch(key));
+        _cache[key].set(newVal);
+        return getCacheHandler(_cache);
+    };
+
+    return { fetch, mutate, entry };
 }
 
-const CACHE = cacheHandler(
-    getSessionCache()
-)
+const toCache = <Tprops extends Record<string, any>>(
+    props: Tprops,
+    cacheEntryCreator: CacheEntryCreator
+): CacheOf<Tprops> => {
+    return Object.entries(props).reduce(
+        (acc, [key, value]) => ({
+            ...acc,
+            [key]: cacheEntryCreator(key, value)
+        }),
+        {} as CacheOf<Tprops>
+    );
+};
 
-export {CACHE};
+const toHandler = <Tprops extends Record<string, any>>(
+    props: Tprops,
+    cacheEntryCreator: CacheEntryCreator
+): TCacheHandler<CacheOf<Tprops>> => {
+    return getCacheHandler(toCache(props, cacheEntryCreator))
+}
+
+
+export {toHandler, toCache};

@@ -1,33 +1,29 @@
-import { RemoteInfo } from "../remote-info";
-import { NAMESPACE, NativeFederationCache, TCacheEntry } from "./cache";
+import { CacheEntryCreator, NAMESPACE, TCacheEntry } from "../models/cache";
 
-function globalEntry<T>(key: string, _init: T): TCacheEntry<T> {
-    if(!(globalThis as any)[NAMESPACE]) (globalThis as any)[NAMESPACE] = {};
+type TGlobalCache = {[NAMESPACE]: Record<string, unknown>;};
 
-    function entry() {
-        return (globalThis as any)[NAMESPACE][key];
+const globalCacheEntry: CacheEntryCreator = <T>(key: string, _fallback: T) => {
+    if (!(globalThis as unknown as TGlobalCache)[NAMESPACE]) {
+        (globalThis as unknown as TGlobalCache)[NAMESPACE] = {};
     }
+    const namespace = (globalThis as unknown as TGlobalCache)[NAMESPACE];
+    
+    const entry = {
+        get(): T {
+            return (namespace[key] as T) ?? _fallback;
+        },
+        
+        set(value: T): TCacheEntry<T> {
+            namespace[key] = value;
+            return entry;
+        },
+        
+        exists(): boolean {
+            return key in namespace;
+        }
+    };
 
-    function set(value: T) {
-        (globalThis as any)[NAMESPACE][key] = value;
-        return this;
-    }
-    function get(): T {
-        if(!entry()) return _init;
-        return entry() as T;
-    }
-    function exists(): boolean {
-        return !!entry();
-    }
-
-    return {get,set,exists};
+    return entry;
 }
 
-const getGlobalCache = (): NativeFederationCache => ({
-    externals: globalEntry('externals', {}),
-    remoteNamesToRemote: globalEntry('remoteNamesToRemote', {}),
-    baseUrlToRemoteNames: globalEntry('baseUrlToRemoteNames', {}),
-    discovery: globalEntry('discovery', undefined)
-});
-
-export {globalEntry, getGlobalCache} ;
+export {globalCacheEntry};
