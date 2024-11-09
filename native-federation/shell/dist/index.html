@@ -16,8 +16,8 @@
         <script>
             window.addEventListener('mfe-loader-available', (e) => {
                 Promise.all([
-                    e.detail.load('explore', './exp-teasers'),
-                    e.detail.load('explore', './exp-recommendations'),
+                    e.detail.load('explore/teasers', './exp-teasers'),
+                    e.detail.load('explore/recommendations', './exp-recommendations'),
                 ])
                     .catch(console.error);
             }, {once: true});

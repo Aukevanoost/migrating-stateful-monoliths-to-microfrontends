@@ -5,6 +5,7 @@ var getDir = (url) => {
   return parts.join("/");
 };
 var join = (pathA, pathB) => {
+  pathA = pathA.startsWith("./") ? pathA.slice(2) : pathA;
   pathA = pathA.startsWith("/") ? pathA.slice(1) : pathA;
   pathB = pathB.endsWith("/") ? pathB.slice(0, -1) : pathB;
   return `${pathA}/${pathB}`;

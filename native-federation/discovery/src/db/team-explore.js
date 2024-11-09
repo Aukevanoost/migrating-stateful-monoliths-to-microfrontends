@@ -1,6 +1,6 @@
 const TEASERS = [
     {
-        url: "http://localhost:4200/exp-teasers.js",
+        url: "http://localhost:4201/exp-teasers.js",
         metadata: {
             integrity: "CHECKSUM",
             version: "1.0.0"
@@ -12,8 +12,7 @@ const TEASERS = [
         },
         extras: {
             nativefederation: {
-                url: "http://localhost:4200",
-                manifest: "./remoteEntry.json",
+                remoteEntry: "http://localhost:4201/remoteEntry.json",
                 key: "./exp-teasers",
                 element: "exp-teasers"
             },
@@ -23,7 +22,7 @@ const TEASERS = [
 
 const RECOMMENDATIONS = [
     {
-        url: "http://localhost:4200/exp-recommendations.js",
+        url: "http://localhost:4202/exp-recommendations.js",
         metadata: {
             integrity: "CHECKSUM",
             version: "1.0.0"
@@ -35,8 +34,7 @@ const RECOMMENDATIONS = [
         },
         extras: {
             nativefederation: {
-                url: "http://localhost:4200",
-                entryPoint: "./remoteEntry.json",
+                remoteEntry: "http://localhost:4202/remoteEntry.json",
                 key: "./exp-recommendations",
                 element: "exp-recommendations"
             },
@@ -44,6 +42,11 @@ const RECOMMENDATIONS = [
     }
 ]
 
+const EXPLORE_MFE = {
+     "explore/teasers": TEASERS,
+    "explore/recommendations": RECOMMENDATIONS
+}
+
 module.exports = {
-    TEASERS, RECOMMENDATIONS
+    EXPLORE_MFE
 }

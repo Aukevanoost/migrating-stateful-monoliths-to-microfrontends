@@ -1,9 +1,9 @@
 import { CacheOf, TCacheHandler } from "../models/cache";
 import { MFEDiscoveryError } from "./discovery-error";
-import { DiscoveryProps, TeamDiscoveryManifest } from "./discovery-manifest";
+import { DiscoveryProps, MfeDiscoveryManifest } from "./discovery-manifest";
 
 const fetchDiscovery = (discoveryManifestUrl: string, ctx: {cacheHandler: TCacheHandler<CacheOf<DiscoveryProps>>})
-    : Promise<TeamDiscoveryManifest> => {
+    : Promise<MfeDiscoveryManifest> => {
     const cachedDiscovery = ctx.cacheHandler.entry("discovery")
     const mfe_discovery_manifest = 
         (cachedDiscovery.exists())
@@ -17,21 +17,20 @@ const fetchDiscovery = (discoveryManifestUrl: string, ctx: {cacheHandler: TCache
         })
 }
 
-const verifyMicroFrontendsAvailable = (requested: Record<string, string[]>) => (manifest: TeamDiscoveryManifest): Promise<TeamDiscoveryManifest> => {
-    Object.entries(requested).forEach(([team, mfe]) => {
-        const availableMFE = Object.keys(manifest[team]!.microfrontends);
-        mfe.forEach(reqMfe => {
-            if(!availableMFE.includes(reqMfe)) Promise.reject(new MFEDiscoveryError(`Micro frontend not found in team '${team}', available: [${availableMFE.join(', ')}]`));
+
+const verifyMicroFrontendsAvailable = (requested: Record<string, string|"latest">) => (manifest: MfeDiscoveryManifest): Promise<MfeDiscoveryManifest> => {
+    Object
+        .entries(requested)
+        .forEach(([mfeName, version]) => {
+            if(!manifest.microFrontends[mfeName] || manifest.microFrontends[mfeName].length < 1) 
+                Promise.reject(new MFEDiscoveryError(`Micro frontend '${mfeName}' not found`))
+            
+            if(version !== "latest" && !manifest.microFrontends[mfeName].some(m => m.metadata.version === version)){
+                const availableVersions = manifest.microFrontends[mfeName].map(m => m.metadata.version);
+                Promise.reject(new MFEDiscoveryError(`Micro frontend '${mfeName}' version '${version}' not found, available: [${availableVersions.join(', ')}]`))
+            }
         });
-    });
     return Promise.resolve(manifest);
 }
 
-const verifyEntryPointsAvailable = (requested: string[]) => (manifest: TeamDiscoveryManifest): Promise<TeamDiscoveryManifest> => {
-    requested.forEach((team) => {
-        if(!manifest[team]) Promise.reject(new MFEDiscoveryError(`Team '${team}' not found.`));
-    });
-    return Promise.resolve(manifest);
-}
-
-export {fetchDiscovery, verifyMicroFrontendsAvailable, verifyEntryPointsAvailable}
+export {fetchDiscovery, verifyMicroFrontendsAvailable}

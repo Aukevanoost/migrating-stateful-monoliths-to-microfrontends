@@ -1,23 +1,23 @@
-interface MfeDiscoveryManifest {
+interface MicroFrontendVersion {
     url: string;
     metadata: {integrity: string; version: string},
     deployment: {traffic: number, default: boolean, prod?: boolean},
     extras: {
         nativefederation: {
-            entryPoint: string,
+            remoteEntry: string,
             key: string,
             element: string
         }
     }
 }
 
-interface TeamDiscoveryManifest extends Record<string, {
-    entryPoint: string;
-    microfrontends: Record<string, MfeDiscoveryManifest[]>;
-}> {}
-
-interface DiscoveryProps {
-    discovery: TeamDiscoveryManifest;
+interface MfeDiscoveryManifest{
+    schema: string;
+    microFrontends: Record<string, MicroFrontendVersion[]>;
 }
 
-export {MfeDiscoveryManifest, DiscoveryProps, TeamDiscoveryManifest}
+interface DiscoveryProps {
+    discovery: MfeDiscoveryManifest;
+}
+
+export {MfeDiscoveryManifest, MicroFrontendVersion, DiscoveryProps}

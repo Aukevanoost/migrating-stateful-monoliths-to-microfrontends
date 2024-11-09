@@ -58,6 +58,7 @@ var getDir = (url) => {
   return parts.join("/");
 };
 var join = (pathA, pathB) => {
+  pathA = pathA.startsWith("./") ? pathA.slice(2) : pathA;
   pathA = pathA.startsWith("/") ? pathA.slice(1) : pathA;
   pathB = pathB.endsWith("/") ? pathB.slice(0, -1) : pathB;
   return `${pathA}/${pathB}`;
@@ -216,19 +217,28 @@ var fetchDiscovery = (discoveryManifestUrl, ctx) => {
     return r;
   });
 };
-var verifyEntryPointsAvailable = (requested) => (manifest) => {
-  requested.forEach((team) => {
-    if (!manifest[team]) Promise.reject(new MFEDiscoveryError(`Team '${team}' not found.`));
+var verifyMicroFrontendsAvailable = (requested) => (manifest) => {
+  Object.entries(requested).forEach(([mfeName, version]) => {
+    if (!manifest.microFrontends[mfeName] || manifest.microFrontends[mfeName].length < 1)
+      Promise.reject(new MFEDiscoveryError(`Micro frontend '${mfeName}' not found`));
+    if (version !== "latest" && !manifest.microFrontends[mfeName].some((m) => m.metadata.version === version)) {
+      const availableVersions = manifest.microFrontends[mfeName].map((m) => m.metadata.version);
+      Promise.reject(new MFEDiscoveryError(`Micro frontend '${mfeName}' version '${version}' not found, available: [${availableVersions.join(", ")}]`));
+    }
   });
   return Promise.resolve(manifest);
 };
 
 // app/native-federation/discovery/init-federation-with-discovery.ts
-var getEntryPointUrls = (manifest, mfeCollectionFilter) => {
-  if (!mfeCollectionFilter) mfeCollectionFilter = Object.keys(manifest);
-  return Object.entries(manifest).filter(([collection, _]) => mfeCollectionFilter.includes(collection)).reduce((ngConfig, [collection, cfg]) => ({
-    ...ngConfig,
-    [collection]: cfg.entryPoint
+var setVersions = (requested) => {
+  if (!Array.isArray(requested)) return requested;
+  return requested.reduce((acc, r) => ({ ...acc, [r]: "latest" }), {});
+};
+var getEntryPointUrls = (manifest, mfeFilter) => {
+  if (!mfeFilter) mfeFilter = setVersions(Object.keys(manifest));
+  return Object.entries(mfeFilter).map(([mfe, version]) => [mfe, manifest.microFrontends[mfe].find((m) => version === "latest" || version === m.metadata.version)]).reduce((nfConfig, [mfe, cfg]) => ({
+    ...nfConfig,
+    [mfe]: cfg.extras.nativefederation.remoteEntry
   }), {});
 };
 var loadCacheHandler = (handler) => {
@@ -241,14 +251,16 @@ var loadCacheHandler = (handler) => {
 };
 var initFederationWithDiscovery = (discoveryManifestUrl, o = {}) => {
   const cacheHandler = loadCacheHandler(o.cacheHandler);
-  return fetchDiscovery(discoveryManifestUrl, { cacheHandler }).then(verifyEntryPointsAvailable(o.mfeCollectionFilter ?? [])).then((manifest) => {
-    return initFederation(getEntryPointUrls(manifest, o.mfeCollectionFilter), { cacheHandler }).then((loader) => ({ loader, manifest }));
+  const requestedMFE = setVersions(o.microfrontends ?? {});
+  return fetchDiscovery(discoveryManifestUrl, { cacheHandler }).then(verifyMicroFrontendsAvailable(requestedMFE)).then((manifest) => {
+    console.log(getEntryPointUrls(manifest, requestedMFE));
+    return initFederation(getEntryPointUrls(manifest, requestedMFE), { cacheHandler }).then((loader) => ({ loader, manifest }));
   });
 };
 
 // app/loader-with-discovery.ts
 (() => {
-  initFederationWithDiscovery("http://localhost:3000/teams", { mfeCollectionFilter: ["explore"] }).then(({ loader, manifest }) => {
+  initFederationWithDiscovery("http://localhost:3000", { microfrontends: ["explore/recommendations", "explore/teasers"] }).then(({ loader, manifest }) => {
     console.log(manifest);
     window.dispatchEvent(new CustomEvent("mfe-loader-available", { detail: { load: loader } }));
   });
