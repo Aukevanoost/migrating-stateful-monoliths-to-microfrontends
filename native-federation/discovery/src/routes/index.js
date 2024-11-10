@@ -7,8 +7,17 @@ router.get('/', function(req, res, next) {
     schema: "https://github.com/awslabs/frontend-discovery/blob/main/schema/v1-pre.json",
     microFrontends: {
       ...EXPLORE_MFE,
-      // other team MFE
     }
   });
+});
+
+router.get('/native-federation', function(req, res, next) {
+  res.json({
+    ...Object.entries(EXPLORE_MFE).reduce((acc, [k,v]) => {
+      return {...acc, [k]: v[0].extras.nativefederation.remoteEntry}
+    }, {})
+  }
+
+  );
 });
 module.exports = router;

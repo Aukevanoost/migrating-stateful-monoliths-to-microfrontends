@@ -29,27 +29,29 @@ var toHandler = (props, cacheEntryCreator) => {
   return getCacheHandler(toCache(props, cacheEntryCreator));
 };
 
-// app/native-federation/cache/session-cache.ts
-var sessionStorageCacheEntry = (key, _fallback) => {
+// app/native-federation/cache/global-cache.ts
+var globalCacheEntry = (key, _fallback) => {
+  if (!globalThis[NAMESPACE]) {
+    globalThis[NAMESPACE] = {};
+  }
+  const namespace = globalThis[NAMESPACE];
   const entry = {
     get() {
-      const str = sessionStorage.getItem(`${NAMESPACE}.${key}`) ?? JSON.stringify(_fallback);
-      return JSON.parse(str);
+      return namespace[key] ?? _fallback;
     },
     set(value) {
-      const clean = typeof value === "string" ? value : JSON.stringify(value);
-      sessionStorage.setItem(`${NAMESPACE}.${key}`, clean);
+      namespace[key] = value;
       return entry;
     },
     exists() {
-      return !!sessionStorage.getItem(`${NAMESPACE}.${key}`);
+      return key in namespace;
     }
   };
   return entry;
 };
 
 // app/native-federation/cache/index.ts
-var DEFAULT_CACHE_ENTRY = sessionStorageCacheEntry;
+var DEFAULT_CACHE_ENTRY = globalCacheEntry;
 
 // app/native-federation/utils/path.ts
 var getDir = (url) => {
@@ -73,14 +75,14 @@ var ImportMapBuilder = (ctx) => {
     imports: {},
     scopes: {}
   });
-  const createRemote = (remoteInfo, remoteName, baseUrl) => {
+  const createRemote = (remoteInfo, remoteName) => {
     const imports = remoteInfo.exposes.reduce((acc, remote) => ({
       ...acc,
-      [join(remoteName, remote.key)]: join(baseUrl, remote.outFileName)
+      [join(remoteName, remote.key)]: join(remoteInfo.baseUrl, remote.outFileName)
     }), {});
     const scopedImports = remoteInfo.shared.reduce((acc, shared) => ({
       ...acc,
-      [shared.packageName]: ctx.cacheHandler.fetch("externals")[toExternalKey(shared)] ?? join(baseUrl, shared.outFileName)
+      [shared.packageName]: ctx.cacheHandler.fetch("externals")[toExternalKey(shared)] ?? join(remoteInfo.baseUrl, shared.outFileName)
     }), {});
     remoteInfo.shared.forEach((shared) => {
       const key = scopedImports[shared.packageName];
@@ -88,7 +90,7 @@ var ImportMapBuilder = (ctx) => {
     });
     return {
       imports,
-      scopes: { [baseUrl + "/"]: scopedImports }
+      scopes: { [remoteInfo.baseUrl + "/"]: scopedImports }
     };
   };
   const merge = (maps) => {
@@ -100,21 +102,11 @@ var ImportMapBuilder = (ctx) => {
       createEmpty()
     );
   };
-  const addRemoteToCache = (remoteName, remote) => {
-    ctx.cacheHandler.mutate("remoteNamesToRemote", (v) => ({ ...v, [remoteName]: remote }));
-    if (!!remote?.baseUrl) {
-      ctx.cacheHandler.mutate("baseUrlToRemoteNames", (v) => ({ ...v, [remote.baseUrl]: remoteName }));
-    }
+  const fromRemoteInfo = (remoteEntry, remoteName) => {
+    if (!remoteName) remoteName = remoteEntry.name;
+    return createRemote(remoteEntry, remoteName);
   };
-  const fromRemoteEntryJson = (remoteEntryUrl, remoteName) => {
-    return fetch(remoteEntryUrl).then((r) => r.json()).then((info) => {
-      if (!remoteName) remoteName = info.name;
-      const baseUrl = getDir(remoteEntryUrl);
-      addRemoteToCache(remoteName, { ...info, baseUrl });
-      return createRemote(info, remoteName, baseUrl);
-    });
-  };
-  return { createEmpty, createRemote, merge, fromRemoteEntryJson };
+  return { createEmpty, createRemote, merge, fromRemoteInfo };
 };
 
 // app/native-federation/utils/dom.ts
@@ -141,7 +133,7 @@ var normalize = (optionsOrRemoteName, exposedModule) => {
 };
 
 // app/native-federation/load-remote-module.ts
-var loadRemoteModule = (ctx) => {
+var getRemoteModuleLoader = (ctx) => {
   const getRemoteNameByBaseUrl = (url) => {
     return ctx.cacheHandler.fetch("baseUrlToRemoteNames")[url];
   };
@@ -149,7 +141,7 @@ var loadRemoteModule = (ctx) => {
     if (!options.remoteEntry || getRemoteNameByBaseUrl(getDir(options.remoteEntry))) {
       return Promise.resolve();
     }
-    return ctx.importMapBuilder.fromRemoteEntryJson(options.remoteEntry).then(appendImportMapToBody);
+    fetch(options.remoteEntry).then((r) => r.json()).then((cfg) => ctx.remoteInfoBuilder.fromRemoteEntry(cfg, options.remoteEntry)).then((info) => ctx.remoteInfoBuilder.addToCache(info)).then((info) => ctx.importMapBuilder.fromRemoteInfo(info));
   };
   const getRemoteNameByOptions = (options) => {
     if (!!options?.remoteName) return options.remoteName;
@@ -176,6 +168,24 @@ var loadRemoteModule = (ctx) => {
   };
 };
 
+// app/native-federation/utils/remote-info-builder.ts
+var RemoteInfoBuilder = (ctx) => {
+  const fromRemoteEntry = (remoteEntry, remoteEntryUrl) => ({
+    ...remoteEntry,
+    baseUrl: getDir(remoteEntryUrl)
+  });
+  const fromEntryJson = (entryUrl) => {
+    return fetch(entryUrl).then((r) => r.json()).then((cfg) => fromRemoteEntry(cfg, entryUrl));
+  };
+  const addToCache = (remoteInfo, remoteName) => {
+    if (!remoteName) remoteName = remoteInfo.name;
+    ctx.cacheHandler.mutate("remoteNamesToRemote", (v) => ({ ...v, [remoteName]: remoteInfo }));
+    ctx.cacheHandler.mutate("baseUrlToRemoteNames", (v) => ({ ...v, [remoteInfo.baseUrl]: remoteName }));
+    return remoteInfo;
+  };
+  return { fromRemoteEntry, fromEntryJson, addToCache };
+};
+
 // app/native-federation/init-federation.ts
 var initFederation = (remotesOrManifestUrl = {}, { cacheHandler } = {}) => {
   if (!cacheHandler) {
@@ -186,18 +196,23 @@ var initFederation = (remotesOrManifestUrl = {}, { cacheHandler } = {}) => {
     }, DEFAULT_CACHE_ENTRY);
   }
   const importMapBuilder = ImportMapBuilder({ cacheHandler });
+  const remoteInfoBuilder = RemoteInfoBuilder({ cacheHandler });
   const fetchRemotes = (remotesOrManifestUrl2 = {}) => typeof remotesOrManifestUrl2 === "string" ? fetch(remotesOrManifestUrl2).then((r) => r.json()) : Promise.resolve(remotesOrManifestUrl2);
   const createImportMapFromRemotes = (remotes) => {
     return Promise.all(
-      Object.keys(remotes).map((remoteName) => {
-        return importMapBuilder.fromRemoteEntryJson(remotes[remoteName], remoteName).catch((_) => {
-          console.error(`Error loading remote entry for ${remoteName} from file ${remotes[remoteName]}`);
+      Object.entries(remotes).map(([mfe, entryUrl]) => {
+        return fetch(entryUrl).then((r) => r.json()).then((cfg) => remoteInfoBuilder.fromRemoteEntry(cfg, entryUrl)).then((info) => remoteInfoBuilder.addToCache(info, mfe)).then((info) => importMapBuilder.fromRemoteInfo(info, mfe)).catch((_) => {
+          console.error(`Error loading remoteEntry for ${mfe} at '${entryUrl}'`);
           return importMapBuilder.createEmpty();
         });
       })
     ).then(importMapBuilder.merge);
   };
-  return fetchRemotes(remotesOrManifestUrl).then(createImportMapFromRemotes).then(appendImportMapToBody).then((_) => loadRemoteModule({ cacheHandler, importMapBuilder }));
+  return fetchRemotes(remotesOrManifestUrl).then(createImportMapFromRemotes).then(appendImportMapToBody).then((_) => getRemoteModuleLoader({
+    cacheHandler,
+    importMapBuilder,
+    remoteInfoBuilder
+  }));
 };
 
 // app/native-federation/discovery/discovery-error.ts
@@ -249,19 +264,18 @@ var loadCacheHandler = (handler) => {
     discovery: {}
   }, DEFAULT_CACHE_ENTRY);
 };
-var initFederationWithDiscovery = (discoveryManifestUrl, o = {}) => {
+var initFederationWithDiscovery = (discoveryManifestUrl, microfrontends = [], o = {}) => {
   const cacheHandler = loadCacheHandler(o.cacheHandler);
-  const requestedMFE = setVersions(o.microfrontends ?? {});
+  const requestedMFE = setVersions(microfrontends ?? {});
   return fetchDiscovery(discoveryManifestUrl, { cacheHandler }).then(verifyMicroFrontendsAvailable(requestedMFE)).then((manifest) => {
-    console.log(getEntryPointUrls(manifest, requestedMFE));
     return initFederation(getEntryPointUrls(manifest, requestedMFE), { cacheHandler }).then((loader) => ({ loader, manifest }));
   });
 };
 
 // app/loader-with-discovery.ts
 (() => {
-  initFederationWithDiscovery("http://localhost:3000", { microfrontends: ["explore/recommendations", "explore/teasers"] }).then(({ loader, manifest }) => {
-    console.log(manifest);
+  initFederationWithDiscovery("http://localhost:3000", ["explore/recommendations", "explore/teasers"]).then(({ loader, manifest }) => {
+    console.log("manifest: ", manifest);
     window.dispatchEvent(new CustomEvent("mfe-loader-available", { detail: { load: loader } }));
   });
 })();

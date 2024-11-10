@@ -9,9 +9,8 @@
         <script type="esms-options">{ "shimMode": true }</script>
         <script src="https://ga.jspm.io/npm:es-module-shims@1.5.17/dist/es-module-shims.js"></script>
 
-        <!-- WITHOUT DISCOVERY -->    
-        <!-- <script type="module-shim" src="loader.js"></script> -->
-        <script type="module-shim" src="loader-with-discovery.js"></script>
+        <script type="module-shim" src="loader.js"></script>
+        <!-- <script type="module-shim" src="loader-with-discovery.js"></script> -->
 
         <script>
             window.addEventListener('mfe-loader-available', (e) => {
@@ -22,18 +21,5 @@
                     .catch(console.error);
             }, {once: true});
         </script>    
-    
-
-
-        <!-- WITH DISCOVERY (OLD) -->
-        <!--         
-            <script type="module-shim" src="loader-with-discovery.js"></script>
-            <script>
-                window.addEventListener('mfe-loaded', console.warn);
-                window.addEventListener('mfe-loader-available', (e) => {
-                    e.detail.load({'explore': ['teasers', 'recommendations']})
-                }, {once: true});
-            </script>
-        -->
     </body>
 </html>

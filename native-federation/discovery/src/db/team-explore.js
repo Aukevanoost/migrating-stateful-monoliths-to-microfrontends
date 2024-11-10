@@ -43,7 +43,7 @@ const RECOMMENDATIONS = [
 ]
 
 const EXPLORE_MFE = {
-     "explore/teasers": TEASERS,
+    "explore/teasers": TEASERS,
     "explore/recommendations": RECOMMENDATIONS
 }
 

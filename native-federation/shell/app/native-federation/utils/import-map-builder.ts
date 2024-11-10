@@ -1,14 +1,14 @@
 import { CacheOf, NativeFederationProps, TCacheHandler } from "../models/cache";
 import { ImportMap } from "../models/import-map";
-import { RemoteInfo } from "../models/remote-info";
+import { RemoteEntry, RemoteInfo } from "../models/remote-info";
 import { SharedConfig } from "../models/shared-config";
 import * as _path from "./path";
 
 type TImportMapBuilder = {
     createEmpty: () => ImportMap,
-    createRemote: (remoteInfo: RemoteInfo, remoteName: string, baseUrl: string) => ImportMap,
+    createRemote: (remoteInfo: RemoteInfo, remoteName: string) => ImportMap,
     merge: (maps: ImportMap[]) => ImportMap,
-    fromRemoteEntryJson: (remoteEntryUrl: string, remoteName?: string) => Promise<ImportMap> 
+    fromRemoteInfo: (remoteEntry: RemoteInfo, remoteName?: string) => ImportMap 
 }
 
 const ImportMapBuilder = (ctx: {cacheHandler: TCacheHandler<CacheOf<NativeFederationProps>>}): TImportMapBuilder => {
@@ -22,15 +22,15 @@ const ImportMapBuilder = (ctx: {cacheHandler: TCacheHandler<CacheOf<NativeFedera
         scopes: {}
     })
     
-    const createRemote = (remoteInfo: RemoteInfo, remoteName: string, baseUrl: string): ImportMap => {
+    const createRemote = (remoteInfo: RemoteInfo, remoteName: string): ImportMap => {
         const imports: Record<string, string> = remoteInfo.exposes.reduce((acc,remote) => ({
             ...acc, 
-            [_path.join(remoteName, remote.key)]: _path.join(baseUrl, remote.outFileName)
+            [_path.join(remoteName, remote.key)]: _path.join(remoteInfo.baseUrl, remote.outFileName)
         }), {});
             
         const scopedImports: Record<string, string> = remoteInfo.shared.reduce((acc, shared) => ({
             ...acc,
-            [shared.packageName]: ctx.cacheHandler.fetch("externals")[toExternalKey(shared)] ?? _path.join(baseUrl, shared.outFileName)
+            [shared.packageName]: ctx.cacheHandler.fetch("externals")[toExternalKey(shared)] ?? _path.join(remoteInfo.baseUrl, shared.outFileName)
         }), {});
     
         remoteInfo.shared.forEach(shared => {
@@ -40,7 +40,7 @@ const ImportMapBuilder = (ctx: {cacheHandler: TCacheHandler<CacheOf<NativeFedera
     
         return { 
             imports, 
-            scopes: {[baseUrl + '/']: scopedImports}
+            scopes: {[remoteInfo.baseUrl + '/']: scopedImports}
         };
     }
         
@@ -53,26 +53,12 @@ const ImportMapBuilder = (ctx: {cacheHandler: TCacheHandler<CacheOf<NativeFedera
             createEmpty()
         );
     }
-    
-    const addRemoteToCache = (remoteName: string, remote: RemoteInfo): void => {
-        ctx.cacheHandler.mutate("remoteNamesToRemote", v => ({...v, [remoteName]: remote}));
-        if(!!remote?.baseUrl) {
-            ctx.cacheHandler.mutate("baseUrlToRemoteNames", v => ({...v, [remote.baseUrl!]: remoteName}));
-        }
+    const fromRemoteInfo = (remoteEntry: RemoteInfo, remoteName?: string): ImportMap => {
+        if(!remoteName) remoteName = remoteEntry.name as string;
+        return createRemote(remoteEntry, remoteName);
     }
 
-    const fromRemoteEntryJson = (remoteEntryUrl: string, remoteName?: string): Promise<ImportMap> => {
-        return fetch(remoteEntryUrl)
-            .then(r => r.json())
-            .then(info => {
-                if(!remoteName) remoteName = info.name as string;
-                const baseUrl = _path.getDir(remoteEntryUrl);
-                addRemoteToCache(remoteName, {...info, baseUrl})
-                return createRemote(info, remoteName, baseUrl);
-            })
-    }
-
-    return {createEmpty, createRemote, merge, fromRemoteEntryJson};
+    return {createEmpty, createRemote, merge, fromRemoteInfo};
 }
 
 export {ImportMapBuilder, TImportMapBuilder};

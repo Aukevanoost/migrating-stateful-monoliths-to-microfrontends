@@ -31,13 +31,13 @@ const loadCacheHandler = (handler?: TCacheHandler<CacheOf<NativeFederationProps&
 
 const initFederationWithDiscovery = (
     discoveryManifestUrl: string,
+    microfrontends: string[]|Record<string,string|"latest"> = [],
     o: {
-        cacheHandler?: TCacheHandler<CacheOf<NativeFederationProps&DiscoveryProps>>,
-        microfrontends?: string[]|Record<string,string|"latest">
+        cacheHandler?: TCacheHandler<CacheOf<NativeFederationProps&DiscoveryProps>>, 
     } = {}
  ) => {
     const cacheHandler = loadCacheHandler(o.cacheHandler);
-    const requestedMFE = setVersions(o.microfrontends ?? {});
+    const requestedMFE = setVersions(microfrontends ?? {});
 
     return fetchDiscovery(discoveryManifestUrl, {cacheHandler})
         .then(verifyMicroFrontendsAvailable(requestedMFE))

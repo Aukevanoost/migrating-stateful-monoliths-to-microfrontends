@@ -6,12 +6,15 @@ import { TCacheHandler } from "./cache";
 import { RemoteOptions } from "./models/remote-options";
 import { TImportMapBuilder } from "./utils/import-map-builder";
 import { CacheOf, NativeFederationProps } from "./models/cache";
+import { TRemoteInfoBuilder } from "./utils/remote-info-builder";
+import { RemoteEntry } from "./models/remote-info";
 
 type fnLoadRemoteModule = ( optionsOrRemoteName: RemoteOptions | string, exposedModule?: string ) => Promise<void>
 
-const loadRemoteModule = (ctx: {
+const getRemoteModuleLoader = (ctx: {
     cacheHandler: TCacheHandler<CacheOf<NativeFederationProps>>,
-    importMapBuilder: TImportMapBuilder
+    importMapBuilder: TImportMapBuilder,
+    remoteInfoBuilder: TRemoteInfoBuilder,
 }): fnLoadRemoteModule => {
 
     const getRemoteNameByBaseUrl = (url: string) => {
@@ -22,9 +25,12 @@ const loadRemoteModule = (ctx: {
         if (!options.remoteEntry || getRemoteNameByBaseUrl(_path.getDir(options.remoteEntry))) {
             return Promise.resolve();
         }
-        return ctx.importMapBuilder
-                .fromRemoteEntryJson(options.remoteEntry)
-                .then(_dom.appendImportMapToBody)
+
+        fetch(options.remoteEntry)
+            .then(r => r.json() as unknown as RemoteEntry)
+            .then(cfg => ctx.remoteInfoBuilder.fromRemoteEntry(cfg, options.remoteEntry))
+            .then(info => ctx.remoteInfoBuilder.addToCache(info))
+            .then(info => ctx.importMapBuilder.fromRemoteInfo(info))
     }
     
     const getRemoteNameByOptions = (options: RemoteOptions): string => {
@@ -64,4 +70,4 @@ const loadRemoteModule = (ctx: {
     }
 }
 
-export { loadRemoteModule, fnLoadRemoteModule }
+export { getRemoteModuleLoader, fnLoadRemoteModule }
