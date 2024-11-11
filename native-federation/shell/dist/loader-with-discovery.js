@@ -318,8 +318,8 @@ var initFederationWithDiscovery = (discoveryManifestUrl, microfrontends = [], o 
 
 // app/loader-with-discovery.ts
 (() => {
-  initFederationWithDiscovery("http://localhost:3000", ["explore/recommendations", "explore/teasers"]).then(({ load, manifest, importMap }) => {
-    console.log("manifest: ", manifest);
+  initFederationWithDiscovery("http://localhost:3000", ["explore/recommendations", "explore/teasers"]).then(({ load, discovery, importMap }) => {
+    console.log("discovery: ", discovery);
     console.log("importMap: ", importMap);
     window.dispatchEvent(new CustomEvent("mfe-loader-available", { detail: { load } }));
   });
