@@ -1,4 +1,4 @@
-import { CacheEntryCreator, NAMESPACE,  TCacheEntry } from "../models/cache";
+import { CacheEntryCreator, NAMESPACE,  TCacheEntry } from "./cache.contract";
 
 const sessionStorageCacheEntry: CacheEntryCreator = <T>(key: string, _fallback: T) => {
     const entry = {

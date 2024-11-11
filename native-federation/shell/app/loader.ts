@@ -1,8 +1,9 @@
-import { initFederation, loadRemoteModule } from './native-federation';
+import { initFederation } from './native-federation';
 
 (() => {
     initFederation("http://localhost:3000/native-federation")
-        .then(load => {
+        .then(({load, importMap}) => {
+            console.log("importMap: ", importMap);
             window.dispatchEvent(new CustomEvent("mfe-loader-available", {detail: {load}}));
         })
 })();

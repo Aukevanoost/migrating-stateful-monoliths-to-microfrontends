@@ -1,4 +1,4 @@
-import { CacheEntryCreator, NAMESPACE, TCacheEntry } from "../models/cache";
+import { CacheEntryCreator, NAMESPACE, TCacheEntry } from "./cache.contract";
 
 type TGlobalCache = {[NAMESPACE]: Record<string, unknown>;};
 

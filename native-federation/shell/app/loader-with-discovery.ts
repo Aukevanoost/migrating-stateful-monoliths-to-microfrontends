@@ -2,8 +2,9 @@ import { initFederationWithDiscovery } from './native-federation/discovery/init-
 
 (() => {
     initFederationWithDiscovery("http://localhost:3000", ["explore/recommendations", "explore/teasers"])
-        .then(({loader, manifest}) => {
+        .then(({load, manifest, importMap}) => {
             console.log("manifest: ", manifest);
-            window.dispatchEvent(new CustomEvent("mfe-loader-available", {detail: {load: loader}}));
+            console.log("importMap: ", importMap);
+            window.dispatchEvent(new CustomEvent("mfe-loader-available", {detail: {load}}));
         })
 })();

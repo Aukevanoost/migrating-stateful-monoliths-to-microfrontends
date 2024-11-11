@@ -1,4 +1,4 @@
-import { SharedConfig } from "./shared-config";
+import { SharedConfig } from "../dependency/shared-config";
 
 export type RemoteEntry = {
     name: string;

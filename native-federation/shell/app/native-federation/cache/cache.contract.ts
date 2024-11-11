@@ -1,4 +1,4 @@
-import { RemoteInfo } from "./remote-info";
+import { RemoteInfo } from "../remote-info/remote-info.contract";
 
 const NAMESPACE = "__NATIVE_FEDERATION__";
 
@@ -21,18 +21,6 @@ type CacheOf<T> = {
 type CacheEntryCreator = <T>(key: string, initialValue: T) => TCacheEntry<T>;
 
 /**
- * CACHE
- */
-interface TCacheHandler<TCache extends CacheOf<Record<keyof TCache, any>>> {
-    fetch: <K extends keyof TCache>(key: K) => CacheEntryValue<TCache[K]>;
-    entry: <K extends keyof TCache>(key: K) => TCache[K];
-    mutate: <K extends keyof TCache>(
-        key: K,
-        mutateFn: (v: CacheEntryValue<TCache[K]>) => CacheEntryValue<TCache[K]>
-    ) => TCacheHandler<TCache>;
-}
-
-/**
  * DEFAULT STORED PROPERTIES
  */
 type NativeFederationProps = {
@@ -41,6 +29,8 @@ type NativeFederationProps = {
     baseUrlToRemoteNames: Record<string, string>;
 }
 
+type NativeFederationCache = CacheOf<NativeFederationProps>
 
 
-export {NAMESPACE, CacheEntryValue, TCacheEntry, CacheOf, NativeFederationProps, CacheEntryCreator, TCacheHandler}
+
+export {NAMESPACE, CacheEntryValue, TCacheEntry, CacheOf, NativeFederationProps, NativeFederationCache, CacheEntryCreator}

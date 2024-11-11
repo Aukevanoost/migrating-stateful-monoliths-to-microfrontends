@@ -1,12 +1,13 @@
-import { ImportMap } from "./../models/import-map";
+import { ImportMap } from "../import-map/import-map.contract";
 
-const appendImportMapToBody = (map: ImportMap): void => {
+const appendImportMapToBody = (map: ImportMap): ImportMap => {
     document.head.appendChild(
         Object.assign(document.createElement('script'), {
             type: 'importmap-shim',
             innerHTML: JSON.stringify(map),
         })
     );
+    return map;
 }
 
 export { appendImportMapToBody };

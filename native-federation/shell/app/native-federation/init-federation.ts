@@ -1,27 +1,22 @@
-import { CacheOf, DEFAULT_CACHE_ENTRY, toCache, toHandler } from './cache';
-import {ImportMapBuilder}from './utils/import-map-builder';
 import * as _dom from './utils/dom';
-import { ImportMap } from './models/import-map';
-import { fnLoadRemoteModule, getRemoteModuleLoader } from './load-remote-module';
-import { NativeFederationProps, TCacheHandler } from './models/cache';
-import { RemoteEntry } from './models/remote-info';
-import { RemoteInfoBuilder } from './utils/remote-info-builder';
+import { ImportMap } from './import-map/import-map.contract';
+import { remoteModuleLoaderFactory, TLoadRemoteModule } from './load-remote-module';
+import { TRemoteInfoHandler } from './remote-info/remote-info.handler';
+import { DEFAULT_CACHE } from './cache';
+import { createEmptyImportMap, TImportMapHandler } from './import-map/import-map.handler';
+import { mergeImportMaps } from './import-map/merge-import-maps';
+import { resolver } from './resolver';
 
-const initFederation = (
-    remotesOrManifestUrl: string | Record<string, string> = {}, 
-    {cacheHandler}: {cacheHandler?: TCacheHandler<CacheOf<NativeFederationProps>>} = {}
-): Promise<fnLoadRemoteModule> => {    
-    if(!cacheHandler) {
-        cacheHandler = toHandler({
-            externals: {},
-            remoteNamesToRemote: {},
-            baseUrlToRemoteNames: {}
-        }, DEFAULT_CACHE_ENTRY)
-    }
+type TInitFederation = (remotesOrManifestUrl: string | Record<string, string>) => Promise<{load: TLoadRemoteModule, importMap: ImportMap}>
 
-    const importMapBuilder = ImportMapBuilder({cacheHandler});
-    const remoteInfoBuilder = RemoteInfoBuilder({cacheHandler});
+type TFederationInitializer = {
+    init: TInitFederation
+}
 
+const federationInitializerFactory = (
+    remoteInfoHandler: TRemoteInfoHandler,
+    importMapHandler: TImportMapHandler
+): TFederationInitializer => {
     const fetchRemotes = (remotesOrManifestUrl: string | Record<string, string> = {}): Promise<Record<string, string>> => 
         (typeof remotesOrManifestUrl === 'string')
             ? fetch(remotesOrManifestUrl).then(r => r.json())
@@ -30,28 +25,36 @@ const initFederation = (
     const createImportMapFromRemotes = (remotes: Record<string, string>): Promise<ImportMap> => {
         return Promise.all(
             Object.entries(remotes)
-                .map(([mfe, entryUrl]) => {
-                    return fetch(entryUrl)
-                        .then(r => r.json() as unknown as RemoteEntry)
-                        .then(cfg => remoteInfoBuilder.fromRemoteEntry(cfg, entryUrl))
-                        .then(info => remoteInfoBuilder.addToCache(info, mfe))
-                        .then(info => importMapBuilder.fromRemoteInfo(info, mfe))
+                .map(([remoteName, remoteEntryUrl]) => {
+                    return remoteInfoHandler.loadRemoteInfo(remoteEntryUrl, remoteName)
+                        .then(info => importMapHandler.toImportMap(info, remoteName))
                         .catch(_ => {
-                            console.error(`Error loading remoteEntry for ${mfe} at '${entryUrl}'`);
-                            return importMapBuilder.createEmpty();
+                            console.warn(`Error loading remoteEntry for ${remoteName} at '${remoteEntryUrl}', skipping module`);
+                            return createEmptyImportMap();
                         })
                 })
-        ).then(importMapBuilder.merge);
+        ).then(mergeImportMaps);
     }
 
-    return fetchRemotes(remotesOrManifestUrl)
-        .then(createImportMapFromRemotes)
-        .then(_dom.appendImportMapToBody)
-        .then(_ => getRemoteModuleLoader({
-            cacheHandler, 
-            importMapBuilder, 
-            remoteInfoBuilder
-        }))
+    const init = (remotesOrManifestUrl: string | Record<string, string> = {}) => {
+        return fetchRemotes(remotesOrManifestUrl)
+            .then(createImportMapFromRemotes)
+            .then(_dom.appendImportMapToBody)
+            .then(importMap => ({
+                importMap,
+                load: remoteModuleLoaderFactory(remoteInfoHandler).load
+            }))
+    }
+
+    return {init}
 }
 
-export { initFederation };
+const initFederation = (remotesOrManifestUrl: string | Record<string, string> = {})
+    : Promise<{load: TLoadRemoteModule, importMap: ImportMap}> => {    
+        const {remoteInfoHandler, importMapHandler} = resolver(DEFAULT_CACHE);
+        
+        const nfInitializer = federationInitializerFactory( remoteInfoHandler, importMapHandler );
+        return nfInitializer.init(remotesOrManifestUrl)
+    }
+
+export { initFederation, federationInitializerFactory, TFederationInitializer};

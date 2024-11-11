@@ -216,10 +216,10 @@ var initFederation = (remotesOrManifestUrl = {}, { cacheHandler } = {}) => {
 };
 
 // app/native-federation/discovery/discovery-error.ts
-var MFEDiscoveryError = class extends Error {
+var NFDiscoveryError = class extends Error {
   constructor(message) {
     super(message);
-    this.name = "MFEDiscoveryError";
+    this.name = "NFDiscoveryError";
   }
 };
 
@@ -235,10 +235,10 @@ var fetchDiscovery = (discoveryManifestUrl, ctx) => {
 var verifyMicroFrontendsAvailable = (requested) => (manifest) => {
   Object.entries(requested).forEach(([mfeName, version]) => {
     if (!manifest.microFrontends[mfeName] || manifest.microFrontends[mfeName].length < 1)
-      Promise.reject(new MFEDiscoveryError(`Micro frontend '${mfeName}' not found`));
+      Promise.reject(new NFDiscoveryError(`Micro frontend '${mfeName}' not found`));
     if (version !== "latest" && !manifest.microFrontends[mfeName].some((m) => m.metadata.version === version)) {
       const availableVersions = manifest.microFrontends[mfeName].map((m) => m.metadata.version);
-      Promise.reject(new MFEDiscoveryError(`Micro frontend '${mfeName}' version '${version}' not found, available: [${availableVersions.join(", ")}]`));
+      Promise.reject(new NFDiscoveryError(`Micro frontend '${mfeName}' version '${version}' not found, available: [${availableVersions.join(", ")}]`));
     }
   });
   return Promise.resolve(manifest);
