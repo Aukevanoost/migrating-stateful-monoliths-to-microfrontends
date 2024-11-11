@@ -1,4 +1,4 @@
-import { initFederationWithDiscovery } from './native-federation/discovery/init-federation-with-discovery';
+import { initFederationWithDiscovery } from 'vanilla-native-federation';
 
 (() => {
     initFederationWithDiscovery("http://localhost:3000", ["explore/recommendations", "explore/teasers"])

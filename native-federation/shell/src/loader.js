@@ -1,4 +1,4 @@
-import { initFederation } from './native-federation';
+import { initFederation } from 'vanilla-native-federation';
 
 (() => {
     initFederation("http://localhost:3000/native-federation")
