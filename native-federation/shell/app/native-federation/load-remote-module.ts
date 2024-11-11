@@ -6,6 +6,7 @@ import { NativeFederationError } from "./native-federation-error";
 import { TRemoteInfoHandler } from "./remote-info/remote-info.handler";
 import { resolver } from "./resolver";
 import { DEFAULT_CACHE } from "./cache";
+import { NativeFederationCache } from "./cache/cache.contract";
 
 type RemoteModule = {
     remoteName?: string;
@@ -59,8 +60,11 @@ const remoteModuleLoaderFactory = (remoteInfoHandler: TRemoteInfoHandler): TRemo
     return { load }
 }
 
-const loadRemoteModule: TLoadRemoteModule = (remoteNameOrModule: RemoteModule | string,exposedModule?: string) => {
-    const {remoteInfoHandler} = resolver(DEFAULT_CACHE);
+const loadRemoteModule: TLoadRemoteModule = (
+    remoteNameOrModule: RemoteModule | string,exposedModule?: string,
+    o: {cache?: NativeFederationCache} = {}
+) => {
+    const {remoteInfoHandler} = resolver(o.cache ?? DEFAULT_CACHE);
 
     const moduleLoader = remoteModuleLoaderFactory(remoteInfoHandler);
     return moduleLoader.load(remoteNameOrModule, exposedModule);

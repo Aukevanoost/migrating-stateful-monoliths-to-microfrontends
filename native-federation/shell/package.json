@@ -9,8 +9,6 @@
   },
   "author": "",
   "devDependencies": {
-    "@softarc/native-federation": "^2.0.10",
-    "@softarc/native-federation-esbuild": "^2.0.10",
     "@types/node": "^20.14.8",
     "esbuild": "^0.24.0",
     "json5": "^2.2.3",
@@ -18,7 +16,6 @@
     "typescript": "^5.4.4"
   },
   "dependencies": {
-    "@softarc/native-federation-runtime": "^2.0.10",
     "rxjs": "^7.8.1"
   }
 }

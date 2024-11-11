@@ -88,13 +88,15 @@ var dependencyHandlerFactory = (cache) => {
 
 // app/native-federation/discovery/discovery.handler.ts
 var discoveryHandlerFactory = (cacheHandler) => {
+  const addAvailableModulesToCache = (modules) => {
+    cacheHandler.entry("discovery").set(modules);
+    return modules;
+  };
   const fetchDiscovery = (discoveryManifestUrl) => {
     const cachedDiscovery = cacheHandler.entry("discovery");
-    const mfe_discovery_manifest = cachedDiscovery.exists() ? Promise.resolve(cachedDiscovery.get()) : fetch(discoveryManifestUrl).then((r) => r.json());
-    return mfe_discovery_manifest.then((r) => {
-      cachedDiscovery.set(r);
-      return r;
-    });
+    if (cachedDiscovery.exists())
+      return Promise.resolve(cachedDiscovery.get());
+    return fetch(discoveryManifestUrl).then((r) => r.json()).then((manifest) => manifest.microFrontends).then(addAvailableModulesToCache);
   };
   return { fetchDiscovery };
 };
@@ -262,16 +264,16 @@ var NFDiscoveryError = class extends NativeFederationError {
 };
 
 // app/native-federation/discovery/verify-requested-modules.ts
-var verifyRequestedModules = (requested) => (manifest) => {
+var verifyRequestedModules = (requested) => (availableModules) => {
   Object.entries(requested).forEach(([mfeName, version]) => {
-    if (!manifest.microFrontends[mfeName] || manifest.microFrontends[mfeName].length < 1)
+    if (!availableModules[mfeName] || availableModules[mfeName].length < 1)
       Promise.reject(new NFDiscoveryError(`Micro frontend '${mfeName}' not found`));
-    if (version !== "latest" && !manifest.microFrontends[mfeName].some((m) => m.metadata.version === version)) {
-      const availableVersions = manifest.microFrontends[mfeName].map((m) => m.metadata.version);
+    if (version !== "latest" && !availableModules[mfeName].some((m) => m.metadata.version === version)) {
+      const availableVersions = availableModules[mfeName].map((m) => m.metadata.version);
       Promise.reject(new NFDiscoveryError(`Micro frontend '${mfeName}' version '${version}' not found, available: [${availableVersions.join(", ")}]`));
     }
   });
-  return Promise.resolve(manifest);
+  return Promise.resolve(availableModules);
 };
 
 // app/native-federation/discovery/init-federation-with-discovery.ts
@@ -280,32 +282,36 @@ var initFederationWithDiscoveryFactory = (federationInitializer, discoveryHandle
     if (!Array.isArray(requested)) return requested;
     return requested.reduce((acc, r) => ({ ...acc, [r]: "latest" }), {});
   };
-  const getEntryPointUrls = (manifest, mfeFilter) => {
-    if (!mfeFilter) mfeFilter = setVersions(Object.keys(manifest));
-    return Object.entries(mfeFilter).map(([mfe, version]) => [mfe, manifest.microFrontends[mfe].find((m) => version === "latest" || version === m.metadata.version)]).reduce((nfConfig, [mfe, cfg]) => ({
+  const getEntryPointUrls = (availableModules, mfeFilter) => {
+    if (!mfeFilter) mfeFilter = setVersions(Object.keys(availableModules));
+    return Object.entries(mfeFilter).map(([mfe, version]) => {
+      const availableModule = availableModules[mfe]?.find((m) => version === "latest" || version === m.metadata.version);
+      if (!availableModule)
+        throw new NFDiscoveryError(`Micro frontend '${mfe}' version '${version}' does not exist!`);
+      return [mfe, availableModule];
+    }).reduce((nfConfig, [mfe, cfg]) => ({
       ...nfConfig,
       [mfe]: cfg.extras.nativefederation.remoteEntry
     }), {});
   };
   const init = (discoveryManifestUrl, microfrontends = []) => {
     const requestedMFE = setVersions(microfrontends ?? {});
-    return discoveryHandler.fetchDiscovery(discoveryManifestUrl).then(verifyRequestedModules(requestedMFE)).then((manifest) => {
-      const entryPoints = getEntryPointUrls(manifest, requestedMFE);
+    return discoveryHandler.fetchDiscovery(discoveryManifestUrl).then(verifyRequestedModules(requestedMFE)).then((availableModules) => {
+      const entryPoints = getEntryPointUrls(availableModules, requestedMFE);
       return federationInitializer.init(entryPoints).then((federationProps) => ({
         ...federationProps,
-        manifest
+        discovery: availableModules
       }));
     });
   };
   return { init };
 };
-var initFederationWithDiscovery = (discoveryManifestUrl, microfrontends = []) => {
-  const DISCOVERY_CACHE = toCache({ discovery: {} }, globalCacheEntry);
+var initFederationWithDiscovery = (discoveryManifestUrl, microfrontends = [], o = {}) => {
   const {
     remoteInfoHandler,
     importMapHandler,
     discoveryHandler
-  } = discoveryResolver({ ...DEFAULT_CACHE, ...DISCOVERY_CACHE });
+  } = discoveryResolver(o.cache ?? { ...DEFAULT_CACHE, ...toCache({ discovery: {} }, globalCacheEntry) });
   const nfInitializer = federationInitializerFactory(remoteInfoHandler, importMapHandler);
   return initFederationWithDiscoveryFactory(nfInitializer, discoveryHandler).init(discoveryManifestUrl, microfrontends);
 };

@@ -237,8 +237,8 @@ var federationInitializerFactory = (remoteInfoHandler, importMapHandler) => {
   };
   return { init };
 };
-var initFederation = (remotesOrManifestUrl = {}) => {
-  const { remoteInfoHandler, importMapHandler } = resolver(DEFAULT_CACHE);
+var initFederation = (remotesOrManifestUrl = {}, o = {}) => {
+  const { remoteInfoHandler, importMapHandler } = resolver(o.cache ?? DEFAULT_CACHE);
   const nfInitializer = federationInitializerFactory(remoteInfoHandler, importMapHandler);
   return nfInitializer.init(remotesOrManifestUrl);
 };

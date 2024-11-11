@@ -1,27 +1,32 @@
-import { cacheHandlerFactory, TCacheHandler } from "../cache/cache.handler";
+import { TCacheHandler } from "../cache/cache.handler";
 import { CacheOf } from "../cache/cache.contract";
-import { DiscoveryProps, MfeDiscoveryManifest } from "./discovery.contract";
+import { AvailableRemoteModules, DiscoveryProps, MfeDiscoveryManifest } from "./discovery.contract";
 
 type TDiscoveryHandler = {
-    fetchDiscovery: (discoveryManifestUrl: string) => Promise<MfeDiscoveryManifest>
+    fetchDiscovery: (discoveryManifestUrl: string) => Promise<AvailableRemoteModules>
 }
 
 const discoveryHandlerFactory = (
     cacheHandler: TCacheHandler<CacheOf<DiscoveryProps>>
 ): TDiscoveryHandler => {
-    const fetchDiscovery = (discoveryManifestUrl: string)
-        : Promise<MfeDiscoveryManifest> => {
-        const cachedDiscovery = cacheHandler.entry("discovery")
-        const mfe_discovery_manifest = 
-            (cachedDiscovery.exists())
-                ? Promise.resolve(cachedDiscovery.get()) 
-                : fetch(discoveryManifestUrl).then(r => r.json());
 
-        return mfe_discovery_manifest
-            .then(r => {
-                cachedDiscovery.set(r);
-                return r;
-            })
+    const addAvailableModulesToCache = (modules: AvailableRemoteModules) => {
+        cacheHandler.entry("discovery").set(modules); 
+        return modules; 
+    }
+
+    const fetchDiscovery = (discoveryManifestUrl: string)
+        : Promise<AvailableRemoteModules> => {
+        const cachedDiscovery = cacheHandler.entry("discovery")
+
+        if(cachedDiscovery.exists()) 
+            return Promise.resolve(cachedDiscovery.get());
+
+
+        return fetch(discoveryManifestUrl)
+            .then(r => r.json() as unknown as MfeDiscoveryManifest)
+            .then(manifest => manifest.microFrontends)
+            .then(addAvailableModulesToCache);
     }
     return {fetchDiscovery};
 }

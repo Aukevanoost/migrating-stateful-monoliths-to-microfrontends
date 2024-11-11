@@ -6,8 +6,11 @@ import { DEFAULT_CACHE } from './cache';
 import { createEmptyImportMap, TImportMapHandler } from './import-map/import-map.handler';
 import { mergeImportMaps } from './import-map/merge-import-maps';
 import { resolver } from './resolver';
+import { NativeFederationCache } from './cache/cache.contract';
 
-type TInitFederation = (remotesOrManifestUrl: string | Record<string, string>) => Promise<{load: TLoadRemoteModule, importMap: ImportMap}>
+type TInitFederation = (
+    remotesOrManifestUrl: string | Record<string, string>
+) => Promise<{load: TLoadRemoteModule, importMap: ImportMap}>
 
 type TFederationInitializer = {
     init: TInitFederation
@@ -49,9 +52,12 @@ const federationInitializerFactory = (
     return {init}
 }
 
-const initFederation = (remotesOrManifestUrl: string | Record<string, string> = {})
+const initFederation = (
+    remotesOrManifestUrl: string | Record<string, string> = {},
+    o: {cache?: NativeFederationCache} = {}
+)
     : Promise<{load: TLoadRemoteModule, importMap: ImportMap}> => {    
-        const {remoteInfoHandler, importMapHandler} = resolver(DEFAULT_CACHE);
+        const {remoteInfoHandler, importMapHandler} = resolver(o.cache ?? DEFAULT_CACHE);
         
         const nfInitializer = federationInitializerFactory( remoteInfoHandler, importMapHandler );
         return nfInitializer.init(remotesOrManifestUrl)
