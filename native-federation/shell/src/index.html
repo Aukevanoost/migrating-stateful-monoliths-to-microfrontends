@@ -17,6 +17,8 @@
                 Promise.all([
                     e.detail.load('explore/teasers', './exp-teasers'),
                     e.detail.load('explore/recommendations', './exp-recommendations'),
+                    // e.detail.load('explore/teasers'),
+                    // e.detail.load('explore/recommendations'),
                 ]).catch(console.error);
             }, {once: true});
         </script>    
