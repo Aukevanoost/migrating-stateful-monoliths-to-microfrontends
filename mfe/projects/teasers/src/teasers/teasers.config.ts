@@ -13,7 +13,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     {provide: ENV, useValue: env},
     provideZoneChangeDetection({ eventCoalescing: true }), 
-    provideClientHydration(),
+    // provideClientHydration(),
     provideHttpClient(),
   ]
 };

@@ -13,18 +13,14 @@ export function app(): express.Express {
 
   const commonEngine = new CommonEngine();
 
-  server.set('view engine', 'html');
-  server.set('views', browserDistFolder);
+  // Add CORS headers for localhost:8080
+  server.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+  });
 
-  // Example Express Rest API endpoints
-  // server.get('/api/**', (req, res) => { });
-  // Serve static files from /browser
-  server.get('**', express.static(browserDistFolder, {
-    maxAge: '1y',
-    index: 'index.html',
-  }));
-
-  // All regular routes use the Angular engine
+  // All routes use the Angular engine
   server.get('**', (req, res, next) => {
     const { protocol, originalUrl, baseUrl, headers } = req;
 
@@ -34,9 +30,15 @@ export function app(): express.Express {
         documentFilePath: indexHtml,
         url: `${protocol}://${headers.host}${originalUrl}`,
         publicPath: browserDistFolder,
-        providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
+        providers: [
+          { provide: APP_BASE_HREF, useValue: baseUrl }
+        ],
       })
-      .then((html) => res.send(html))
+      .then((html) => {
+        // Extract just the content between the exp-teasers tags
+        const content = html.match(/<exp-teasers.*?>([\s\S]*)<\/exp-teasers>/)?.[1] || '';
+        res.send(content);
+      })
       .catch((err) => next(err));
   });
 

@@ -1,8 +1,7 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FeaturedHttpService } from './../shared/http/featured-http.service';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { fromCDNPipe } from '../shared/from-cdn.pipe';
-import { of } from 'rxjs';
 
 @Component({
   selector: 'exp-recommendations',
