@@ -12,7 +12,6 @@ import io.jsonwebtoken.security.Keys;
 
 public class AuthController implements IAuthController {
     private static final Key JWT_SECRET = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    public static final long JWT_EXPIRATION = 3600000;
 
     public String generateToken() {
         Date now = new Date();

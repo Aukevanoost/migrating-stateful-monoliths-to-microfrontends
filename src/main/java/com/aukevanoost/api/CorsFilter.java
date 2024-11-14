@@ -10,7 +10,10 @@ import java.util.Set;
 @Provider
 public class CorsFilter implements ContainerResponseFilter {
     private static final Set<String> WHITELIST = Set.of(
+        "http://localhost:4001",
+        "http://localhost:4002",
         "http://localhost:4201",
+        "http://localhost:4202",
         "http://localhost:8080",
         "http://localhost:3000"
     );

@@ -1,6 +1,6 @@
 package com.aukevanoost.api;
 
-import com.aukevanoost.api.resources.FeaturedResource;
+import com.aukevanoost.api.featured.FeaturedResource;
 import jakarta.ws.rs.core.Application;
 import java.util.HashSet;
 import java.util.Set;
