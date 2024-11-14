@@ -1,0 +1,8 @@
+  <a 
+    *ngFor="let teaser of (teasers$ | async)"
+    class="exp_HomePage__categoryLink" [href]="'/products/' + teaser.key">         
+    <img 
+        [src]="teaser.image | fromCDN: '500'" 
+        width="500" sizes="500px"/>
+    <p>{{teaser.title}}</p>
+  </a>
