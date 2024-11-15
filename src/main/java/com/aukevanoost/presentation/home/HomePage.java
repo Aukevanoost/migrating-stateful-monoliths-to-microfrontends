@@ -2,6 +2,7 @@ package com.aukevanoost.presentation.home;
 
 import com.aukevanoost.interfaces.boundaries.auth.AuthControllerFactory;
 import com.aukevanoost.interfaces.boundaries.auth.IAuthController;
+import com.aukevanoost.presentation._core.components.RemoteContentPanel;
 import com.aukevanoost.presentation._core.layout.BaseTemplate;
 import jakarta.servlet.http.Cookie;
 import org.apache.wicket.request.cycle.RequestCycle;
@@ -18,6 +19,7 @@ public class HomePage extends BaseTemplate {
     protected void onInitialize() {
         super.onInitialize();
         setAuthCookie(authController.generateToken());
+        add(new RemoteContentPanel("exp_teasers", "http://localhost:4001/"));
     }
 
     /**
