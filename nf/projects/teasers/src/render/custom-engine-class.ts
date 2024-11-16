@@ -9,7 +9,6 @@
 import { ApplicationRef, StaticProvider, Type } from '@angular/core';
 import { ɵSERVER_CONTEXT, renderModule } from '@angular/platform-server';
 import { renderApplication } from './custom-engine'; 
-import * as fs from 'node:fs';
 
 export interface CustomEngineOptions {
   /** A method that when invoked returns a promise that returns an `ApplicationRef` instance once resolved or an NgModule. */
@@ -60,7 +59,6 @@ export class CustomEngine {
    */
   async render(opts: CustomEngineRenderOptions): Promise<string> {
     var html = await this.renderApplication(opts);
-    console.log(html);
     return html;
   }
 
@@ -84,11 +82,6 @@ export class CustomEngine {
     //   document = await this.getDocument(opts.documentFilePath);
     // }
     let document = '<exp-teasers></exp-teasers>';
-    
-    console.log('----------------------------------------------------------------------------')
-    console.log(document);
-    console.log('----------------------------------------------------------------------------')
-
     const commonRenderingOptions = {
       url: opts.url,
       document,
@@ -102,20 +95,19 @@ export class CustomEngine {
       : renderModule(moduleOrFactory, { extraProviders, ...commonRenderingOptions });
   }
 
-  /** Retrieve the document from the cache or the filesystem */
-  private async getDocument(filePath: string): Promise<string> {
-    let doc = this.templateCache.get(filePath);
+//   /** Retrieve the document from the cache or the filesystem */
+//   private async getDocument(filePath: string): Promise<string> {
+//     let doc = this.templateCache.get(filePath);
 
-    if (!doc) {
-      doc = await fs.promises.readFile(filePath, 'utf-8');
-      this.templateCache.set(filePath, doc);
-    }
+//     if (!doc) {
+//       doc = await fs.promises.readFile(filePath, 'utf-8');
+//       this.templateCache.set(filePath, doc);
+//     }
 
-    return doc;
-  }
+//     return doc;
+//   }
 }
 
 function isBootstrapFn(value: unknown): value is () => Promise<ApplicationRef> {
-  // We can differentiate between a module and a bootstrap function by reading compiler-generated `ɵmod` static property:
   return typeof value === 'function' && !('ɵmod' in value);
 }

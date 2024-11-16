@@ -3,35 +3,61 @@ import express from 'express';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 import bootstrap from './src/main.server';
-import { CustomEngine } from './src/render/custom-engine-class';
+import { CommonEngine } from '@angular/ssr';
+import { HTMLExtractor } from './src/render/extractor';
+import cors from 'cors';
 
-// The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
+  
+  server.use(cors());
+
   const serverDistFolder = dirname(fileURLToPath(import.meta.url));
   const browserDistFolder = resolve(serverDistFolder, '../browser');
   const indexHtml = join(serverDistFolder, 'index.server.html');
 
-  console.log("STUFF");
-  const customEngine = new CustomEngine();
+  const commonEngine = new CommonEngine();
 
   server.set('view engine', 'html');
   server.set('views', browserDistFolder);
 
-  // Example Express Rest API endpoints
-  // server.get('/api/**', (req, res) => { });
-  // Serve static files from /browser
-  // server.get('**', express.static(browserDistFolder, {
-  //   maxAge: '1y',
-  //   index: 'index.html',
-  // }));
+  server.use(express.static(browserDistFolder, {
+    setHeaders: (res) => {
+      res.setHeader('Access-Control-Allow-Origin', '*');
+    }
+  }));
+
+  server.get('/remoteEntry',async (req, res, next) => {
+    await fetch('http://localhost:4001/remoteEntry.json')
+      .then(r => r.json())
+      .then((cfg: any) => {
+        res.json(cfg);
+    })
+  });
+
+  server.get('/mfe', (req, res, next) => {
+    const { protocol, baseUrl, headers } = req;
+
+    commonEngine
+      .render({
+        bootstrap,
+        documentFilePath: indexHtml,
+        url: `${protocol}://${headers.host}/`,
+        publicPath: browserDistFolder,
+        providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
+      })
+      .then((html) => {
+        const {head, body, comp} = HTMLExtractor('exp-teasers', html).extract();        
+        res.json( {head, body, comp} );
+      })
+      .catch((err) => next(err));
+  });
 
   // All regular routes use the Angular engine
   server.get('**', (req, res, next) => {
     const { protocol, originalUrl, baseUrl, headers } = req;
 
-    console.log('render');
-    customEngine
+    commonEngine
       .render({
         bootstrap,
         documentFilePath: indexHtml,

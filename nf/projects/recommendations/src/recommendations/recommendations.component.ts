@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { afterRender, Component, inject } from '@angular/core';
 import { FeaturedHttpService } from './../shared/http/featured-http.service';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { fromCDNPipe } from '../shared/from-cdn.pipe';
@@ -14,4 +14,9 @@ import { fromCDNPipe } from '../shared/from-cdn.pipe';
 export class RecommendationsComponent {
   http = inject(FeaturedHttpService);
   recommendations$ = this.http.recommendations$(["CL-01-GY","AU-07-MT"]);
+  constructor() {
+    afterRender(() => {
+      console.log("cd just finished work!");
+  });
+  }
 }
