@@ -1,6 +1,6 @@
-import { bootstrapApplication } from '@angular/platform-browser';
-import { appConfig } from './teasers/teasers.config';
-import { TeasersComponent } from './teasers/teasers.component';
+import { initFederation } from '@angular-architects/native-federation';
 
-bootstrapApplication(TeasersComponent, appConfig)
-  .catch((err) => console.error(err));
+initFederation()
+  .catch(err => console.error(err))
+  .then(_ => import('./bootstrap'))
+  .catch(err => console.error(err));
