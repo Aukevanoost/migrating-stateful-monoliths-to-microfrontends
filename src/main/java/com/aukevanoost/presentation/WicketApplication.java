@@ -6,6 +6,7 @@ import com.aukevanoost.presentation.category.CategoryPage;
 import com.aukevanoost.presentation.product.ProductPage;
 import com.aukevanoost.presentation.store.StoresPage;
 import org.apache.wicket.Session;
+import org.apache.wicket.markup.head.filter.JavaScriptFilteredIntoFooterHeaderResponse;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
@@ -44,6 +45,10 @@ public class WicketApplication extends WebApplication
 //			.add(CSPDirective.STYLE_SRC, CSPDirectiveSrcValue.SELF, CSPDirectiveSrcValue.UNSAFE_INLINE)
 //			.add(CSPDirective.SCRIPT_SRC, "https://ga.jspm.io", CSPDirectiveSrcValue.UNSAFE_INLINE)
 //			.add(CSPDirective.FONT_SRC, CSPDirectiveSrcValue.SELF);
+
+		getHeaderResponseDecorators().add(response ->
+			new JavaScriptFilteredIntoFooterHeaderResponse(response, "footer-container"));
+
 
 		// add your configuration here
 		mountPage("/products/#{category}", CategoryPage.class);
