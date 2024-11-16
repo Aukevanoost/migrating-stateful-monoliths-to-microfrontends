@@ -52,8 +52,6 @@ import { extractFragment } from './wrapper-helper';
   
     async loadFragment() {
       const { fragmentUrl, elementName, remoteName } = this.config;
-      console.log('-----Loading fragment-----');
-      console.log(fragmentUrl);
   
       const result = await lastValueFrom(
         this.http.get(fragmentUrl!, { responseType: 'text' })
@@ -61,14 +59,13 @@ import { extractFragment } from './wrapper-helper';
 
       const html = extractFragment(result, elementName);
 
-      const style = extractFragment(result, 'style', 'ng-app-id', 'ng');
+      const style = extractFragment(result, 'style', 'ng-app-id', remoteName);
       const script = extractFragment(
         result,
         'script',
         'id',
-        `ng-state`
+        remoteName + `-state`
       );
-      console.log(script);
 
       this.elm.nativeElement.querySelector('#placeholder').innerHTML = `${style}\n${script}\n${html}`;
     }

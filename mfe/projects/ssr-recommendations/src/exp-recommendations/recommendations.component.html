@@ -1,0 +1,17 @@
+<div class="exp_Recommendations" data-boundary="explore">
+  <h2>Recommendations</h2>
+  <ul class="exp_Recommendations_list">
+    <li class="exp_Recommendation" *ngFor="let r of (recommendations$ | async)">
+      <a class="exp_Recommendation_link" [href]="'/product/' + r.productSku + '/' + r.sku">
+        <img
+          class="exp_Recommendation_image"
+          [src]="r.image | fromCDN: '400'" 
+          alt=""
+          sizes="200px"
+          width="200"
+          height="200"
+        />
+      </a>
+    </li>
+  </ul>
+</div>

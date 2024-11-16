@@ -12,20 +12,21 @@ import { WrapperConfig } from '../wrapper/wrapper-config';
 })
 export class AppComponent {
   title = 'shell';
-  config: WrapperConfig = {
+  teasers: WrapperConfig = {
     remoteName: 'exp-teasers',
-    exposedModule: './web-component',
+    exposedModule: './exp-teasers',
     elementName: 'exp-teasers',
     fragmentUrl: 'http://localhost:4001/'
+  };
+  recommendations: WrapperConfig = {
+    remoteName: 'exp-recommendations',
+    exposedModule: './exp-recommendations',
+    elementName: 'exp-recommendations',
+    fragmentUrl: 'http://localhost:4002/'
   };
   platformId = inject(PLATFORM_ID);
 
   constructor() {
-    if (isPlatformServer(this.platformId) && this.config.fragmentUrl) {
-      console.log('APP IN SERVER');
-    } else if (isPlatformBrowser(this.platformId)) {
-      console.log('APP IN BROWSER');
-    }
     (globalThis as any).ngZone = inject(NgZone);
   }
 }

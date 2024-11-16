@@ -320,6 +320,128 @@
 				}
 			}
 		},
+		"ssr-recommendations": {
+			"projectType": "application",
+			"schematics": {},
+			"root": "projects/ssr-recommendations",
+			"sourceRoot": "projects/ssr-recommendations/src",
+			"prefix": "app",
+			"architect": {
+				"build": {
+					"builder": "@angular-architects/native-federation:build",
+					"options": {},
+					"configurations": {
+						"production": {
+							"target": "ssr-recommendations:esbuild:production"
+						},
+						"development": {
+							"target": "ssr-recommendations:esbuild:development",
+							"dev": true
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"serve": {
+					"builder": "@angular-architects/native-federation:build",
+					"options": {
+						"target": "ssr-recommendations:serve-original:development",
+						"rebuildDelay": 0,
+						"dev": true,
+						"port": 0
+					}
+				},
+				"extract-i18n": {
+					"builder": "@angular-devkit/build-angular:extract-i18n",
+					"options": {
+						"buildTarget": "ssr-recommendations:build"
+					}
+				},
+				"test": {
+					"builder": "@angular-devkit/build-angular:karma",
+					"options": {
+						"polyfills": [
+							"zone.js",
+							"zone.js/testing"
+						],
+						"tsConfig": "projects/ssr-recommendations/tsconfig.spec.json",
+						"assets": [
+							"projects/ssr-recommendations/src/favicon.ico",
+							"projects/ssr-recommendations/src/assets"
+						],
+						"styles": [
+							"projects/ssr-recommendations/src/styles.scss"
+						],
+						"scripts": []
+					}
+				},
+				"esbuild": {
+					"builder": "@angular-devkit/build-angular:application",
+					"options": {
+						"outputPath": "dist/ssr-recommendations",
+						"index": "projects/ssr-recommendations/src/index.html",
+						"polyfills": [
+							"zone.js",
+							"es-module-shims"
+						],
+						"tsConfig": "projects/ssr-recommendations/tsconfig.app.json",
+						"assets": [
+							"projects/ssr-recommendations/src/favicon.ico",
+							"projects/ssr-recommendations/src/assets"
+						],
+						"styles": [
+							"projects/ssr-recommendations/src/styles.scss"
+						],
+						"scripts": [],
+						"browser": "projects/ssr-recommendations/src/main.ts",
+						"server": "projects/ssr-recommendations/src/main.server.ts",
+						"prerender": true,
+						"ssr": {
+							"entry": "projects/ssr-recommendations/server.ts"
+						}
+					},
+					"configurations": {
+						"production": {
+							"budgets": [
+								{
+									"type": "initial",
+									"maximumWarning": "500kb",
+									"maximumError": "1mb"
+								},
+								{
+									"type": "anyComponentStyle",
+									"maximumWarning": "2kb",
+									"maximumError": "4kb"
+								}
+							],
+							"outputHashing": "all"
+						},
+						"development": {
+							"optimization": false,
+							"extractLicenses": false,
+							"sourceMap": true,
+							"namedChunks": true
+						}
+					},
+					"defaultConfiguration": "production"
+				},
+				"serve-original": {
+					"builder": "@angular-devkit/build-angular:dev-server",
+					"configurations": {
+						"production": {
+							"buildTarget": "ssr-recommendations:esbuild:production"
+						},
+						"development": {
+							"buildTarget": "ssr-recommendations:esbuild:development",
+							"port": 4202
+						}
+					},
+					"defaultConfiguration": "development",
+					"options": {
+						"port": 4202
+					}
+				}
+			}
+		},
 		"explore": {
 			"projectType": "application",
 			"schematics": {
@@ -566,106 +688,6 @@
 				}
 			}
 		
-        }
-      },
-      "ssr-teasers": {
-        "projectType": "application",
-        "schematics": {
-          "@schematics/angular:component": {
-            "style": "scss"
-          }
-        },
-        "root": "projects/ssr-teasers",
-        "sourceRoot": "projects/ssr-teasers/src",
-        "prefix": "app",
-        "architect": {
-          "build": {
-            "builder": "@angular-devkit/build-angular:application",
-            "options": {
-              "outputPath": "dist/ssr-teasers",
-              "index": "projects/ssr-teasers/src/index.html",
-              "browser": "projects/ssr-teasers/src/main.ts",
-              "polyfills": [
-                "zone.js"
-              ],
-              "tsConfig": "projects/ssr-teasers/tsconfig.app.json",
-              "inlineStyleLanguage": "scss",
-              "assets": [
-                {
-                  "glob": "**/*",
-                  "input": "projects/ssr-teasers/public"
-                }
-              ],
-              "styles": [
-                "projects/ssr-teasers/src/styles.scss"
-              ],
-              "scripts": [],
-              "server": "projects/ssr-teasers/src/main.server.ts",
-              "prerender": true,
-              "ssr": {
-                "entry": "projects/ssr-teasers/server.ts"
-              }
-            },
-            "configurations": {
-              "production": {
-                "budgets": [
-                  {
-                    "type": "initial",
-                    "maximumWarning": "500kB",
-                    "maximumError": "1MB"
-                  },
-                  {
-                    "type": "anyComponentStyle",
-                    "maximumWarning": "2kB",
-                    "maximumError": "4kB"
-                  }
-                ],
-                "outputHashing": "all"
-              },
-              "development": {
-                "optimization": false,
-                "extractLicenses": false,
-                "sourceMap": true
-              }
-            },
-            "defaultConfiguration": "production"
-          },
-          "serve": {
-            "builder": "@angular-devkit/build-angular:dev-server",
-            "configurations": {
-              "production": {
-                "buildTarget": "ssr-teasers:build:production"
-              },
-              "development": {
-                "buildTarget": "ssr-teasers:build:development"
-              }
-            },
-            "defaultConfiguration": "development"
-          },
-          "extract-i18n": {
-            "builder": "@angular-devkit/build-angular:extract-i18n"
-          },
-          "test": {
-            "builder": "@angular-devkit/build-angular:karma",
-            "options": {
-              "polyfills": [
-                "zone.js",
-                "zone.js/testing"
-              ],
-              "tsConfig": "projects/ssr-teasers/tsconfig.spec.json",
-              "inlineStyleLanguage": "scss",
-              "assets": [
-                {
-                  "glob": "**/*",
-                  "input": "projects/ssr-teasers/public"
-                }
-              ],
-              "styles": [
-                "projects/ssr-teasers/src/styles.scss"
-              ],
-              "scripts": []
-            }
-          }
         }
       }
 	}
