@@ -1,9 +1,10 @@
-const { withNativeFederation, shareAll } = require('@angular-architects/native-federation/config');
+const { withNativeFederation } = require('@angular-architects/native-federation/config');
 
 module.exports = withNativeFederation({
-  name: 'ssr-teasers',
+  name: 'teasers',
   exposes: {
-    './exp-teasers': './projects/ssr-teasers/src/bootstrap.ts',
+    './web-component': './projects/teasers/src/bootstrap/bootstrap.csr.ts',
+    './ssr': './projects/teasers/src/bootstrap/bootstrap.ssr.ts',
   },
   shared: {
     //...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),

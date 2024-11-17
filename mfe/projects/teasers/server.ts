@@ -17,54 +17,28 @@ export function app(): express.Express {
   server.set('view engine', 'html');
   server.set('views', browserDistFolder);
 
-
-
   server.get('*.*', express.static(browserDistFolder, {
-    setHeaders: (res) => {
-      res.header('Access-Control-Allow-Origin', 'http://localhost:4000');
-      res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
-      res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    }
+    setHeaders: addCorsHeaders
   }));
 
-  server.get('/mfe', (req, res, next) => {
-    console.log('spot on');
-    const { protocol, originalUrl, url, headers } = req;
+  server.get('/html', (req, res, next) => {
+    const { baseUrl } = req;
 
-    const document = `
-    <!doctype html>
-    <html lang="en">
-      <head>
-        <meta charset="utf-8">
-        <title>SsrTeasers</title>
-        <base href="/">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="icon" type="image/x-icon" href="favicon.ico">
-      </head>
-      <body>
-        <exp-teasers></exp-teasers>
-      </body>
-    </html>
-    `;
-
-    res.header('Access-Control-Allow-Origin', 'http://localhost:4000');
-    res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res = addCorsHeaders(res);
 
     commonEngine
       .render({
         bootstrap,
         documentFilePath: indexHtml,
-        url,
+        url: baseUrl,
         publicPath: browserDistFolder,
-        providers: [{ provide: APP_BASE_HREF, useValue: url }],
+        providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
       })
-      .then(mapper("exp-teasers", "http://localhost:4001"))
+      .then(mapper("exp-teasers", baseUrl))
       .then((html) => res.send(html))
       .catch((err) => next(err));
   })
 
-  // All regular routes use the Angular engine
   server.get('*', (req, res, next) => {
     const { protocol, originalUrl, baseUrl, headers } = req;
 
@@ -93,4 +67,10 @@ function run(): void {
   });
 }
 
+function addCorsHeaders(res: express.Response) {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:4000');
+  res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  return res;
+}
 run();

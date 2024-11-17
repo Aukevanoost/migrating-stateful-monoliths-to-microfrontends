@@ -35,7 +35,6 @@ export const mapper = (remoteName: string, baseUrl: string) => {
       remoteName + `-state`
     );
   
-    // return `${style}\n${state}\n${comp}\n${loader}`;
     return `${style}\n${comp}`;
   }
 }

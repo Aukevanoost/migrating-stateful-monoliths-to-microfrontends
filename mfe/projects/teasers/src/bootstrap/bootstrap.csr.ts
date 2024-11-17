@@ -1,21 +1,15 @@
 import { createCustomElement } from '@angular/elements';
 import { createApplication } from '@angular/platform-browser';
-import { TeasersComponent } from './exp-teasers/teasers.component';
+import { TeasersComponent } from './../exp-teasers/teasers.component';
 import { NgZone } from '@angular/core';
-import { appConfig } from './exp-teasers/teasers.config';
+import { appConfig } from './../exp-teasers/teasers.config';
 import 'zone.js';
 
 (async () => {
-  const app = await createApplication({
+  await createApplication({
     providers: [
       (globalThis as any).ngZone ? { provide: NgZone, useValue: (globalThis as any).ngZone } : [],
       ...appConfig.providers
     ],
-  });
-
-  const expTeasers = createCustomElement(TeasersComponent, {
-    injector: app.injector,
-  });
-
-  customElements.define('exp-teasers', expTeasers);
+  }).then(({injector}) => customElements.define('exp-teasers', createCustomElement(TeasersComponent, {injector})));
 })();
