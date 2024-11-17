@@ -23,10 +23,28 @@ export function app(): express.Express {
   server.get('*', (req, res, next) => {
     const { protocol, originalUrl, baseUrl, headers } = req;
 
+    const document = `
+    <!doctype html>
+      <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>Shell</title>
+        <base href="/">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" type="image/x-icon" href="favicon.ico">
+      </head>
+      <body>
+        <app-root></app-root>
+      </body>
+    </html>
+
+    `
+
+    console.log('test');
     commonEngine
       .render({
         bootstrap,
-        documentFilePath: indexHtml,
+        document,
         url: `${protocol}://${headers.host}${originalUrl}`,
         publicPath: browserDistFolder,
         providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],

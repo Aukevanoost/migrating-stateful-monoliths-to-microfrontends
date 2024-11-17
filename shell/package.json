@@ -1,0 +1,20 @@
+{
+  "name": "csr-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "node build.js",
+    "start": "serve dist -l 4000"
+  },
+  "author": "",
+  "devDependencies": {
+    "esbuild": "^0.24.0",
+    "json5": "^2.2.3",
+    "serve": "^14.2.4"
+  },
+  "dependencies": {
+    "vanilla-native-federation": "^0.2.0"
+  }
+}

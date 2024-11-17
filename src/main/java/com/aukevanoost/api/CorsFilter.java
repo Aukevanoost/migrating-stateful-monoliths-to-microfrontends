@@ -10,11 +10,16 @@ import java.util.Set;
 @Provider
 public class CorsFilter implements ContainerResponseFilter {
     private static final Set<String> WHITELIST = Set.of(
+        // SSR
+        "http://localhost:4000",
         "http://localhost:4001",
         "http://localhost:4002",
+        // CSR
         "http://localhost:4201",
         "http://localhost:4202",
+        // WICKET
         "http://localhost:8080",
+        // DISCOVERY
         "http://localhost:3000"
     );
     @Override
