@@ -15,6 +15,6 @@
     "serve": "^14.2.4"
   },
   "dependencies": {
-    "vanilla-native-federation": "^0.2.0"
+    "vanilla-native-federation": "^0.3.1"
   }
 }

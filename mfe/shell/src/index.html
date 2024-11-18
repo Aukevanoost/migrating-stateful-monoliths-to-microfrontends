@@ -6,21 +6,21 @@
         <exp-teasers></exp-teasers>
         <exp-recommendations product="CL-01-GY,AU-07-MT"></exp-recommendations>
 
-        <script type="esms-options">{ "shimMode": true }</script>
+        <script type="esms-options">{ "shimMode": true }</script> 
         <script src="https://ga.jspm.io/npm:es-module-shims@1.10.1/dist/es-module-shims.js"></script>
 
-        <script type="module-shim" src="loader.js"></script>
-        <!-- <script type="module-shim" src="loader-with-discovery.js"></script> -->
+        <!-- <script type="module-shim" src="loader.js"></script> -->
+        <script type="module-shim" src="loader-with-discovery.js"></script>
 
-        <script>
+        <script type="module">
             window.addEventListener('mfe-loader-available', (e) => {
                 Promise.all([
-                    e.detail.load('explore/teasers', './exp-teasers'),
-                    e.detail.load('explore/recommendations', './exp-recommendations'),
-                    // e.detail.load('explore/teasers'),
-                    // e.detail.load('explore/recommendations'),
+                    // e.detail.load('explore/teasers', './exp-teasers'),
+                    // e.detail.load('explore/recommendations', './exp-recommendations'),
+                    e.detail.load('explore/teasers'),
+                    e.detail.load('explore/recommendations')
                 ]).catch(console.error);
             }, {once: true});
-        </script>    
+        </script>
     </body>
 </html>
