@@ -3,8 +3,7 @@ const { withNativeFederation } = require('@angular-architects/native-federation/
 module.exports = withNativeFederation({
   name: 'recommendations',
   exposes: {
-    './web-component': './projects/recommendations/src/bootstrap/bootstrap.csr.ts',
-    './ssr': './projects/recommendations/src/bootstrap/bootstrap.ssr.ts',
+    './Component': './projects/recommendations/src/bootstrap.ts'
   },
   shared: {
     //...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),

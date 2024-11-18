@@ -3,6 +3,7 @@ bin/
 .classpath
 .project
 .settings
+.angular
 .factorypath
 .externalToolBuilders
 .fbExcludeFilterFile
@@ -75,6 +76,7 @@ yarn-error.log
 .history/*
 
 # Miscellaneous
+/.angular
 /.angular/cache
 .sass-cache/
 /connect.lock

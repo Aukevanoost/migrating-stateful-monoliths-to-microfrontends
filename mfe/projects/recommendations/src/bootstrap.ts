@@ -1,7 +1,7 @@
 import { createApplication } from '@angular/platform-browser';
-import 'zone.js';
-import { appConfig } from './../exp-teasers/teasers.config';
 import { NgZone } from '@angular/core';
+import { appConfig } from './exp-recommendations/recommendations.config';
+import 'zone.js';
 
 (async () => {
   await createApplication({

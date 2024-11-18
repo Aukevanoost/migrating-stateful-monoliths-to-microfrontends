@@ -3,7 +3,7 @@
         <title>Shell</title>
     </head>
     <body>
-        <div id="teasers"> </div>
+        <div id="teasers"></div>
         <hr />
         <div id="recommendations"></div>
 
@@ -20,13 +20,13 @@
                         .then(response => response.text())
                         .then(html => {
                             document.getElementById("teasers").innerHTML = html;
-                            e.detail.load('teasers', './ssr');
+                            e.detail.load('teasers', './Component');
                         }),
                     fetch('http://localhost:4002/html')
                         .then(response => response.text())
                         .then(html => {
                             document.getElementById("recommendations").innerHTML = html;
-                            e.detail.load('recommendations', './ssr');
+                            e.detail.load('recommendations', './Component');
                         })
                 ])
 

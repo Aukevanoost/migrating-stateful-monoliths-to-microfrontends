@@ -1,6 +1,6 @@
 const TEASERS = [
     {
-        url: "http://localhost:4201/exp-teasers.js",
+        url: "http://localhost:4001/ssr-IGQPTHAQ.js",
         metadata: {
             integrity: "CHECKSUM",
             version: "1.0.0"
@@ -12,8 +12,8 @@ const TEASERS = [
         },
         extras: {
             nativefederation: {
-                remoteEntry: "http://localhost:4201/remoteEntry.json",
-                exposedModule: "./exp-teasers",
+                remoteEntry: "http://localhost:4001/remoteEntry.json",
+                exposedModule: "./Component",
                 element: "exp-teasers"
             },
         },
@@ -22,7 +22,7 @@ const TEASERS = [
 
 const RECOMMENDATIONS = [
     {
-        url: "http://localhost:4202/exp-recommendations.js",
+        url: "http://localhost:4002/web-component-IAM3TNZN.js",
         metadata: {
             integrity: "CHECKSUM",
             version: "1.0.0"
@@ -34,8 +34,8 @@ const RECOMMENDATIONS = [
         },
         extras: {
             nativefederation: {
-                remoteEntry: "http://localhost:4202/remoteEntry.json",
-                exposedModule: "./exp-recommendations",
+                remoteEntry: "http://localhost:4002/remoteEntry.json",
+                exposedModule: "./Component",
                 element: "exp-recommendations"
             },
         },
@@ -43,8 +43,8 @@ const RECOMMENDATIONS = [
 ]
 
 const EXPLORE_MFE = {
-    "explore/teasers": TEASERS,
-    "explore/recommendations": RECOMMENDATIONS
+    "teasers": TEASERS,
+    "recommendations": RECOMMENDATIONS
 }
 
 module.exports = {
