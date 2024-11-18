@@ -19,7 +19,8 @@ public class HomePage extends BaseTemplate {
     protected void onInitialize() {
         super.onInitialize();
         setAuthCookie(authController.generateToken());
-        add(new RemoteContentPanel("exp_teasers", "http://localhost:4001/mfe"));
+        add(new RemoteContentPanel("exp_teasers", "http://localhost:4001/html"));
+        add(new RemoteContentPanel("exp_recommendations", "http://localhost:4002/html"));
     }
 
     /**
