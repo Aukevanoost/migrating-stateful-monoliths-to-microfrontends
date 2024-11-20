@@ -1,47 +1,60 @@
 package com.aukevanoost.presentation.home;
 
-import com.aukevanoost.interfaces.boundaries.auth.AuthControllerFactory;
-import com.aukevanoost.interfaces.boundaries.auth.IAuthController;
+import com.aukevanoost.interfaces.boundaries.discovery.DiscoveryControllerFactory;
+import com.aukevanoost.interfaces.boundaries.discovery.IDiscoveryController;
 import com.aukevanoost.presentation._core.components.RemoteContentPanel;
 import com.aukevanoost.presentation._core.layout.BaseTemplate;
-import jakarta.servlet.http.Cookie;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.http.WebResponse;
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.html.basic.Label;
 
 public class HomePage extends BaseTemplate {
-    private final IAuthController authController;
+    private transient final IDiscoveryController discoveryController;
 
     public HomePage(){
         super();
-        this.authController = AuthControllerFactory.inject();
+        this.discoveryController = DiscoveryControllerFactory.inject();
     }
 
     protected void onInitialize() {
         super.onInitialize();
-        setAuthCookie(authController.generateToken());
-        add(new RemoteContentPanel("exp_teasers", "http://localhost:4001/html"));
-        add(new RemoteContentPanel("exp_recommendations", "http://localhost:4002/html"));
-    }
+        try {
+            var Config = discoveryController.fetchConfig("http://localhost:3000");
 
-    /**
-     * Set the auth token as a cookie, don't try this at home
-     * @param token
-     */
-    private void setAuthCookie(String token) {
-        WebResponse response = (WebResponse) RequestCycle.get().getResponse();
+            var teasers = Config.getMicroFrontends().get("teasers").getFirst();
+            var recommendations = Config.getMicroFrontends().get("recommendations").getFirst();
 
-        Cookie cookie = new Cookie("auth-token", token);
-        cookie.setPath("/");
-        cookie.setMaxAge((int) (IAuthController.JWT_EXPIRATION / 1000));
-        cookie.setHttpOnly(false);
-        cookie.setSecure(true);
+            add(new RemoteContentPanel(
+                "exp_teasers",
+                teasers.getExtras().getSsr().getHtml()
+            ));
+            add(new RemoteContentPanel(
+                "exp_recommendations",
+                recommendations.getExtras().getSsr().getHtml()
+            ));
 
-        response.addHeader("Set-Cookie",
-            String.format("%s=%s; Path=/; Max-Age=%d; Secure; SameSite=Strict",
-                "auth-token",
-                token,
-                (IAuthController.JWT_EXPIRATION / 1000)
-            )
-        );
+            var hydrationScript = String.format("""
+                import { initFederation } from './scripts/init-federation.js';
+                initFederation({
+                    "teasers": "%s",
+                    "recommendations": "%s"
+                }).then(({load, importMap}) => {
+                        return Promise.all([
+                            load('teasers', '%s'),
+                            load('recommendations', '%s')
+                        ])
+                    })
+                """,
+                teasers.getExtras().getNativefederation().getRemoteEntry(),
+                recommendations.getExtras().getNativefederation().getRemoteEntry(),
+                teasers.getExtras().getNativefederation().getExposedModule(),
+                recommendations.getExtras().getNativefederation().getExposedModule()
+            );
+
+            add(new Label("hydrationScript", hydrationScript)
+                .setEscapeModelStrings(false)
+                .add(new AttributeModifier("type", "module-shim")));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }

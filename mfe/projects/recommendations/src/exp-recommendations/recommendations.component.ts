@@ -1,8 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, PLATFORM_ID } from '@angular/core';
 import { FeaturedHttpService } from './../shared/http/featured-http.service';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { fromCDNPipe } from '../shared/from-cdn.pipe';
-import { take, tap } from 'rxjs';
 
 @Component({
   selector: 'exp-recommendations',
@@ -15,6 +14,7 @@ import { take, tap } from 'rxjs';
 })
 export class RecommendationsComponent {
   http = inject(FeaturedHttpService);
+  platform = inject(PLATFORM_ID);
   // recommendations$ = this.http.recommendations$(['CL-01-GY','AU-07-MT']);
   recommendations$ = this.http.recommendations$();
 
@@ -22,6 +22,9 @@ export class RecommendationsComponent {
   //   const skus = value.split(',');
   //   this.recommendations$ = this.http.recommendations$(skus);
   // }
+  constructor() {
+    console.log(this.platform);
+  }
   
   //recommendations$ = of([] as any[]);
   

@@ -1,29 +1,15 @@
 <html>
-<head>
-</head>
-<body>
-<wicket:extend>
-    <main class="e_HomePage" id="homepage">
-        <div wicket:id="exp_teasers"></div>
-        <div wicket:id="exp_recommendations"></div>
+    <head>
+    </head>
+    <body>
+        <wicket:extend>
+            <main class="e_HomePage" id="homepage">
+                <div wicket:id="exp_teasers"></div>
+                <div wicket:id="exp_recommendations"></div>
+            </main>
 
-    </main>
-
-    <script></script>
-    <script type="module-shim" src="scripts/loader.js"></script>
-
-
-    <!-- HYDRATION -->
-    <!--
-        <script>
-            window.addEventListener('mfe-loader-available', (e) => {
-                Promise.all([
-                    e.detail.load('teasers', './Component'),
-                    e.detail.load('recommendations', './Component')
-                ])
-            });
-        </script>
-    -->
-</wicket:extend>
-</body>
+            <!-- HYDRATION -->
+            <script wicket:id="hydrationScript"></script>
+        </wicket:extend>
+    </body>
 </html>

@@ -8,7 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CONFIG = {
   srcDir: 'src',
   outDir: 'dist',
-  entryPoints: ['loader.js'],
+  entryPoints: ['loader.js', 'init-federation.js'],
   staticFiles: ['index.html']
 };
 

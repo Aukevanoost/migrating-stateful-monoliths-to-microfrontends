@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "node build.js",
-    "start": "serve dist -l 8080"
+    "start": "serve dist -l 4000"
   },
   "author": "",
   "devDependencies": {

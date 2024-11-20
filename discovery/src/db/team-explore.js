@@ -16,6 +16,7 @@ const TEASERS = [
                 exposedModule: "./Component",
                 element: "exp-teasers"
             },
+            ssr: { html: "http://localhost:4001/html"}
         },
     }
 ]
@@ -38,6 +39,7 @@ const RECOMMENDATIONS = [
                 exposedModule: "./Component",
                 element: "exp-recommendations"
             },
+            ssr: { html: "http://localhost:4002/html"}
         },
     }
 ]
