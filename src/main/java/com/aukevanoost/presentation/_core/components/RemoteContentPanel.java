@@ -18,14 +18,16 @@ public class RemoteContentPanel extends Panel {
     public RemoteContentPanel(String id, String remoteUrl) {
         super(id);
         this.remoteUrl = remoteUrl;
-        setOutputMarkupId(true);
+        setRenderBodyOnly(true);
     }
 
     @Override
     protected void onInitialize() {
         super.onInitialize();
         content = fetchContent();
-        add(new Label("content", content).setEscapeModelStrings(false));
+        add(new Label("content", content)
+            .setEscapeModelStrings(false))
+            .setRenderBodyOnly(true);
     }
 
     private String fetchContent() {

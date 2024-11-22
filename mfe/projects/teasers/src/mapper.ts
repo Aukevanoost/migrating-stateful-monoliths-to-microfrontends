@@ -12,29 +12,18 @@ export const mapper = (remoteName: string, baseUrl: string) => {
     return html;
   }
 
-  // function extractModulePreload(html: string) {
-  //   const regex = /<link\s+rel="modulepreload"[^>]*>/;
-  //   const match = html.match(regex);
-  //   if(match === null) return "NOT FOUND";
-
-  //   return match[0].replace(
-  //     /href="([^"]+)"/,
-  //     'crossorigin="anonymous" href="http://localhost:4001/$1"'
-  //   );
-  // }
-
   return (html: string) => {
     const comp = extractFragment(html, remoteName);
 
     const style = extractFragment(html, 'style', 'ng-app-id', remoteName);
-    // const state = extractFragment(
-    //   html,
-    //   'script',
-    //   'id',
-    //   remoteName + `-state`
-    // );
+    
+    const state = extractFragment(
+      html,
+      'script',
+      'id',
+      remoteName + `-state`
+    );
   
-    // return `${style}\n${state}\n${comp}\n${loader}`;
-    return `${style}\n${comp}`;
+    return `${comp}\n${style}\n${state}`;
   }
 }

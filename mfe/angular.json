@@ -12,17 +12,15 @@
 			"architect": {
 				"build": {
 					"builder": "@angular-architects/native-federation:build",
-					"options": {},
-					"configurations": {
-						"production": {
-							"target": "teasers:esbuild:production"
-						},
-						"development": {
-							"target": "teasers:esbuild:development",
-							"dev": true
-						}
+					"options": {
+						"ssr": true,
+						"target": "teasers:esbuild:development"
 					},
-					"defaultConfiguration": "production"
+					"configurations": {
+						"production": { },
+						"development": { }
+					},
+					"defaultConfiguration": "development"
 				},
 				"serve": {
 					"builder": "@angular-architects/native-federation:build",
@@ -87,16 +85,10 @@
 					},
 					"configurations": {
 						"production": {
-							"optimization": false,
-							"extractLicenses": false,
-							"sourceMap": true,
-							"namedChunks": true
+
 						},
 						"development": {
-							"optimization": false,
-							"extractLicenses": false,
-							"sourceMap": true,
-							"namedChunks": true
+
 						}
 					},
 					"defaultConfiguration": "development"

@@ -12,22 +12,10 @@ export const mapper = (remoteName: string, baseUrl: string) => {
     return html;
   }
 
-  function extractModulePreload(html: string) {
-    const regex = /<link\s+rel="modulepreload"[^>]*>/;
-    const match = html.match(regex);
-    if(match === null) return "NOT FOUND";
-
-    return match[0].replace(
-      /href="([^"]+)"/,
-      'crossorigin="anonymous" href="http://localhost:4001/$1"'
-    );
-  }
-
   return (html: string) => {
     const comp = extractFragment(html, remoteName);
 
     const style = extractFragment(html, 'style', 'ng-app-id', remoteName);
-    const loader = extractModulePreload(html);
     const state = extractFragment(
       html,
       'script',
@@ -35,6 +23,6 @@ export const mapper = (remoteName: string, baseUrl: string) => {
       remoteName + `-state`
     );
   
-    return `${style}\n${comp}`;
+    return `${comp}\n${style}\n${state}`;
   }
 }

@@ -1,36 +1,74 @@
 <html>
     <head>
         <title>Shell</title>
+        <style ng-app-id="exp-teasers">
+
+            [_nghost-exp-teasers-c900259117] {
+              --outer-space: 1.5rem;
+              box-sizing: border-box;
+              font-family:
+                "Helvetica Neue",
+                Helvetica,
+                Arial,
+                sans-serif;
+              font-size: 16px;
+              max-width: 1000px;
+              padding: 0;
+            }
+            @media (min-width: 500px) {
+              [_nghost-exp-teasers-c900259117] {
+                display: flex;
+                gap: 1rem;
+                flex-direction: row;
+              }
+            }
+            p[_ngcontent-exp-teasers-c900259117] {
+              line-height: 1.5;
+            }
+            .exp_HomePage__categoryLink[_ngcontent-exp-teasers-c900259117] {
+              flex: 1;
+              display: block;
+              position: relative;
+              margin-bottom: 2rem;
+              color: inherit;
+              text-align: center;
+              text-decoration: none;
+            }
+            .exp_HomePage__categoryLink[_ngcontent-exp-teasers-c900259117]:hover, 
+            .exp_HomePage__categoryLink[_ngcontent-exp-teasers-c900259117]:focus {
+              text-decoration: underline;
+            }
+            .exp_HomePage__categoryLink[_ngcontent-exp-teasers-c900259117]   img[_ngcontent-exp-teasers-c900259117] {
+              width: 100%;
+              aspect-ratio: 1000/560;
+              margin-bottom: 0.75rem;
+            }
+            /*# sourceMappingURL=teasers.component.css.map */</style>
+        
     </head>
-    <body>
-        <div id="teasers"></div>
-        <hr />
-        <div id="recommendations"></div>
+<body><!--nghm-->
+    <div id="teasers">
+        <exp-teasers _nghost-exp-teasers-c900259117="" ng-version="18.2.12" ngh="0" ng-server-context="ssg"><a _ngcontent-exp-teasers-c900259117="" class="exp_HomePage__categoryLink" href="/products/classic"><img _ngcontent-exp-teasers-c900259117="" width="500" sizes="500px" src="http://localhost:8080/img/scene/500/classics.webp"><p _ngcontent-exp-teasers-c900259117="">Classic Tractors</p></a><a _ngcontent-exp-teasers-c900259117="" class="exp_HomePage__categoryLink" href="/products/autonomous"><img _ngcontent-exp-teasers-c900259117="" width="500" sizes="500px" src="http://localhost:8080/img/scene/500/autonomous.webp"><p _ngcontent-exp-teasers-c900259117="">Autonomous Tractors</p></a><!--bindings={
+            "ng-reflect-ng-for-of": "[object Object],[object Object"
+            }--></exp-teasers>
+        <script id="exp-teasers-state" type="application/json">{"2585932547":{"b":[{"title":"Classic Tractors","image":"/img/scene/[size]/classics.webp","key":"classic"},{"title":"Autonomous Tractors","image":"/img/scene/[size]/autonomous.webp","key":"autonomous"}],"h":{},"s":200,"st":"OK","u":"http://localhost:8081/v1/featured/teasers","rt":"json"},"__nghData__":[{"t":{"0":"t0"},"c":{"0":[{"i":"t0","r":1,"x":2}]}}]}</script>
+    </div>
 
 
         <script type="esms-options">{ "shimMode": true }</script>
         <script src="https://ga.jspm.io/npm:es-module-shims@1.10.1/dist/es-module-shims.js"></script>
     
-        <script type="module-shim" src="loader.js"></script>
-
-        <script>
-            window.addEventListener('mfe-loader-available', (e) => {
-                Promise.all([
-                    fetch('http://localhost:4001/html')
-                        .then(response => response.text())
-                        .then(html => {
-                            document.getElementById("teasers").innerHTML = html;
-                            e.detail.load('teasers', './Component');
-                        }),
-                    fetch('http://localhost:4002/html')
-                        .then(response => response.text())
-                        .then(html => {
-                            document.getElementById("recommendations").innerHTML = html;
-                            e.detail.load('recommendations', './Component');
-                        })
-                ])
-
-            });
+        <script type="module-shim">
+            import { initFederation } from './init-federation.js';
+            initFederation({
+                "teasers": "http://localhost:4001/remoteEntry.json"
+            })
+                .then(({load, importMap}) => {
+                    return Promise.all([
+                        load('teasers', './Component'),
+                    ])
+                })
         </script>
+
     </body>
 </html>
