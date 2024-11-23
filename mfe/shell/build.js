@@ -8,7 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CONFIG = {
   srcDir: 'src',
   outDir: 'dist',
-  entryPoints: ['loader-with-discovery.js', 'loader.js'],
+  entryPoints: ['loader-from-discovery.js', 'loader.js'],
   staticFiles: ['index.html']
 };
 
