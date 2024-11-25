@@ -1,0 +1,14 @@
+{
+  "name": "puppeteer test-suite",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test:vitals": "node tests/core-web-vitals.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "puppeteer": "^23.9.0"
+  }
+}
