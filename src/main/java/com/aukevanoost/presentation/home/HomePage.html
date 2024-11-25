@@ -8,16 +8,14 @@
         <exp-recommendations product="CL-01-GY,AU-07-MT"></exp-recommendations>
     </main>
 
-    <!-- <script type="module-shim" src="scripts/loader.js"></script> -->
-    <script type="module-shim" src="scripts/loader-with-discovery.js"></script>
+    <script type="module-shim">
+        import { initMicroFrontends } from "./scripts/loader.js";
 
-    <script>
-        window.addEventListener('mfe-loader-available', (e) => {
-            Promise.all([
-                e.detail.load('explore/teasers', './exp-teasers'),
-                e.detail.load('explore/recommendations', './exp-recommendations'),
-            ]).catch(console.error);
-        }, {once: true});
+        initMicroFrontends("http://localhost:3000/native-federation")
+            .then(({load, importMap}) => {
+                load('explore/teasers', './exp-teasers');
+                load('explore/recommendations', './exp-recommendations');
+            });
     </script>
 </wicket:extend>
 </body>
