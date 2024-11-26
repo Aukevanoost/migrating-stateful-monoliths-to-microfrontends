@@ -1,157 +1,188 @@
-const puppeteer = require('puppeteer');
+import * as playwright from 'playwright-chromium';
+import * as fs from 'fs';
+import { promisify } from 'util';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-async function measureWebVitals(url, iterations = 3) {
-  const metrics = [];
-  
-  console.log(`Testing ${url} for Core Web Vitals...`);
-  
-  for (let i = 0; i < iterations; i++) {
-    console.log(`\nIteration ${i + 1}/${iterations}`);
-    
-    const browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
-    
-    try {
-      const page = await browser.newPage();
-      
-      await page.setCacheEnabled(false);
-      const client = await page.target().createCDPSession();
-      await client.send('Performance.enable');
-      
-      await client.send('PerformanceObserver.enable');
-      
-      const navigationStart = Date.now();
-      await page.goto(url, { waitUntil: 'networkidle0' });
-      
-      const performanceMetrics = await client.send('Performance.getMetrics');
-      const navigationEnd = Date.now();
-      
-      const lcpElement = await page.evaluate(() => {
-        return new Promise((resolve) => {
-          new PerformanceObserver((entryList) => {
-            const entries = entryList.getEntries();
-            if (entries.length > 0) {
-              resolve(entries[entries.length - 1].startTime);
-            }
-          }).observe({ entryTypes: ['largest-contentful-paint'] });
-          
-          setTimeout(() => resolve(null), 5000);
-        });
-      });
-      
-      const fid = await page.evaluate(() => {
-        return new Promise((resolve) => {
-          new PerformanceObserver((entryList) => {
-            const entries = entryList.getEntries();
-            if (entries.length > 0) {
-              resolve(entries[0].duration);
-            }
-          }).observe({ entryTypes: ['first-input'] });
-          
-          setTimeout(() => resolve(null), 5000);
-        });
-      });
-      
-      const cls = await page.evaluate(() => {
-        return new Promise((resolve) => {
-          let clsValue = 0;
-          new PerformanceObserver((entryList) => {
-            for (const entry of entryList.getEntries()) {
-              if (!entry.hadRecentInput) {
-                clsValue += entry.value;
-              }
-            }
-          }).observe({ entryTypes: ['layout-shift'] });
-          
-          setTimeout(() => resolve(clsValue), 5000);
-        });
-      });
-      
-      metrics.push({
-        lcp: lcpElement,
-        fid,
-        cls,
-        ttfb: performanceMetrics.metrics.find(m => m.name === 'FirstMeaningfulPaint').value,
-        loadTime: navigationEnd - navigationStart
-      });
-      
-    } finally {
-      await browser.close();
+const writeFileAsync = promisify(fs.writeFile);
+const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
+
+class PerformanceTester {
+    constructor(config = {}) {
+        this.config = {
+            url: config.url || 'http://localhost:8080',
+            path: `${__dirname}/results/${config?.folder ?? 'misc'}`,
+            viewportWidth: config.viewportWidth || 1280,
+            viewportHeight: config.viewportHeight || 800,
+            waitTimeout: config.waitTimeout || 10000
+        };
+        this.performanceData = [];
     }
-  }
-  
-  const averageMetrics = {
-    lcp: average(metrics.map(m => m.lcp)),
-    fid: average(metrics.map(m => m.fid)),
-    cls: average(metrics.map(m => m.cls)),
-    ttfb: average(metrics.map(m => m.ttfb)),
-    loadTime: average(metrics.map(m => m.loadTime))
-  };
-  
-  return {
-    individualRuns: metrics,
-    averages: averageMetrics,
-    assessment: assessPerformance(averageMetrics)
-  };
-}
 
-function average(arr) {
-  const validValues = arr.filter(val => val !== null);
-  return validValues.length ? 
-    validValues.reduce((a, b) => a + b, 0) / validValues.length : 
-    null;
-}
-
-function assessPerformance(metrics) {
-  return {
-    lcp: {
-      score: metrics.lcp < 2500 ? 'Good' : metrics.lcp < 4000 ? 'Needs Improvement' : 'Poor',
-      value: metrics.lcp
-    },
-    fid: {
-      score: metrics.fid < 100 ? 'Good' : metrics.fid < 300 ? 'Needs Improvement' : 'Poor',
-      value: metrics.fid
-    },
-    cls: {
-      score: metrics.cls < 0.1 ? 'Good' : metrics.cls < 0.25 ? 'Needs Improvement' : 'Poor',
-      value: metrics.cls
-    },
-    ttfb: {
-      score: metrics.ttfb < 600 ? 'Good' : metrics.ttfb < 1000 ? 'Needs Improvement' : 'Poor',
-      value: metrics.ttfb
-    }
-  };
-}
-
-async function runTest() {
-    try {
-        const results = await measureWebVitals('http://localhost:8080', 3);
-        
-        console.log('\n=== Core Web Vitals Test Results ===\n');
-        
-        console.log('Average Metrics:');
-        Object.entries(results.averages).forEach(([metric, value]) => {
-            console.log(`${metric}: ${value?.toFixed(2) || 'N/A'}`);
+    async initBrowser() {
+        this.browser = await playwright.chromium.launch({
+            handleSIGINT: true,
+            handleSIGTERM: true,
+            handleSIGHUP: true
         });
-        
-        console.log('\nPerformance Assessment:');
-        Object.entries(results.assessment).forEach(([metric, data]) => {
-            console.log(`${metric}: ${data.score} (${data.value?.toFixed(2) || 'N/A'})`);
+        this.context = await this.browser.newContext({
+            viewport: {
+                width: this.config.viewportWidth,
+                height: this.config.viewportHeight
+            }
         });
+        this.page = await this.context.newPage();
+    }
+
+    setupLogging() {
+        this.page.on('console', msg => console.log(`Page log: ${msg.text()}`));
+        this.page.on('pageerror', err => console.error(`Page error: ${err}`));
+        this.page.on('requestfailed', req => console.error(`Failed request: ${req.url()}`));
+    }
+
+    async collectMetrics() {
+        return this.page.evaluate(async () => {
+            return new Promise((resolve) => {
+                const metrics = {
+                    lcp: null,
+                    fcp: null,
+                    ttfb: null
+                };
+
+                function checkComplete() {
+                    if (metrics.lcp !== null && metrics.fcp !== null && metrics.ttfb !== null) {
+                        resolve(metrics);
+                    }
+                }
+
+                new PerformanceObserver((list) => {
+                    const entries = list.getEntries();
+                    metrics.lcp = entries.at(-1)?.startTime;
+                    checkComplete();
+                }).observe({ type: 'largest-contentful-paint', buffered: true });
+
+                new PerformanceObserver((list) => {
+                    metrics.fcp = list.getEntries()[0]?.startTime;
+                    checkComplete();
+                }).observe({ type: 'paint', buffered: true });
+
+                const navigation = performance.getEntriesByType('navigation')[0];
+                metrics.ttfb = navigation?.responseStart;
+                checkComplete();
+            });
+        });
+    }
+
+    formatMetrics(metrics) {
+        return Object.entries(metrics).reduce((acc, [key, value]) => {
+            acc[key] = value ? parseFloat(value.toFixed(4)) : null;
+            return acc;
+        }, {});
+    }
+
+    formatDateTime(date) {
+        // Format date as YYYY-MM-DD for easy sorting and filtering
+        const formattedDate = date.toISOString().split('T')[0];
         
-        const fs = require('fs');
-        fs.writeFileSync(
-            'test-results.json',
-            JSON.stringify(results, null, 2)
-        );
-        console.log('\nDetailed results saved to test-results.json');
+        // Format time as HH:mm:ss for 24-hour time
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        const seconds = date.getSeconds().toString().padStart(2, '0');
+        const formattedTime = `${hours}:${minutes}:${seconds}`;
+
+        return { date: formattedDate, time: formattedTime };
+    }
+
+    async cleanup() {
+        if (this.page) await this.page.close().catch(console.error);
+        if (this.context) await this.context.close().catch(console.error);
+        if (this.browser) await this.browser.close().catch(console.error);
+    }
+
+    convertToCSV(data) {
+        // Define CSV headers with separate date and time columns
+        const headers = ['site', 'date', 'time', 'lcp', 'fcp', 'ttfb', 'error'];
         
-    } catch (error) {
-        console.error('Error running tests:', error);
-        process.exit(1);
+        // Create CSV rows
+        const rows = data.map(entry => {
+            const metrics = entry.metrics || {};
+            const { date, time } = this.formatDateTime(entry.timestamp);
+            return [
+                entry.site,
+                date,
+                time,
+                metrics.lcp || '',
+                metrics.fcp || '',
+                metrics.ttfb || '',
+                entry.error || ''
+            ].map(value => `"${value}"`).join(',');
+        });
+
+        // Combine headers and rows
+        return [headers.join(','), ...rows].join('\n');
+    }
+
+    async saveResults() {
+        try {
+            if (!fs.existsSync(this.config.path)) {
+                fs.mkdirSync(this.config.path, { recursive: true });
+            }
+            const filename = `${this.config.path}/${(new Date()).toISOString()}_results.csv`;
+            const csvContent = this.convertToCSV(this.performanceData);
+            await writeFileAsync(filename, csvContent);
+            console.log(`Results saved to ${filename}`);
+        } catch (error) {
+            console.error('Error saving results:', error);
+        }
+    }
+
+    async runTest() {
+        try {
+            await this.initBrowser();
+            this.setupLogging();
+
+            await this.page.goto(this.config.url, {
+                waitUntil: 'networkidle',
+                timeout: this.config.waitTimeout
+            });
+
+            const metrics = await this.collectMetrics();
+            
+            this.performanceData.push({
+                site: this.config.url,
+                timestamp: new Date(), // Store full Date object for formatting
+                metrics: this.formatMetrics(metrics)
+            });
+
+        } catch (error) {
+            console.error('Test run error:', error);
+            this.performanceData.push({
+                site: this.config.url,
+                timestamp: new Date(), // Store full Date object for formatting
+                error: error.message
+            });
+        } finally {
+            await this.cleanup();
+        }
+    }
+
+    async run(runs = 5) {
+        console.log(`Starting ${runs} test run(s)...`);
+        
+        for (let i = 0; i < runs; i++) {
+            console.log(`Run ${i + 1}/${runs}`);
+            await this.runTest();
+        }
+
+        await this.saveResults();
+        console.log('=== Testing completed ===');
     }
 }
 
-module.exports = { measureWebVitals, runTest };
+// Usage
+const tester = new PerformanceTester({
+    url: 'http://localhost:8080',
+    folder: 'core-web-vitals'
+});
+
+tester.run(50).catch(console.error);

@@ -5,10 +5,17 @@
   "scripts": {
     "test:vitals": "node tests/core-web-vitals.js"
   },
+  "type": "module",
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "playwright-chromium": "^1.49.0",
     "puppeteer": "^23.9.0"
+  },
+  "devDependencies": {
+    "lighthouse": "^12.2.2",
+    "playwright": "^1.49.0",
+    "playwright-lighthouse": "^4.0.0"
   }
 }

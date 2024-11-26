@@ -1,0 +1,11 @@
+[
+  {
+    "site": "http://localhost:8080",
+    "timestamp": "2024-11-26T07:37:22.025Z",
+    "metrics": {
+      "lcp": 360,
+      "fcp": 135.7,
+      "ttfb": 22.1
+    }
+  }
+]
