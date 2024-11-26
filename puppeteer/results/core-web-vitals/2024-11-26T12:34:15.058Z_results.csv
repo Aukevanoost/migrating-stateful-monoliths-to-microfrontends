@@ -1,5 +1,0 @@
-site,date,time,lcp,fcp,ttfb,tbt,error
-"http://localhost:8080","2024-11-26","12:34:15","","","","","page.goto: Timeout 10000ms exceeded.
-Call log:
-[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
-"

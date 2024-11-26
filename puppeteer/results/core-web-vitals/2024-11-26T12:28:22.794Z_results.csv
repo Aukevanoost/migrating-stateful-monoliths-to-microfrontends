@@ -1,2 +1,0 @@
-site,date,time,lcp,fcp,ttfb,tbt,error
-"http://localhost:8080/","2024-11-26","12:28:22","597.6","136.8","17.7","150",""

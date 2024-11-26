@@ -1,3 +1,31 @@
+/**
+ * Core Web Vitals Measurements:
+ * 
+ * TTFB (Time to First Byte):
+ * - Time from navigation start until the first byte of response is received
+ * - Calculated using: performance.getEntriesByType('navigation')[0].responseStart
+ * 
+ * FCP (First Contentful Paint):
+ * - Time when the first text, image, or other content appears on the screen
+ * - Measured using PerformanceObserver with type: 'paint'
+ * - Looks for entries with name 'first-contentful-paint'
+ * 
+ * LCP (Largest Contentful Paint):
+ * - Time when the largest text or image element is rendered on the screen
+ * - Measured using PerformanceObserver with type: 'largest-contentful-paint'
+ * - Updates when a larger element is rendered, final value is the largest
+ * 
+ * TTI (Time to Interactive):
+ * - Time when the page becomes reliably interactive
+ * - Calculated by finding the first 5-second window after FCP with no long tasks (>50ms)
+ * - A long task is any uninterrupted period where the main thread is busy for 50ms or more
+ * 
+ * TBT (Total Blocking Time):
+ * - Sum of all "blocking time" for long tasks between FCP and TTI
+ * - Blocking time = (task duration - 50ms) for each long task
+ * - Measured using PerformanceObserver with type: 'longtask'
+*/
+
 import * as playwright from 'playwright-chromium';
 import * as fs from 'fs';
 import { promisify } from 'util';
@@ -81,135 +109,129 @@ class PerformanceTester {
     try {
       await this.initBrowser();
       this.setupLogging();
-
-      await this.page.addInitScript(() => {
-        window._performanceMetrics = {
-          lcp: null,
-          fcp: null,
-          ttfb: null,
-          tti: null,
-          tbt: null,
-          longTasks: []
-        };
-
-        new PerformanceObserver((list) => {
-          const entries = list.getEntries();
-          for (const entry of entries) {
-            const task = {
-              startTime: entry.startTime,
-              duration: entry.duration,
-              endTime: entry.startTime + entry.duration
-            };
-            window._performanceMetrics.longTasks.push(task);
-          }
-        }).observe({ type: 'longtask', buffered: true });  // Changed from type to entryTypes
-
-        new PerformanceObserver((list) => {
-          const entries = list.getEntries();
-          const lastEntry = entries.at(-1);
-
-          if (!window._performanceMetrics.lcp || lastEntry.startTime > window._performanceMetrics.lcp) {
-            window._performanceMetrics.lcp = lastEntry.startTime;
-          }
-
-        }).observe({ type: 'largest-contentful-paint', buffered: true });
-
-        new PerformanceObserver((list) => {
-          const entries = list.getEntries();
-          const paintEntry = entries.find(entry => entry.name === 'first-contentful-paint');
-
-          if (paintEntry) {
-            window._performanceMetrics.fcp = paintEntry.startTime;
-          }
-        }).observe({ type: 'paint', buffered:true});  // Changed from type
-
-        // TTFB calculation - moved to after navigation completes
-        window._performanceMetrics.calculateTTFB = () => {
-          const navEntry = performance.getEntriesByType('navigation')[0];
-          if (navEntry) {
-            window._performanceMetrics.ttfb = navEntry.responseStart;
-          }
-        };
-
-        function findFirstQuietWindow(tasks, searchStart) {
-          const QUIET_WINDOW = 5000;
-          const MAX_TIME = performance.now();
-          
-          if (!tasks.length) return searchStart;
-
-          tasks.sort((a, b) => a.startTime - b.startTime);
-          tasks = tasks.filter(task => task.startTime >= searchStart);
-          
-          if (!tasks.length) {
-            return (MAX_TIME - searchStart >= QUIET_WINDOW) ? searchStart : null;
-          }
-
-          for (let i = 0; i < tasks.length - 1; i++) {
-            const currentTaskEnd = tasks[i].endTime;
-            const nextTaskStart = tasks[i + 1].startTime;
-            
-            if (nextTaskStart - currentTaskEnd >= QUIET_WINDOW) {
-              return currentTaskEnd;
-            }
-          }
-
-          const lastTaskEnd = tasks[tasks.length - 1].endTime;
-          if (MAX_TIME - lastTaskEnd >= QUIET_WINDOW) {
-            return lastTaskEnd;
-          }
-
-          return null;
-        }
-
-        window._performanceMetrics.calculateMetrics = () => {
-          const metrics = window._performanceMetrics;
-          
-          // Calculate TTFB if not already done
-          if (!metrics.ttfb) {
-            metrics.calculateTTFB();
-          }
-
-          // Find first 5s quiet window after FCP
-          if (metrics.fcp !== null) {
-            metrics.tti = findFirstQuietWindow(metrics.longTasks, metrics.fcp);
-            
-            if (metrics.tti !== null) {
-              let tbt = 0;
-              for (const task of metrics.longTasks) {
-                if (task.startTime >= metrics.fcp && task.endTime <= metrics.tti) {
-                  const blockingTime = task.duration - 50;
-                  if (blockingTime > 0) {
-                    tbt += blockingTime;
-                    console.log('Task contributing to TBT:', {
-                      taskStartTime: task.startTime,
-                      taskDuration: task.duration,
-                      blockingTime,
-                      runningTBT: tbt
-                    });
-                  }
-                }
-              }
-              metrics.tbt = tbt;
-            }
-          }
-
-          return metrics;
-        };
-      });
-
+  
       console.log('Navigating to page...');
       await this.page.goto(this.config.url, {
         waitUntil: 'networkidle',
         timeout: this.config.waitTimeout
       });
-
-      console.log('Waiting for metrics collection...');
-      await this.page.waitForTimeout(15000);
-
+  
+      console.log('Setting up metrics collection...');
       const metrics = await this.page.evaluate(() => {
-        return window._performanceMetrics.calculateMetrics();
+        return new Promise(resolve => {
+          const performanceMetrics = {
+            lcp: null,
+            fcp: null,
+            ttfb: null,
+            tti: null,
+            tbt: null,
+            longTasks: []
+          };
+  
+          // Long tasks observer
+          new PerformanceObserver((list) => {
+            const entries = list.getEntries();
+            for (const entry of entries) {
+
+              performanceMetrics.longTasks.push({
+                startTime: entry.startTime,
+                duration: entry.duration,
+                endTime: entry.startTime + entry.duration
+              });
+            }
+          }).observe({ type: 'longtask', buffered: true });
+  
+          new PerformanceObserver((list) => {
+            const entries = list.getEntries();
+            const lastEntry = entries.at(-1);
+  
+            if (!performanceMetrics.lcp || lastEntry.startTime > performanceMetrics.lcp) {
+              performanceMetrics.lcp = lastEntry.startTime;
+            }
+          }).observe({ type: 'largest-contentful-paint', buffered: true });
+  
+          new PerformanceObserver((list) => {
+            const entries = list.getEntries();
+            const paintEntry = entries.find(entry => entry.name === 'first-contentful-paint');
+            
+            if (paintEntry) {
+              performanceMetrics.fcp = paintEntry.startTime;
+            }
+          }).observe({ type: 'paint', buffered: true });
+  
+          function findFirstQuietWindow(tasks, searchStart) {
+            const QUIET_WINDOW = 5000;
+            const MAX_TIME = performance.now();
+            
+            if (!tasks.length) return searchStart;
+          
+            tasks.sort((a, b) => a.startTime - b.startTime);
+
+            const relevantTasks = tasks.filter(task => task.startTime >= searchStart);
+            
+            if (!relevantTasks.length) {
+              return (MAX_TIME - searchStart >= QUIET_WINDOW) ? searchStart : null;
+            }
+          
+            // Find the first quiet window
+            let quietWindowStart = null;
+            for (let i = 0; i < relevantTasks.length - 1; i++) {
+              const currentTaskEnd = relevantTasks[i].endTime;
+              const nextTaskStart = relevantTasks[i + 1].startTime;
+              
+              if (nextTaskStart - currentTaskEnd >= QUIET_WINDOW) {
+                quietWindowStart = currentTaskEnd;
+                break;
+              }
+            }
+          
+            if (!quietWindowStart) {
+              const lastTaskEnd = relevantTasks[relevantTasks.length - 1].endTime;
+              if (MAX_TIME - lastTaskEnd >= QUIET_WINDOW) {
+                quietWindowStart = lastTaskEnd;
+              }
+            }
+          
+            if (!quietWindowStart) {
+              return null;
+            }
+          
+            const lastTaskBeforeQuiet = [...tasks]
+              .reverse()
+              .find(task => task.endTime <= quietWindowStart);
+          
+            return lastTaskBeforeQuiet ? lastTaskBeforeQuiet.endTime : searchStart;
+          }
+  
+          const navEntry = performance.getEntriesByType('navigation')[0];
+          if (navEntry) {
+            performanceMetrics.ttfb = navEntry.responseStart;
+          }
+  
+          setTimeout(() => {
+            // Calculate TTI and TBT
+            if (performanceMetrics.fcp !== null) {
+              performanceMetrics.tti = findFirstQuietWindow(performanceMetrics.longTasks, performanceMetrics.fcp);
+              
+              if (performanceMetrics.tti !== null) {
+                let tbt = 0;
+                for (const task of performanceMetrics.longTasks) {
+                  if (task.startTime >= performanceMetrics.fcp && task.endTime <= performanceMetrics.tti) {
+                    const blockingTime = task.duration - 50;
+                    if (blockingTime > 0) {
+                      tbt += blockingTime;
+                    }
+                  }
+                }
+                performanceMetrics.tbt = tbt;
+              }
+            }
+  
+            resolve(performanceMetrics);
+          }, 15000);
+        });
       });
-      
+  
       this.performanceData.push({
         site: `${this.config.url}/`,
         timestamp: new Date(),
@@ -232,11 +254,11 @@ class PerformanceTester {
 
   formatMetrics(metrics) {
     return {
-      lcp: metrics.lcp ? parseFloat(metrics.lcp.toFixed(4)) : null,
-      fcp: metrics.fcp ? parseFloat(metrics.fcp.toFixed(4)) : null,
-      ttfb: metrics.ttfb ? parseFloat(metrics.ttfb.toFixed(4)) : null,
-      tti: metrics.tti ? parseFloat(metrics.tti.toFixed(4)) : null,
-      tbt: metrics.tbt ? parseFloat(metrics.tbt.toFixed(4)) : null
+      lcp: metrics.lcp ? metrics.lcp : null,
+      fcp: metrics.fcp ? metrics.fcp : null,
+      ttfb: metrics.ttfb ? metrics.ttfb : null,
+      tti: metrics.tti ? metrics.tti : null,
+      tbt: metrics.tbt ? metrics.tbt : null
     };
   }
 
