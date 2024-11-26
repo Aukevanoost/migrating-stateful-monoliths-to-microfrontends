@@ -14,7 +14,15 @@ class PerformanceTester {
       path: `${__dirname}/results/${config?.folder ?? 'misc'}`,
       viewportWidth: config.viewportWidth || 1280,
       viewportHeight: config.viewportHeight || 800,
-      waitTimeout: config.waitTimeout || 10000
+      waitTimeout: config.waitTimeout || 20000,
+      throttling: {
+        cpu: config.cpuThrottling || 4,  // 4x CPU slowdown
+        network: config.networkThrottling || {
+          downloadThroughput: (1.5 * 1024 * 1024) / 8, // 1.5 Mbps
+          uploadThroughput: (750 * 1024) / 8, // 750 Kbps
+          latency: 150 // 150ms latency
+        }
+      }
     };
     this.performanceData = [];
     this.currentRun = 0;
@@ -26,13 +34,41 @@ class PerformanceTester {
       handleSIGTERM: true,
       handleSIGHUP: true
     });
+
     this.context = await this.browser.newContext({
       viewport: {
         width: this.config.viewportWidth,
         height: this.config.viewportHeight
       }
     });
+    
     this.page = await this.context.newPage();
+
+    await this.page.context().addInitScript(() => {
+      window.cpuThrottling = true;
+    });
+
+    // Apply CPU throttling using Chrome DevTools Protocol
+    const client = await this.context.newCDPSession(this.page);
+    await client.send('Emulation.setCPUThrottlingRate', { rate: this.config.throttling.cpu });
+
+    // Apply network throttling
+    await client.send('Network.enable');
+    await client.send('Network.emulateNetworkConditions', {
+      offline: false,
+      downloadThroughput: this.config.throttling.network.downloadThroughput,
+      uploadThroughput: this.config.throttling.network.uploadThroughput,
+      latency: this.config.throttling.network.latency
+    });
+
+    console.log('Throttling enabled:', {
+      cpu: `${this.config.throttling.cpu}x slowdown`,
+      network: {
+        download: `${Math.round(this.config.throttling.network.downloadThroughput / 1024 / 1024 * 8)} Mbps`,
+        upload: `${Math.round(this.config.throttling.network.uploadThroughput / 1024 * 8)} Kbps`,
+        latency: `${this.config.throttling.network.latency}ms`
+      }
+    });
   }
 
   setupLogging() {
@@ -40,150 +76,146 @@ class PerformanceTester {
     this.page.on('pageerror', err => console.error(`Page error: ${err}`));
     this.page.on('requestfailed', req => console.error(`Failed request: ${req.url()}`));
   }
-  
-  async measureInteraction() {
-    return this.page.evaluate(() => {
-      return new Promise((resolve) => {
-        try {
-          const hideButton = document.querySelector('#hide-teasers');
-          if (!hideButton) {
-            console.error('Hide button not found');
-            return resolve(null);
-          }
-
-          const observer = new PerformanceObserver((list) => {
-            const entries = list.getEntries();
-            for (const entry of entries) {
-              if (entry.entryType === 'measure' && entry.name === 'interactionDuration') {
-                observer.disconnect(); 
-                resolve(entry.duration);
-              }
-            }
-          });
-
-          observer.observe({ entryTypes: ['measure'] });
-
-          performance.clearMarks();
-          performance.clearMeasures();
-
-          performance.mark('interactionStart');
-
-          const handleClick = () => {
-            requestAnimationFrame(() => {
-              requestAnimationFrame(() => {
-                try {
-                  performance.mark('interactionEnd');
-                  performance.measure('interactionDuration', 'interactionStart', 'interactionEnd');
-                } catch (error) {
-                  console.error('Error during performance measurement:', error);
-                  resolve(null);
-                }
-              });
-            });
-          };
-
-          const newButton = hideButton.cloneNode(true);
-          newButton.addEventListener('click', handleClick, { once: true });
-          hideButton.parentNode.replaceChild(newButton, hideButton);
-
-          newButton.click();
-
-          setTimeout(() => {
-            observer.disconnect();
-            if (!performance.getEntriesByName('interactionDuration').length) {
-              console.log('Measurement timed out');
-              resolve(null);
-            }
-          }, 3000);
-
-        } catch (error) {
-          console.error('Error in measureInteraction:', error);
-          resolve(null);
-        }
-    });
-    }).catch(error => {
-      console.error('Error in page.evaluate:', error);
-      return null;
-    });
-  }
-
-  async collectMetrics() {
-    return this.page.evaluate(() => {
-      return new Promise((resolve) => {
-        const metrics = {
-          lcp: null,
-          fcp: null,
-          ttfb: null,
-          inp: null
-        };
-
-        const navEntry = performance.getEntriesByType('navigation')[0];
-        if (navEntry) {
-            metrics.ttfb = navEntry.responseStart;
-        }
-
-        new PerformanceObserver((list) => {
-          const entries = list.getEntries();
-          metrics.lcp = entries.at(-1)?.startTime;
-          checkComplete();
-        }).observe({ type: 'largest-contentful-paint', buffered: true });
-
-        new PerformanceObserver((list) => {
-          metrics.fcp = list.getEntries()[0]?.startTime;
-          checkComplete();
-        }).observe({ type: 'paint', buffered: true });
-
-        function checkComplete() {
-          if (metrics.lcp !== null && metrics.fcp !== null && metrics.ttfb !== null) {
-            resolve(metrics);
-          }
-        }
-
-        setTimeout(() => resolve(metrics), 5000);
-      });
-    });
-  }
 
   async runTest() {
     try {
       await this.initBrowser();
       this.setupLogging();
 
-      await this.page.goto(this.config.url, {
-          waitUntil: 'networkidle',
-          timeout: this.config.waitTimeout
+      await this.page.addInitScript(() => {
+        window._performanceMetrics = {
+          lcp: null,
+          fcp: null,
+          ttfb: null,
+          tti: null,
+          tbt: null,
+          longTasks: []
+        };
+
+        new PerformanceObserver((list) => {
+          const entries = list.getEntries();
+          for (const entry of entries) {
+            const task = {
+              startTime: entry.startTime,
+              duration: entry.duration,
+              endTime: entry.startTime + entry.duration
+            };
+            window._performanceMetrics.longTasks.push(task);
+          }
+        }).observe({ type: 'longtask', buffered: true });  // Changed from type to entryTypes
+
+        new PerformanceObserver((list) => {
+          const entries = list.getEntries();
+          const lastEntry = entries.at(-1);
+
+          if (!window._performanceMetrics.lcp || lastEntry.startTime > window._performanceMetrics.lcp) {
+            window._performanceMetrics.lcp = lastEntry.startTime;
+          }
+
+        }).observe({ type: 'largest-contentful-paint', buffered: true });
+
+        new PerformanceObserver((list) => {
+          const entries = list.getEntries();
+          const paintEntry = entries.find(entry => entry.name === 'first-contentful-paint');
+
+          if (paintEntry) {
+            window._performanceMetrics.fcp = paintEntry.startTime;
+          }
+        }).observe({ type: 'paint', buffered:true});  // Changed from type
+
+        // TTFB calculation - moved to after navigation completes
+        window._performanceMetrics.calculateTTFB = () => {
+          const navEntry = performance.getEntriesByType('navigation')[0];
+          if (navEntry) {
+            window._performanceMetrics.ttfb = navEntry.responseStart;
+          }
+        };
+
+        function findFirstQuietWindow(tasks, searchStart) {
+          const QUIET_WINDOW = 5000;
+          const MAX_TIME = performance.now();
+          
+          if (!tasks.length) return searchStart;
+
+          tasks.sort((a, b) => a.startTime - b.startTime);
+          tasks = tasks.filter(task => task.startTime >= searchStart);
+          
+          if (!tasks.length) {
+            return (MAX_TIME - searchStart >= QUIET_WINDOW) ? searchStart : null;
+          }
+
+          for (let i = 0; i < tasks.length - 1; i++) {
+            const currentTaskEnd = tasks[i].endTime;
+            const nextTaskStart = tasks[i + 1].startTime;
+            
+            if (nextTaskStart - currentTaskEnd >= QUIET_WINDOW) {
+              return currentTaskEnd;
+            }
+          }
+
+          const lastTaskEnd = tasks[tasks.length - 1].endTime;
+          if (MAX_TIME - lastTaskEnd >= QUIET_WINDOW) {
+            return lastTaskEnd;
+          }
+
+          return null;
+        }
+
+        window._performanceMetrics.calculateMetrics = () => {
+          const metrics = window._performanceMetrics;
+          
+          // Calculate TTFB if not already done
+          if (!metrics.ttfb) {
+            metrics.calculateTTFB();
+          }
+
+          // Find first 5s quiet window after FCP
+          if (metrics.fcp !== null) {
+            metrics.tti = findFirstQuietWindow(metrics.longTasks, metrics.fcp);
+            
+            if (metrics.tti !== null) {
+              let tbt = 0;
+              for (const task of metrics.longTasks) {
+                if (task.startTime >= metrics.fcp && task.endTime <= metrics.tti) {
+                  const blockingTime = task.duration - 50;
+                  if (blockingTime > 0) {
+                    tbt += blockingTime;
+                    console.log('Task contributing to TBT:', {
+                      taskStartTime: task.startTime,
+                      taskDuration: task.duration,
+                      blockingTime,
+                      runningTBT: tbt
+                    });
+                  }
+                }
+              }
+              metrics.tbt = tbt;
+            }
+          }
+
+          return metrics;
+        };
       });
 
-      const metrics = await this.collectMetrics();
-      
-      await this.page.waitForTimeout(1000);
+      console.log('Navigating to page...');
+      await this.page.goto(this.config.url, {
+        waitUntil: 'networkidle',
+        timeout: this.config.waitTimeout
+      });
 
-      try {
-        const hideButton = await this.page.$('#hide-teasers');
-        if (hideButton) {
-          await hideButton.waitForElementState('visible');
-          
-          const duration = await this.measureInteraction();
-          if (duration !== null) {
-            metrics.inp = duration;
-          }
-        }
-          
-        this.performanceData.push({
-          site: `${this.config.url}/`,
-          timestamp: new Date(),
-          metrics: this.formatMetrics(metrics),
-          run: this.currentRun + 1
-        });
-      } catch (e) {
-        console.error('Interaction failed:', e.message);
-        this.performanceData.push({
-          site: this.config.url,
-          timestamp: new Date(),
-          error: e.message,
-          run: this.currentRun + 1
-        });
-      }
+      console.log('Waiting for metrics collection...');
+      await this.page.waitForTimeout(15000);
+
+      const metrics = await this.page.evaluate(() => {
+        return window._performanceMetrics.calculateMetrics();
+      });
+      
+      this.performanceData.push({
+        site: `${this.config.url}/`,
+        timestamp: new Date(),
+        metrics: this.formatMetrics(metrics),
+        run: this.currentRun + 1
+      });
     } catch (error) {
       console.error('Test run error:', error);
       this.performanceData.push({
@@ -196,12 +228,16 @@ class PerformanceTester {
       await this.cleanup();
     }
   }
-  
+
+
   formatMetrics(metrics) {
-    return Object.entries(metrics).reduce((acc, [key, value]) => {
-      acc[key] = value && value !== -1 ? parseFloat(value.toFixed(4)) : null;
-      return acc;
-    }, {});
+    return {
+      lcp: metrics.lcp ? parseFloat(metrics.lcp.toFixed(4)) : null,
+      fcp: metrics.fcp ? parseFloat(metrics.fcp.toFixed(4)) : null,
+      ttfb: metrics.ttfb ? parseFloat(metrics.ttfb.toFixed(4)) : null,
+      tti: metrics.tti ? parseFloat(metrics.tti.toFixed(4)) : null,
+      tbt: metrics.tbt ? parseFloat(metrics.tbt.toFixed(4)) : null
+    };
   }
 
   formatDateTime(dt) {
@@ -222,7 +258,7 @@ class PerformanceTester {
   }
 
   convertToCSV(data) {
-    const headers = ['site', 'date', 'time', 'lcp', 'fcp', 'ttfb', 'inp', 'error'];
+    const headers = ['site', 'date', 'time', 'lcp', 'fcp', 'ttfb', 'tbt', 'error'];
     
     const rows = data.map(entry => {
       const metrics = entry.metrics || {};
@@ -234,7 +270,7 @@ class PerformanceTester {
         metrics.lcp || '',
         metrics.fcp || '',
         metrics.ttfb || '',
-        metrics.inp || '',
+        metrics.tbt || '',
         entry.error || ''
       ].map(value => `"${value}"`).join(',');
     });
@@ -260,6 +296,7 @@ class PerformanceTester {
     console.log(`Starting ${runs} test run(s)...`);
     
     for (let i = 0; i < runs; i++) {
+      this.currentRun = i;
       console.log(`Run ${i + 1}/${runs}`);
       await this.runTest();
     }

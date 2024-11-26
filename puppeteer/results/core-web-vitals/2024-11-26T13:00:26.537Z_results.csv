@@ -1,0 +1,2 @@
+site,date,time,lcp,fcp,ttfb,tbt,error
+"http://localhost:8080/","2024-11-26","13:00:26","12488.2","1196.6","177.8","82",""
