@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test:vitals": "node tests/core-web-vitals.js"
+    "test:vitals": "node tests/core-web-vitals/runner.js"
   },
   "type": "module",
   "author": "",
