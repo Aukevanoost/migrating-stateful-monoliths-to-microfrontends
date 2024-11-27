@@ -13,7 +13,7 @@ const TEASERS = [
         extras: {
             nativefederation: {
                 remoteEntry: "http://localhost:4201/remoteEntry.json",
-                exposedModule: "./exp-teasers",
+                exposedModule: "./Component",
                 element: "exp-teasers"
             },
         },
@@ -35,7 +35,7 @@ const RECOMMENDATIONS = [
         extras: {
             nativefederation: {
                 remoteEntry: "http://localhost:4202/remoteEntry.json",
-                exposedModule: "./exp-recommendations",
+                exposedModule: "./Component",
                 element: "exp-recommendations"
             },
         },

@@ -5,7 +5,7 @@ module.exports = withNativeFederation({
   name: 'explore',
 
   exposes: {
-    './exp-recommendations': './projects/recommendations/src/bootstrap.ts'
+    './Component': './projects/recommendations/src/bootstrap.ts'
   },
 
   shared: {

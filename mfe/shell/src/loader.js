@@ -1,10 +1,10 @@
-import { initFederation, consoleLogger } from 'vanilla-native-federation';
+import { initFederation } from 'vanilla-native-federation';
 
-const initMicroFrontends = (url, logLevel = "error") => {
-    return initFederation(url, {
-        logLevel,
-        logger: consoleLogger
-    })
+const initMicroFrontends = (urlOrManifest, remotes) => {
+    return initFederation(urlOrManifest)
+        .then(({load, importMap}) => Promise.all(
+            remotes.map(r => load(r, "./Component"))
+        ))
 }
 
 export { initMicroFrontends };

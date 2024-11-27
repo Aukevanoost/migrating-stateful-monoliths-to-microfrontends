@@ -5,7 +5,7 @@ module.exports = withNativeFederation({
   name: 'teasers',
 
   exposes: {
-    './exp-teasers': './projects/teasers/src/bootstrap.ts',
+    './Component': './projects/teasers/src/bootstrap.ts',
   },
 
   shared: {

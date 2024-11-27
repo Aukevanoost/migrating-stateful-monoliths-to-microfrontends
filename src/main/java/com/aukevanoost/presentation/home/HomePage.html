@@ -11,11 +11,10 @@
     <script type="module-shim">
         import { initMicroFrontends } from "./scripts/loader.js";
 
-        initMicroFrontends("http://localhost:3000/native-federation")
-            .then(({load, importMap}) => {
-                load('explore/teasers', './exp-teasers');
-                load('explore/recommendations', './exp-recommendations');
-            });
+        initMicroFrontends(
+            "http://localhost:3000/native-federation",
+            ["explore/teasers", "explore/recommendations"]
+        )
     </script>
 </wicket:extend>
 </body>
