@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), '../..');
 
-const defaultSettings = {
+const defaultThrottledSettings = {
   url: 'http://localhost:8080',
   path: `${__dirname}/results/core-web-vitals`,
   viewport: { width: 1280, height: 800},
@@ -21,6 +21,12 @@ const defaultSettings = {
   }
 }
 
+const defaultSettings = {
+  url: 'http://localhost:8080',
+  path: `${__dirname}/results/core-web-vitals`,
+  viewport: { width: 1280, height: 800}
+}
+
 async function getBrowser(cfg) {
   const browser = await playwright.chromium.launch();
 
@@ -30,20 +36,24 @@ async function getBrowser(cfg) {
   
   const page = await context.newPage();
 
-  await page.context().addInitScript(() => {
-    window.cpuThrottling = true;
-  });
 
-  const client = await context.newCDPSession(page);
-  await client.send('Emulation.setCPUThrottlingRate', { rate: cfg.throttling.cpu });
+  if(cfg.throttling) {
+    await page.context().addInitScript(() => {
+      window.cpuThrottling = true;
+    });
+  
+    const client = await context.newCDPSession(page);
+    await client.send('Emulation.setCPUThrottlingRate', { rate: cfg.throttling.cpu });
+  
+    await client.send('Network.enable');
+    await client.send('Network.emulateNetworkConditions', {
+      offline: false,
+      downloadThroughput: cfg.throttling.network.download,
+      uploadThroughput: cfg.throttling.network.upload,
+      latency: cfg.throttling.network.latency
+    });
+  }
 
-  await client.send('Network.enable');
-  await client.send('Network.emulateNetworkConditions', {
-    offline: false,
-    downloadThroughput: cfg.throttling.network.download,
-    uploadThroughput: cfg.throttling.network.upload,
-    latency: cfg.throttling.network.latency
-  });
 
   // LOGGING
   page.on('console', msg => console.log(`Page log: ${msg.text()}`));
@@ -101,12 +111,19 @@ async function runTest(cfg, idx) {
 async function runWebVitalsTests(cfg, runs = 1) {
 
   console.log('====== STARTING TEST ======');  
-  console.log();
-  console.log(`CPU \t\t: ${cfg.throttling.cpu}x slower`);
-  console.log(`download\t: ${cfg.throttling.network.download / 1024 / 1024 * 8} Mbps`);
-  console.log(`upload\t\t: ${cfg.throttling.network.upload / 1024 * 8} Kbps`);
-  console.log(`latency\t\t: ${cfg.throttling.network.latency} ms`);
-  console.log();
+  if(cfg.throttling) {
+    console.log();
+    console.log(`CPU \t\t: ${cfg.throttling.cpu}x slower`);
+    console.log(`download\t: ${cfg.throttling.network.download / 1024 / 1024 * 8} Mbps`);
+    console.log(`upload\t\t: ${cfg.throttling.network.upload / 1024 * 8} Kbps`);
+    console.log(`latency\t\t: ${cfg.throttling.network.latency} ms`);
+    console.log();
+  } else {
+    console.log();
+    console.log(`Throttling is disabled.`);
+    console.log();
+  }
+
   console.log(`Starting ${runs} test run(s)...`);
 
   const results = [];
