@@ -45,10 +45,10 @@ async function saveMetricsToCSV(pathToDir, results) {
         metrics?.lcp?.endTime ?? -1,
         metrics?.fcp?.endTime ?? -1,
         metrics?.ttfb || -1,
-        metrics?.tbt || -1,
+        metrics?.tbt || 0,
         metrics?.tti || -1,
-        metrics?.longTasks || -1,
-        metrics?.longestTask.duration || -1,
+        metrics?.longTasks || 0,
+        metrics?.longestTask?.duration || -1,
         run.error || "",
       ]
         .map((value) => `"${value}"`)
