@@ -45,8 +45,8 @@ const RECOMMENDATIONS = [
 ]
 
 const EXPLORE_MFE = {
-    "teasers": TEASERS,
-    "recommendations": RECOMMENDATIONS
+    "explore/teasers": TEASERS,
+    "explore/recommendations": RECOMMENDATIONS
 }
 
 module.exports = {

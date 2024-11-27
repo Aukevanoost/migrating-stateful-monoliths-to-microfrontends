@@ -1,0 +1,82 @@
+// --- COMPONENT
+
+:host {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  max-width: calc(1000px);
+  padding: 0;
+  display: block;
+}
+
+.hide {
+  &__container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__button {
+    cursor: pointer;
+    background-color: rgba(236,52,84, 1);
+    padding: 2px 6px;
+    margin: 0;
+    margin-bottom: 8px;
+    border-radius: 2px;
+    color: #fff;
+    border: none;
+    outline: none;
+    transition: .3s;
+    text-align: right;
+
+    &:hover {
+      padding: 5px 8px;
+      margin-bottom: 2px;
+      width: 100%;
+      background-color: rgba(236,52,84, 0.7);
+    }
+  }
+}
+
+
+.teaser {
+  &__container {
+    --outer-space: 1.5rem;
+
+    box-sizing: border-box;
+
+
+    position: relative;
+  
+    @media (min-width: 500px) {
+      display: flex;
+      gap: 1rem;
+      flex-direction: row;
+    }
+  }
+
+  &__card {
+    flex: 1;
+    display: block;
+    position: relative;
+    margin-bottom: 2rem;
+    color: inherit;
+    text-align: center;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      text-decoration: underline;
+    }
+  }
+
+  &__title {
+    line-height: 1.5;
+  }
+
+  &__img {
+    width: 100%;
+    aspect-ratio: 1000 / 560;
+    margin-bottom: 0.75rem;
+  }
+}
+  

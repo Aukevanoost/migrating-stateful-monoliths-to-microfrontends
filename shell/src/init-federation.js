@@ -1,1 +1,0 @@
-export { initFederation } from 'vanilla-native-federation';

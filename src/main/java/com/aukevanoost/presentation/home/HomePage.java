@@ -18,36 +18,34 @@ public class HomePage extends BaseTemplate {
     protected void onInitialize() {
         super.onInitialize();
         try {
-            var Config = discoveryController.fetchConfig("http://localhost:3000");
+            var Config = discoveryController.fetchConfig("http://localhost:3000/from-manifest");
 
-            var teasers = Config.getMicroFrontends().get("teasers").getFirst();
-            var recommendations = Config.getMicroFrontends().get("recommendations").getFirst();
-
+            String teasersKey = "explore/teasers";
+            var teasers = Config.getMicroFrontends().get(teasersKey).getFirst();
             add(new RemoteContentPanel(
                 "exp_teasers",
                 teasers.getExtras().getSsr().getHtml()
             ));
+
+            String recommendationsKey = "explore/recommendations";
+            var recommendations = Config.getMicroFrontends().get(recommendationsKey).getFirst();
             add(new RemoteContentPanel(
                 "exp_recommendations",
                 recommendations.getExtras().getSsr().getHtml()
             ));
 
             var hydrationScript = String.format("""
-                import { initFederation } from './scripts/init-federation.js';
-                initFederation({
-                    "teasers": "%s",
-                    "recommendations": "%s"
-                }).then(({load, importMap}) => {
-                        return Promise.all([
-                            load('teasers', '%s'),
-                            load('recommendations', '%s')
-                        ])
-                    })
+                import { initMicroFrontends } from './scripts/loader.js';
+                
+                initMicroFrontends({
+                    '%s': '%s',
+                    '%s': '%s'
+                })
                 """,
+                teasersKey,
                 teasers.getExtras().getNativefederation().getRemoteEntry(),
-                recommendations.getExtras().getNativefederation().getRemoteEntry(),
-                teasers.getExtras().getNativefederation().getExposedModule(),
-                recommendations.getExtras().getNativefederation().getExposedModule()
+                recommendationsKey,
+                recommendations.getExtras().getNativefederation().getRemoteEntry()
             );
 
             add(new Label("hydrationScript", hydrationScript)

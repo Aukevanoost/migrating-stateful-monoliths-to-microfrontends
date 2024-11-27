@@ -1,0 +1,20 @@
+<ng-container *ngIf="visible()">
+  <div class="hide__container">
+    <button (click)="hide()" class="hide__button" id="hide-teasers">&times; hide</button>
+  </div>
+
+  <div class="teaser__container">
+    <a 
+      *ngFor="let teaser of teasers()"
+      class="teaser__card" 
+      [href]="'/products/' + teaser.key"
+      [id]="'goto-' + teaser.key">         
+      <img 
+        [src]="teaser.image | fromCDN: '500'" 
+        width="500" 
+        sizes="500px" 
+        class="teaser__img"/>
+      <p class="teaser__title">{{teaser.title}}</p>
+    </a>
+  </div>
+</ng-container>
