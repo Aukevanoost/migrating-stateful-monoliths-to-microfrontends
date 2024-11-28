@@ -7,9 +7,25 @@ import { fileURLToPath } from 'url';
 const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), '../..');
 
 /**
- * Unthrottled memory power: 3016
+ * Unthrottled memory power: ~3000
  * src: https://github.com/GoogleChrome/lighthouse/blob/main/docs/throttling.md#the-mobile-network-throttling-preset
  */
+
+
+const heavilyThrottledSettings = {
+  url: 'http://localhost:8080',
+  path: `${__dirname}/results/core-web-vitals`,
+  viewport: { width: 375, height: 812}, // IPhone 11
+  throttling: {
+    cpu: 10,  // https://lighthouse-cpu-throttling-calculator.vercel.app/ (input:3000)
+    network: {
+      download: (1.6 * 1024 * 1024) / 8,  // 1.6 Mbps
+      upload: (750 * 1024) / 8,           // 750 Kbps
+      latency: 150                        // 150 ms 
+    }
+  }
+}
+
 
 const throttledSettings = {
     url: 'http://localhost:8080',
@@ -162,4 +178,4 @@ async function runWebVitalsTests(cfg, runs = 1) {
 }
 
 
-runWebVitalsTests(defaultSettings, 50).catch(console.error);
+runWebVitalsTests(heavilyThrottledSettings, 50).catch(console.error);
