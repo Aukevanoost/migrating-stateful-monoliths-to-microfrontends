@@ -12,41 +12,41 @@ const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), '../..
  */
 
 const throttledSettings = {
-  url: 'http://localhost:8080',
-  path: `${__dirname}/results/core-web-vitals`,
-  viewport: { width: 1280, height: 800},
-  throttling: {
-    cpu: 4,  // 4x CPU slowdown (default)
-    network: {
-      download: (1.6 * 1024 * 1024) / 8,  // 1.6 Mbps
-      upload: (750 * 1024) / 8,           // 750 Kbps
-      latency: 150                        // 150 ms 
+    url: 'http://localhost:8080',
+    path: `${__dirname}/results/core-web-vitals`,
+    viewport: { width: 375, height: 812}, // IPhone 11
+    throttling: {
+      cpu: 4,  // 4x CPU slowdown (default)
+      network: {
+        download: (1.6 * 1024 * 1024) / 8,  // 1.6 Mbps
+        upload: (750 * 1024) / 8,           // 750 Kbps
+        latency: 150                        // 150 ms 
+      }
     }
   }
-}
-
-const throttledSettingsNoLatency = {
-  url: 'http://localhost:8080',
-  path: `${__dirname}/results/core-web-vitals`,
-  viewport: { width: 1280, height: 800},
-  throttling: {
-    cpu: 4,  // 4x CPU slowdown (default)
-    network: {
-      download: (1.6 * 1024 * 1024) / 8,  // 1.6 Mbps
-      upload: (750 * 1024) / 8,           // 750 Kbps
-      latency: 0                       
+  
+  const throttledSettingsNoLatency = {
+    url: 'http://localhost:8080',
+    path: `${__dirname}/results/core-web-vitals`,
+    viewport: { width: 375, height: 812}, // IPhone 11
+    throttling: {
+      cpu: 4,  // 4x CPU slowdown (default)
+      network: {
+        download: (1.6 * 1024 * 1024) / 8,  // 1.6 Mbps
+        upload: (750 * 1024) / 8,           // 750 Kbps
+        latency: 0                       
+      }
     }
   }
-}
-
-const defaultSettings = {
-  url: 'http://localhost:8080',
-  path: `${__dirname}/results/core-web-vitals`,
-  viewport: { width: 1280, height: 800}
-}
+  
+  const defaultSettings = {
+    url: 'http://localhost:8080',
+    path: `${__dirname}/results/core-web-vitals`,
+    viewport: { width: 3024, height: 1964} // macbook
+  }
 
 async function getBrowser(cfg) {
-  const browser = await playwright.chromium.launch();
+  const browser = await playwright.chromium.launch({headless: false});
 
   const context = await browser.newContext({
     viewport: cfg.viewport
@@ -54,16 +54,20 @@ async function getBrowser(cfg) {
   
   const page = await context.newPage();
 
+  const client = await context.newCDPSession(page);
+
+  await client.send('Network.enable');
+  await client.send('Network.setCacheDisabled', { cacheDisabled: true });
 
   if(cfg.throttling) {
+
     await page.context().addInitScript(() => {
       window.cpuThrottling = true;
     });
   
-    const client = await context.newCDPSession(page);
     await client.send('Emulation.setCPUThrottlingRate', { rate: cfg.throttling.cpu });
   
-    await client.send('Network.enable');
+
     await client.send('Network.emulateNetworkConditions', {
       offline: false,
       downloadThroughput: cfg.throttling.network.download,
@@ -79,6 +83,7 @@ async function getBrowser(cfg) {
   page.on('requestfailed', req => console.error(`Failed request: ${req.url()}`));
 
   const cleanup = async() => {
+    await client.detach();
     await page.close().catch(console.error);
     await context.close().catch(console.error);
     await browser.close().catch(console.error);
@@ -157,4 +162,4 @@ async function runWebVitalsTests(cfg, runs = 1) {
 }
 
 
-runWebVitalsTests(throttledSettings, 50).catch(console.error);
+runWebVitalsTests(defaultSettings, 50).catch(console.error);
