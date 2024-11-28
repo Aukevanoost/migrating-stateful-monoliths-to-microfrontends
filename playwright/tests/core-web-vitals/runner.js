@@ -26,40 +26,40 @@ const heavilyThrottledSettings = {
   }
 }
 
-
 const throttledSettings = {
-    url: 'http://localhost:8080',
-    path: `${__dirname}/results/core-web-vitals`,
-    viewport: { width: 375, height: 812}, // IPhone 11
-    throttling: {
-      cpu: 4,  // 4x CPU slowdown (default)
-      network: {
-        download: (1.6 * 1024 * 1024) / 8,  // 1.6 Mbps
-        upload: (750 * 1024) / 8,           // 750 Kbps
-        latency: 150                        // 150 ms 
-      }
+  url: 'http://localhost:8080',
+  path: `${__dirname}/results/core-web-vitals`,
+  viewport: { width: 375, height: 812}, // IPhone 11
+  throttling: {
+    cpu: 4,  // 4x CPU slowdown (default)
+    network: {
+      download: (1.6 * 1024 * 1024) / 8,  // 1.6 Mbps
+      upload: (750 * 1024) / 8,           // 750 Kbps
+      latency: 150                        // 150 ms 
     }
   }
-  
-  const throttledSettingsNoLatency = {
-    url: 'http://localhost:8080',
-    path: `${__dirname}/results/core-web-vitals`,
-    viewport: { width: 375, height: 812}, // IPhone 11
-    throttling: {
-      cpu: 4,  // 4x CPU slowdown (default)
-      network: {
-        download: (1.6 * 1024 * 1024) / 8,  // 1.6 Mbps
-        upload: (750 * 1024) / 8,           // 750 Kbps
-        latency: 0                       
-      }
+}
+
+
+const throttledSettingsNoLatency = {
+  url: 'http://localhost:8080',
+  path: `${__dirname}/results/core-web-vitals`,
+  viewport: { width: 375, height: 812}, // IPhone 11
+  throttling: {
+    cpu: 4,  // 4x CPU slowdown (default)
+    network: {
+      download: (1.6 * 1024 * 1024) / 8,  // 1.6 Mbps
+      upload: (750 * 1024) / 8,           // 750 Kbps
+      latency: 0                       
     }
   }
-  
-  const defaultSettings = {
-    url: 'http://localhost:8080',
-    path: `${__dirname}/results/core-web-vitals`,
-    viewport: { width: 3024, height: 1964} // macbook
-  }
+}
+
+const defaultSettings = {
+  url: 'http://localhost:8080',
+  path: `${__dirname}/results/core-web-vitals`,
+  viewport: { width: 3024, height: 1964} // macbook
+}
 
 async function getBrowser(cfg) {
   const browser = await playwright.chromium.launch({headless: false});
@@ -178,4 +178,4 @@ async function runWebVitalsTests(cfg, runs = 1) {
 }
 
 
-runWebVitalsTests(heavilyThrottledSettings, 50).catch(console.error);
+runWebVitalsTests(defaultSettings, 50).catch(console.error);

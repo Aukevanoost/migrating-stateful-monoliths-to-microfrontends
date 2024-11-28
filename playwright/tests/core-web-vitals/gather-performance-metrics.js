@@ -120,12 +120,18 @@ const gatherPerformanceMetrics = () => {
     });
     fcpObserver.observe({ type: 'paint', buffered: true });
     observers.push(fcpObserver);
-    
 
-    const navEntry = performance.getEntriesByType('navigation')[0];
-    if (navEntry) {
-      metrics.ttfb = navEntry.responseStart;
-    }
+    const ttfbObserver = new PerformanceObserver((list) => {
+      const entries = list.getEntries();
+      if (entries.length > 0) {
+        const navigationEntry = entries[0];
+        console.log(navigationEntry);
+        metrics.ttfb = navigationEntry.responseStart - navigationEntry.startTime;
+      }
+    })
+
+    ttfbObserver.observe({type: 'navigation',buffered: true,});
+    observers.push(ttfbObserver);
 
     timeoutTimer = setTimeout(() => {
       console.log('TIMEOUT REACHED');
