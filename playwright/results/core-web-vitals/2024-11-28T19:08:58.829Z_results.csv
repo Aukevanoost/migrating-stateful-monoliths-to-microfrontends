@@ -1,0 +1,201 @@
+site,date,time,navTime,totalTime,lcp,fcp,ttfb,tbt,tti,longTasks,longestTask,error
+"http://localhost:8080/","2024-11-28","19:08:24","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:25","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:26","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:26","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:27","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:28","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:29","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:29","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:30","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:31","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:31","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:32","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:33","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:33","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:34","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:35","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:35","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:36","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:37","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:38","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:38","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:39","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:40","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:40","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:41","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:42","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:42","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:43","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:44","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:45","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:45","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:46","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:47","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:47","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:48","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:49","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:49","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:50","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:51","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:51","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:52","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:53","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:53","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:54","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:55","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:55","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:56","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:57","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:58","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
+"http://localhost:8080/","2024-11-28","19:08:58","-1","-1","-1","-1","-1","0","-1","0","-1","page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:8080/
+Call log:
+[2m  - navigating to "http://localhost:8080/", waiting until "networkidle"[22m
+"
