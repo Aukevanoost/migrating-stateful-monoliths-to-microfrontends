@@ -125,7 +125,6 @@ const gatherPerformanceMetrics = () => {
       const entries = list.getEntries();
       if (entries.length > 0) {
         const navigationEntry = entries[0];
-        console.log(navigationEntry);
         metrics.ttfb = navigationEntry.responseStart - navigationEntry.startTime;
       }
     })
