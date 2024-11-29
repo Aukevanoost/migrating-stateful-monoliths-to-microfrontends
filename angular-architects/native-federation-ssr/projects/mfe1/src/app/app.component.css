@@ -1,0 +1,10 @@
+.container {
+    border: crimson dashed 2px;
+    display: block;
+    padding: 20px;
+}
+
+.ssr {
+    color: goldenrod;
+    font-weight: bold;
+}
