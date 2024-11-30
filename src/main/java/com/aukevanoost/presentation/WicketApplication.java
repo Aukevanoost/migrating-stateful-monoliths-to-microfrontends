@@ -1,5 +1,6 @@
 package com.aukevanoost.presentation;
 
+import com.aukevanoost.presentation._core.ProxyRequestMapper;
 import com.aukevanoost.presentation.cart.CartPage;
 import com.aukevanoost.presentation.home.HomePage;
 import com.aukevanoost.presentation.category.CategoryPage;
@@ -49,6 +50,10 @@ public class WicketApplication extends WebApplication
 		getHeaderResponseDecorators().add(response ->
 			new JavaScriptFilteredIntoFooterHeaderResponse(response, "footer-container"));
 
+		getRootRequestMapperAsCompound().add(new ProxyRequestMapper(
+			"http://localhost:4200",
+			"home"
+		));
 
 		// add your configuration here
 		mountPage("/products/#{category}", CategoryPage.class);

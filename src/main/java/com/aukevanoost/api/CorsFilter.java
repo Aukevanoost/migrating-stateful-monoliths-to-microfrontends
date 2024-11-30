@@ -15,6 +15,7 @@ public class CorsFilter implements ContainerResponseFilter {
         "http://localhost:4001",
         "http://localhost:4002",
         // CSR
+        "http://localhost:4200",
         "http://localhost:4201",
         "http://localhost:4202",
         // WICKET

@@ -327,6 +327,7 @@
 						"outputPath": "dist/homepage",
 						"index": "projects/homepage/src/index.html",
 						"browser": "projects/homepage/src/main.ts",
+						"baseHref": "http://localhost:4200/",
 						"polyfills": [
 							"zone.js",
 							"es-module-shims"
