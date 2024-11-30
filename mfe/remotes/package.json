@@ -8,7 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:teasers": "node dist/teasers/server/server.mjs",
-    "serve:ssr:recommendations": "node dist/recommendations/server/server.mjs"
+    "serve:ssr:recommendations": "node dist/recommendations/server/server.mjs",
+    "serve:ssr:homepage": "node dist/homepage/server/server.mjs"
   },
   "private": true,
   "dependencies": {
