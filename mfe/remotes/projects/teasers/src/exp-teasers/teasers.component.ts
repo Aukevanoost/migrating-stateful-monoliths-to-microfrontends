@@ -17,16 +17,11 @@ export class TeasersComponent {
   platform = inject(PLATFORM_ID);
   private http = inject(FeaturedHttpService);
   
-  visible = signal(true);
   teasers = toSignal(this.http.teasers$(), { initialValue: [] });
 
   constructor() {
     afterNextRender(() => {
       console.log("Teasers hydration loaded, env: " + this.platform);
     })
-  }
-
-  hide() {
-    this.visible.set(false);
   }
 }
