@@ -5,7 +5,11 @@
 	"projects": {
 		"teasers": {
 			"projectType": "application",
-			"schematics": {},
+			"schematics": {
+				"@schematics/angular:component": {
+					"style": "scss"
+				}
+			},
 			"root": "projects/teasers",
 			"sourceRoot": "projects/teasers/src",
 			"prefix": "app",
@@ -45,6 +49,7 @@
 							"zone.js/testing"
 						],
 						"tsConfig": "projects/teasers/tsconfig.spec.json",
+						"inlineStyleLanguage": "scss",
 						"assets": [
 							"projects/teasers/src/assets"
 						],
@@ -73,6 +78,7 @@
 						"scripts": [],
 						"browser": "projects/teasers/src/main.ts",
 						"server": "projects/teasers/src/main.server.ts",
+						"baseHref": "http://localhost:4001/",
 						"prerender": true,
 						"optimization": false,
 						"sourceMap": true,

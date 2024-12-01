@@ -1,9 +1,16 @@
+// import { bootstrapApplication } from '@angular/platform-browser';
+// import { appConfig } from './exp-teasers/teasers.config';
+// import { TeasersComponent } from './exp-teasers/teasers.component';
+
+// bootstrapApplication(TeasersComponent, appConfig)
+//   .catch((err) => console.error(err));
+
 import { createApplication } from '@angular/platform-browser';
 import { appConfig } from './exp-teasers/teasers.config';
 import { NgZone } from '@angular/core';
-import 'zone.js';
 import { createCustomElement } from '@angular/elements';
 import { TeasersComponent } from './exp-teasers/teasers.component';
+import 'zone.js';
 
 (async () => {
   await createApplication({

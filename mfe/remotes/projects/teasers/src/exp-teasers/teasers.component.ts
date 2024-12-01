@@ -7,13 +7,18 @@ import { toSignal } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'exp-teasers',
   standalone: true,
-  imports: [fromCDNPipe, CommonModule, AsyncPipe],
+  imports: [fromCDNPipe, CommonModule],
   providers: [FeaturedHttpService],
   templateUrl: './teasers.component.html',
   styleUrls: ['./teasers.component.scss'],
   encapsulation: ViewEncapsulation.Emulated
 })
 export class TeasersComponent {
+
+  url(key: string) {
+    return window.location.origin + '/products/' + key;
+  }
+
   platform = inject(PLATFORM_ID);
   private http = inject(FeaturedHttpService);
   
