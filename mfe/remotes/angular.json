@@ -69,6 +69,7 @@
 							"es-module-shims"
 						],
 						"tsConfig": "projects/teasers/tsconfig.app.json",
+						"inlineStyleLanguage": "scss",
 						"assets": [
 							"projects/teasers/src/assets"
 						],
@@ -117,7 +118,11 @@
 		},
 		"recommendations": {
 			"projectType": "application",
-			"schematics": {},
+			"schematics": {
+				"@schematics/angular:component": {
+					"style": "scss"
+				}
+			},
 			"root": "projects/recommendations",
 			"sourceRoot": "projects/recommendations/src",
 			"prefix": "app",
@@ -159,6 +164,7 @@
 							"zone.js/testing"
 						],
 						"tsConfig": "projects/recommendations/tsconfig.spec.json",
+						"inlineStyleLanguage": "scss",
 						"assets": [
 							"projects/recommendations/src/assets"
 						],
@@ -178,6 +184,8 @@
 							"es-module-shims"
 						],
 						"tsConfig": "projects/recommendations/tsconfig.app.json",
+						"inlineStyleLanguage": "scss",
+						"baseHref": "http://localhost:4002",
 						"assets": [
 							"projects/recommendations/src/assets"
 						],

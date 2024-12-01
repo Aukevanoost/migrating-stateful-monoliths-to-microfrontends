@@ -14,15 +14,15 @@ import { toSignal } from '@angular/core/rxjs-interop';
   encapsulation: ViewEncapsulation.Emulated
 })
 export class TeasersComponent {
+  #base = "http://localhost:8080";
+  platform = inject(PLATFORM_ID);
+  #http = inject(FeaturedHttpService);
+
+  teasers = toSignal(this.#http.teasers$(), { initialValue: [] });
 
   url(key: string) {
-    return window.location.origin + '/products/' + key;
+    return this.#base + '/products/' + key;
   }
-
-  platform = inject(PLATFORM_ID);
-  private http = inject(FeaturedHttpService);
-  
-  teasers = toSignal(this.http.teasers$(), { initialValue: [] });
 
   constructor() {
     afterNextRender(() => {

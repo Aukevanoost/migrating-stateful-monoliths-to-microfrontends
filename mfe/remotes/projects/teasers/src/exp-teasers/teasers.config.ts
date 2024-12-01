@@ -4,6 +4,7 @@ import { provideClientHydration, withEventReplay } from '@angular/platform-brows
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    { provide: APP_ID, useValue: 'exp-teasers' },
     provideZoneChangeDetection({eventCoalescing: true}),
     provideHttpClient(withFetch()),
     provideClientHydration(withEventReplay())
