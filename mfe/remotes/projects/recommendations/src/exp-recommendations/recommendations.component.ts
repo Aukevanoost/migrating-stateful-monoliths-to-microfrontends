@@ -27,7 +27,6 @@ export class RecommendationsComponent {
     });
   }
   constructor() {
-    console.log(this.platform);
     this.http.recommendations$(["CL-01-GY", "AU-07-MT"]).subscribe(x => {
       this.#recommendations.set(x)
     });

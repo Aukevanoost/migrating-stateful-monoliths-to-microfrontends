@@ -1,8 +1,9 @@
-import { afterNextRender, Component, inject, PLATFORM_ID, signal, ViewEncapsulation } from '@angular/core';
+import { afterNextRender, Component, inject, PLATFORM_ID, ViewEncapsulation } from '@angular/core';
 import { FeaturedHttpService } from './../shared/http/featured-http.service';
-import { AsyncPipe, CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { fromCDNPipe } from '../shared/from-cdn.pipe';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { MFE_ENV } from '../shared/env';
 
 @Component({
   selector: 'exp-teasers',
@@ -14,19 +15,19 @@ import { toSignal } from '@angular/core/rxjs-interop';
   encapsulation: ViewEncapsulation.Emulated
 })
 export class TeasersComponent {
-  #base = "http://localhost:8080";
-  platform = inject(PLATFORM_ID);
+  #env = inject(MFE_ENV);
+  #platform = inject(PLATFORM_ID);
   #http = inject(FeaturedHttpService);
 
   teasers = toSignal(this.#http.teasers$(), { initialValue: [] });
 
   url(key: string) {
-    return this.#base + '/products/' + key;
+    return this.#env.mfe + '/products/' + key;
   }
 
   constructor() {
     afterNextRender(() => {
-      console.log("Teasers hydration loaded, env: " + this.platform);
+      console.log("Teasers hydration loaded, env: " + this.#platform);
     })
   }
 }

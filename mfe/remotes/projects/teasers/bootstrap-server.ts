@@ -32,7 +32,6 @@ export function app(): express.Express {
         documentFilePath: indexHtml,
         url: baseUrl,
         publicPath: browserDistFolder,
-        providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
       })
       .then(mapper("exp-teasers", baseUrl))
       .then((html) => res.send(html))
@@ -40,7 +39,7 @@ export function app(): express.Express {
   })
 
   server.get('*', (req, res, next) => {
-    const { protocol, originalUrl, baseUrl, headers } = req;
+    const { protocol, originalUrl, headers } = req;
 
     commonEngine
       .render({
@@ -48,7 +47,6 @@ export function app(): express.Express {
         documentFilePath: indexHtml,
         url: `${protocol}://${headers.host}${originalUrl}`,
         publicPath: browserDistFolder,
-        providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
       })
       .then((html) => res.send(html))
       .catch((err) => next(err));

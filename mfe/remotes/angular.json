@@ -79,7 +79,7 @@
 						"scripts": [],
 						"browser": "projects/teasers/src/main.ts",
 						"server": "projects/teasers/src/main.server.ts",
-						"baseHref": "http://localhost:4001/",
+						"deployUrl": "http://localhost:4001/",
 						"prerender": true,
 						"optimization": false,
 						"sourceMap": true,
@@ -185,10 +185,10 @@
 						],
 						"tsConfig": "projects/recommendations/tsconfig.app.json",
 						"inlineStyleLanguage": "scss",
-						"baseHref": "http://localhost:4002",
 						"assets": [
 							"projects/recommendations/src/assets"
 						],
+						"deployUrl": "http://localhost:4002/",
 						"styles": [
 							"projects/recommendations/src/styles.scss"
 						],
