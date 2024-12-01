@@ -51,7 +51,7 @@ public class WicketApplication extends WebApplication
 			new JavaScriptFilteredIntoFooterHeaderResponse(response, "footer-container"));
 
 		getRootRequestMapperAsCompound().add(new ProxyRequestMapper(
-			"http://localhost:4200",
+			"http://localhost:4000",
 			"home"
 		));
 

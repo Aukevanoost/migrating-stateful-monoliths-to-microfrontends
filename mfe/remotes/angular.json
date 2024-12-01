@@ -321,6 +321,7 @@
 							"projects/homepage/src/styles.scss"
 						],
 						"scripts": [],
+						"baseHref": "http://localhost:4000/",
 						"server": "projects/homepage/src/main.server.ts",
 						"prerender": false,
 						"ssr": {
