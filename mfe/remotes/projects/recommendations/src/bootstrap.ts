@@ -1,13 +1,6 @@
-import { createApplication } from '@angular/platform-browser';
-import { NgZone } from '@angular/core';
+import { bootstrapApplication } from '@angular/platform-browser';
 import { appConfig } from './exp-recommendations/recommendations.config';
-import 'zone.js';
+import { RecommendationsComponent } from './exp-recommendations/recommendations.component';
 
-(async () => {
-  await createApplication({
-    providers: [
-      (globalThis as any).ngZone ? { provide: NgZone, useValue: (globalThis as any).ngZone } : [],
-      ...appConfig.providers
-    ],
-  });
-})();
+bootstrapApplication(RecommendationsComponent, appConfig)
+  .catch((err) => console.error(err));

@@ -13,7 +13,7 @@ const fallback: Env = {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    { provide: APP_ID, useValue: 'exp-recommendations' },
+    // { provide: APP_ID, useValue: 'exp-recommendations' },
     { provide: APP_BASE_HREF, useValue: 'http://localhost:4002'},
     { provide: MFE_ENV, useValue: fallback },
     provideZoneChangeDetection({eventCoalescing: true}),

@@ -79,7 +79,6 @@
 						"scripts": [],
 						"browser": "projects/teasers/src/main.ts",
 						"server": "projects/teasers/src/main.server.ts",
-						"deployUrl": "http://localhost:4001/",
 						"prerender": true,
 						"optimization": false,
 						"sourceMap": true,
@@ -106,12 +105,12 @@
 						},
 						"development": {
 							"buildTarget": "teasers:esbuild:development",
-							"port": 4201
+							"port": 4001
 						}
 					},
 					"defaultConfiguration": "development",
 					"options": {
-						"port": 4201
+						"port": 4001
 					}
 				}
 			}
@@ -188,7 +187,6 @@
 						"assets": [
 							"projects/recommendations/src/assets"
 						],
-						"deployUrl": "http://localhost:4002/",
 						"styles": [
 							"projects/recommendations/src/styles.scss"
 						],
@@ -233,12 +231,12 @@
 						},
 						"development": {
 							"buildTarget": "recommendations:esbuild:development",
-							"port": 4202
+							"port": 4002
 						}
 					},
 					"defaultConfiguration": "development",
 					"options": {
-						"port": 4202
+						"port": 4002
 					}
 				}
 			}
@@ -257,15 +255,13 @@
 				"build": {
 					"builder": "@angular-architects/native-federation:build",
 					"options": {
-						"ssr": true
+						"ssr": true,
+						"target": "homepage:esbuild:development"
 					},
 					"configurations": {
 						"production": {
-							"target": "homepage:esbuild:production"
 						},
 						"development": {
-							"target": "homepage:esbuild:development",
-							"dev": true
 						}
 					},
 					"defaultConfiguration": "production"
@@ -321,7 +317,6 @@
 								"input": "projects/homepage/public"
 							}
 						],
-						"deployUrl": "http://localhost:4000/",
 						"styles": [
 							"projects/homepage/src/styles.scss"
 						],

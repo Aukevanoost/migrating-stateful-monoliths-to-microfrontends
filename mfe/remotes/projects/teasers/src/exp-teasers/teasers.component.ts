@@ -7,7 +7,6 @@ import { MFE_ENV } from '../shared/env';
 
 @Component({
   selector: 'exp-teasers',
-  standalone: true,
   imports: [fromCDNPipe, CommonModule],
   providers: [FeaturedHttpService],
   templateUrl: './teasers.component.html',

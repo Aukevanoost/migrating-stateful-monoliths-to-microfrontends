@@ -2,7 +2,6 @@ import { Component, Input, OnChanges, ViewChild, ViewContainerRef } from "@angul
 import { loadRemoteModule } from '@angular-architects/native-federation';
 
 @Component({
-    standalone: true,
     selector: 'plugin-proxy',
     template: `<ng-container #placeHolder></ng-container>`,
     styles: []

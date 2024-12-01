@@ -1,4 +1,4 @@
-import { APP_ID, ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { MFE_ENV, Env } from '../shared/env';
@@ -13,7 +13,7 @@ const fallback: Env = {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    { provide: APP_ID, useValue: 'exp-teasers' },
+    // { provide: APP_ID, useValue: 'exp-teasers' },
     { provide: APP_BASE_HREF, useValue: 'http://localhost:4001'},
     { provide: MFE_ENV, useValue: fallback },
     provideZoneChangeDetection({eventCoalescing: true}),
