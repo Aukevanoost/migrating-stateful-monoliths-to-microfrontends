@@ -40,21 +40,6 @@ const throttledSettings = {
   }
 }
 
-
-const throttledSettingsNoLatency = {
-  url: 'http://localhost:8080',
-  path: `${__dirname}/results/core-web-vitals`,
-  viewport: { width: 375, height: 812}, // IPhone 11
-  throttling: {
-    cpu: 4,  // 4x CPU slowdown (default)
-    network: {
-      download: (1.6 * 1024 * 1024) / 8,  // 1.6 Mbps
-      upload: (750 * 1024) / 8,           // 750 Kbps
-      latency: 0                       
-    }
-  }
-}
-
 const defaultSettings = {
   url: 'http://localhost:8080',
   path: `${__dirname}/results/core-web-vitals`,
@@ -178,4 +163,4 @@ async function runWebVitalsTests(cfg, runs = 1) {
 }
 
 
-runWebVitalsTests(defaultSettings, 50).catch(console.error);
+runWebVitalsTests(defaultSettings, 60).catch(console.error);
