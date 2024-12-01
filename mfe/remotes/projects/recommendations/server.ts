@@ -7,5 +7,4 @@ import { initNodeFederation } from '@softarc/native-federation-node';
   });
   
   await import('./bootstrap-server');
-
 })();

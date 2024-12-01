@@ -17,18 +17,14 @@
 				"build": {
 					"builder": "@angular-architects/native-federation:build",
 					"options": {
-						"ssr": true
+						"ssr": true,
+						"target": "teasers:esbuild:development"
 					},
 					"configurations": {
-						"production": {
-							"target": "teasers:esbuild:production"
-						},
-						"development": {
-							"target": "teasers:esbuild:development",
-							"dev": true
-						}
+						"production": { },
+						"development": { }
 					},
-					"defaultConfiguration": "production"
+					"defaultConfiguration": "development"
 				},
 				"serve": {
 					"builder": "@angular-architects/native-federation:build",
@@ -40,7 +36,10 @@
 					}
 				},
 				"extract-i18n": {
-					"builder": "@angular-devkit/build-angular:extract-i18n"
+					"builder": "@angular-devkit/build-angular:extract-i18n",
+					"options": {
+						"buildTarget": "teasers:build"
+					}
 				},
 				"test": {
 					"builder": "@angular-devkit/build-angular:karma",
@@ -52,10 +51,7 @@
 						"tsConfig": "projects/teasers/tsconfig.spec.json",
 						"inlineStyleLanguage": "scss",
 						"assets": [
-							{
-								"glob": "**/*",
-								"input": "projects/teasers/public"
-							}
+							"projects/teasers/src/assets"
 						],
 						"styles": [
 							"projects/teasers/src/styles.scss"
@@ -68,7 +64,6 @@
 					"options": {
 						"outputPath": "dist/teasers",
 						"index": "projects/teasers/src/index.html",
-						"browser": "projects/teasers/src/main.ts",
 						"polyfills": [
 							"zone.js",
 							"es-module-shims"
@@ -76,44 +71,32 @@
 						"tsConfig": "projects/teasers/tsconfig.app.json",
 						"inlineStyleLanguage": "scss",
 						"assets": [
-							{
-								"glob": "**/*",
-								"input": "projects/teasers/public"
-							}
+							"projects/teasers/src/assets"
 						],
 						"styles": [
 							"projects/teasers/src/styles.scss"
 						],
 						"scripts": [],
+						"browser": "projects/teasers/src/main.ts",
 						"server": "projects/teasers/src/main.server.ts",
-						"prerender": false,
+						"deployUrl": "http://localhost:4001/",
+						"prerender": true,
+						"optimization": false,
+						"sourceMap": true,
+						"namedChunks": true,
 						"ssr": {
 							"entry": "projects/teasers/server.ts"
 						}
 					},
 					"configurations": {
 						"production": {
-							"budgets": [
-								{
-									"type": "initial",
-									"maximumWarning": "500kB",
-									"maximumError": "1MB"
-								},
-								{
-									"type": "anyComponentStyle",
-									"maximumWarning": "2kB",
-									"maximumError": "4kB"
-								}
-							],
-							"outputHashing": "all"
+
 						},
 						"development": {
-							"optimization": false,
-							"extractLicenses": false,
-							"sourceMap": true
+
 						}
 					},
-					"defaultConfiguration": "production"
+					"defaultConfiguration": "development"
 				},
 				"serve-original": {
 					"builder": "@angular-devkit/build-angular:dev-server",
@@ -122,7 +105,8 @@
 							"buildTarget": "teasers:esbuild:production"
 						},
 						"development": {
-							"buildTarget": "teasers:esbuild:development"
+							"buildTarget": "teasers:esbuild:development",
+							"port": 4201
 						}
 					},
 					"defaultConfiguration": "development",
@@ -145,9 +129,7 @@
 			"architect": {
 				"build": {
 					"builder": "@angular-architects/native-federation:build",
-					"options": {
-						"ssr": true
-					},
+					"options": {},
 					"configurations": {
 						"production": {
 							"target": "recommendations:esbuild:production"
@@ -169,7 +151,10 @@
 					}
 				},
 				"extract-i18n": {
-					"builder": "@angular-devkit/build-angular:extract-i18n"
+					"builder": "@angular-devkit/build-angular:extract-i18n",
+					"options": {
+						"buildTarget": "recommendations:build"
+					}
 				},
 				"test": {
 					"builder": "@angular-devkit/build-angular:karma",
@@ -181,10 +166,7 @@
 						"tsConfig": "projects/recommendations/tsconfig.spec.json",
 						"inlineStyleLanguage": "scss",
 						"assets": [
-							{
-								"glob": "**/*",
-								"input": "projects/recommendations/public"
-							}
+							"projects/recommendations/src/assets"
 						],
 						"styles": [
 							"projects/recommendations/src/styles.scss"
@@ -197,7 +179,6 @@
 					"options": {
 						"outputPath": "dist/recommendations",
 						"index": "projects/recommendations/src/index.html",
-						"browser": "projects/recommendations/src/main.ts",
 						"polyfills": [
 							"zone.js",
 							"es-module-shims"
@@ -205,17 +186,16 @@
 						"tsConfig": "projects/recommendations/tsconfig.app.json",
 						"inlineStyleLanguage": "scss",
 						"assets": [
-							{
-								"glob": "**/*",
-								"input": "projects/recommendations/public"
-							}
+							"projects/recommendations/src/assets"
 						],
+						"deployUrl": "http://localhost:4002/",
 						"styles": [
 							"projects/recommendations/src/styles.scss"
 						],
 						"scripts": [],
+						"browser": "projects/recommendations/src/main.ts",
 						"server": "projects/recommendations/src/main.server.ts",
-						"prerender": false,
+						"prerender": true,
 						"ssr": {
 							"entry": "projects/recommendations/server.ts"
 						}
@@ -225,13 +205,13 @@
 							"budgets": [
 								{
 									"type": "initial",
-									"maximumWarning": "500kB",
-									"maximumError": "1MB"
+									"maximumWarning": "500kb",
+									"maximumError": "1mb"
 								},
 								{
 									"type": "anyComponentStyle",
-									"maximumWarning": "2kB",
-									"maximumError": "4kB"
+									"maximumWarning": "2kb",
+									"maximumError": "4kb"
 								}
 							],
 							"outputHashing": "all"
@@ -239,7 +219,8 @@
 						"development": {
 							"optimization": false,
 							"extractLicenses": false,
-							"sourceMap": true
+							"sourceMap": true,
+							"namedChunks": true
 						}
 					},
 					"defaultConfiguration": "production"
@@ -251,7 +232,8 @@
 							"buildTarget": "recommendations:esbuild:production"
 						},
 						"development": {
-							"buildTarget": "recommendations:esbuild:development"
+							"buildTarget": "recommendations:esbuild:development",
+							"port": 4202
 						}
 					},
 					"defaultConfiguration": "development",
@@ -327,7 +309,6 @@
 						"outputPath": "dist/homepage",
 						"index": "projects/homepage/src/index.html",
 						"browser": "projects/homepage/src/main.ts",
-						"baseHref": "http://localhost:4200/",
 						"polyfills": [
 							"zone.js",
 							"es-module-shims"
@@ -340,6 +321,7 @@
 								"input": "projects/homepage/public"
 							}
 						],
+						"deployUrl": "http://localhost:4000/",
 						"styles": [
 							"projects/homepage/src/styles.scss"
 						],
@@ -386,7 +368,7 @@
 					},
 					"defaultConfiguration": "development",
 					"options": {
-						"port": 4200
+						"port": 4000
 					}
 				}
 			}

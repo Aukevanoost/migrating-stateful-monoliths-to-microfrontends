@@ -1,12 +1,11 @@
-import cors from 'cors';
 import { APP_BASE_HREF } from '@angular/common';
-import { CommonEngine } from '@angular/ssr';
+import { CommonEngine } from '@angular/ssr/node';
 import express from 'express';
 import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 import bootstrap from './src/main.server';
+import {mapper} from './src/mapper';
 
-// The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
   const serverDistFolder = dirname(fileURLToPath(import.meta.url));
@@ -15,21 +14,32 @@ export function app(): express.Express {
 
   const commonEngine = new CommonEngine();
 
-  server.use(cors())
   server.set('view engine', 'html');
   server.set('views', browserDistFolder);
 
-  // Example Express Rest API endpoints
-  // server.get('/api/**', (req, res) => { });
-  // Serve static files from /browser
-  server.get('**', express.static(browserDistFolder, {
-    maxAge: '1y',
-    index: 'index.html',
+  server.get('*.*', express.static(browserDistFolder, {
+    setHeaders: addCorsHeaders
   }));
 
-  // All regular routes use the Angular engine
-  server.get('**', (req, res, next) => {
-    const { protocol, originalUrl, baseUrl, headers } = req;
+  server.get('/html', (req, res, next) => {
+    const { baseUrl } = req;
+
+    res = addCorsHeaders(res);
+
+    commonEngine
+      .render({
+        bootstrap,
+        documentFilePath: indexHtml,
+        url: baseUrl,
+        publicPath: browserDistFolder,
+      })
+      .then(mapper("exp-teasers", baseUrl))
+      .then((html) => res.send(html))
+      .catch((err) => next(err));
+  })
+
+  server.get('*', (req, res, next) => {
+    const { protocol, originalUrl, headers } = req;
 
     commonEngine
       .render({
@@ -37,7 +47,6 @@ export function app(): express.Express {
         documentFilePath: indexHtml,
         url: `${protocol}://${headers.host}${originalUrl}`,
         publicPath: browserDistFolder,
-        providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
       })
       .then((html) => res.send(html))
       .catch((err) => next(err));
@@ -47,7 +56,7 @@ export function app(): express.Express {
 }
 
 function run(): void {
-  const port = process.env['PORT'] || 4201;
+  const port = process.env['PORT'] || 4001;
 
   // Start up the Node server
   const server = app();
@@ -56,4 +65,10 @@ function run(): void {
   });
 }
 
+function addCorsHeaders(res: express.Response) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  return res;
+}
 run();

@@ -1,22 +1,20 @@
-const { withNativeFederation, shareAll } = require('@angular-architects/native-federation/config');
+const { withNativeFederation } = require('@angular-architects/native-federation/config');
 
 module.exports = withNativeFederation({
-
-  name: 'explore/teasers',
-
+  name: 'teasers',
   exposes: {
-    './Component': './projects/teasers/src/exp-teasers/teasers.component.ts',
+    './Component': './projects/teasers/src/bootstrap.ts',
   },
-
   shared: {
-    ...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
+    //...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
   },
-
-  skip: [
-    'rxjs/ajax',
-    'rxjs/fetch',
-    'rxjs/testing',
-    'rxjs/webSocket',
-  ]
-  
+  // skip: [
+  //   'rxjs/ajax',
+  //   'rxjs/fetch',
+  //   'rxjs/testing',
+  //   'rxjs/webSocket',
+  //   'express',
+  //   '@angular/ssr',
+  //   '@angular/elements'
+  // ]
 });
