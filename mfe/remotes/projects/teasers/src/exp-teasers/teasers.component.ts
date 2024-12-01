@@ -1,14 +1,12 @@
-import { afterNextRender, Component, inject, PLATFORM_ID, ViewEncapsulation } from '@angular/core';
-import { FeaturedHttpService } from './../shared/http/featured-http.service';
 import { CommonModule } from '@angular/common';
-import { fromCDNPipe } from '../shared/from-cdn.pipe';
+import { afterNextRender, Component, inject, PLATFORM_ID, ViewEncapsulation } from '@angular/core';
+import { MFE_ENV, FeaturedHttpService, fromCDNPipe } from '@shared';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { MFE_ENV } from '../shared/env';
 
 @Component({
   selector: 'exp-teasers',
   standalone: true,
-  imports: [fromCDNPipe, CommonModule],
+  imports: [CommonModule, fromCDNPipe],
   providers: [FeaturedHttpService],
   templateUrl: './teasers.component.html',
   styleUrls: ['./teasers.component.scss'],

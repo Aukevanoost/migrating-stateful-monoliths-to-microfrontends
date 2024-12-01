@@ -1,7 +1,7 @@
 import { APP_ID, ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideClientHydration } from '@angular/platform-browser';
-import { MFE_ENV, Env } from '../shared/env';
+import { MFE_ENV, Env } from '@shared';
 import { APP_BASE_HREF } from '@angular/common';
 
 const fallback: Env = {

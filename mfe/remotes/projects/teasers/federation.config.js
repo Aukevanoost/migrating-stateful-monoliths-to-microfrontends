@@ -1,4 +1,4 @@
-const { withNativeFederation } = require('@angular-architects/native-federation/config');
+const { withNativeFederation, shareAll } = require('@angular-architects/native-federation/config');
 
 module.exports = withNativeFederation({
   name: 'teasers',
@@ -6,15 +6,14 @@ module.exports = withNativeFederation({
     './Component': './projects/teasers/src/bootstrap.ts',
   },
   shared: {
-    //...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
+    ...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
   },
-  // skip: [
-  //   'rxjs/ajax',
-  //   'rxjs/fetch',
-  //   'rxjs/testing',
-  //   'rxjs/webSocket',
-  //   'express',
-  //   '@angular/ssr',
-  //   '@angular/elements'
-  // ]
+  skip: [
+    'rxjs/ajax',
+    'rxjs/fetch',
+    'rxjs/testing',
+    'rxjs/webSocket',
+    /^@softarc\/native-federation-node/
+  ],
+  sharedMappings: ['@shared']
 });
