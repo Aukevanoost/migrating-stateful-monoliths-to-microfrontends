@@ -1,15 +1,16 @@
 import { inject, Pipe, PipeTransform } from '@angular/core';
-import { ENV } from './env/env.contract';
+import { MFE_ENV } from './env';
 
 @Pipe({
   name: 'fromCDN',
   standalone: true,
 })
 export class fromCDNPipe implements PipeTransform {
-  env = inject(ENV);
+  #env = inject(MFE_ENV);
+  
 
   transform(path: string, size?: string): string {
-    const url =  `${this.trimIfLastChar(this.env.cdn)}/${this.trimIfFirstChar(path)}`;
+    const url =  `${this.trimIfLastChar(this.#env.cdn)}/${this.trimIfFirstChar(path)}`;
     return !!size ? url.replace('[size]', size) : url;
   }
 

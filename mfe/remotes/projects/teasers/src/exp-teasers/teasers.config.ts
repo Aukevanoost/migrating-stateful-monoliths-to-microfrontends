@@ -1,17 +1,21 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { AppEnv, ENV } from '../shared/env/env.contract';
-import { provideHttpClient } from '@angular/common/http';
+import { APP_ID, ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { provideHttpClient, withFetch } from '@angular/common/http';
+import { MFE_ENV, Env } from '@shared';
+import { APP_BASE_HREF } from '@angular/common';
 
-const env: AppEnv = {
-  stage: "dev",
-  api: "http://localhost:8081/v1",
-  cdn: "http://localhost:8080"
-};
+const fallback: Env = {
+  cdn: 'http://localhost:8080',
+  shell: 'http://localhost:8080',
+  api: 'http://localhost:8081/v1',
+  mfe: 'http://localhost:4201'
+}
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }),
-    {provide: ENV, useValue: env},
-    provideHttpClient(),
+    { provide: APP_ID, useValue: 'exp-teasers' },
+    { provide: APP_BASE_HREF, useValue: 'http://localhost:4201'},
+    { provide: MFE_ENV, useValue: fallback },
+    provideZoneChangeDetection({eventCoalescing: true}),
+    provideHttpClient(withFetch()),
   ]
 };

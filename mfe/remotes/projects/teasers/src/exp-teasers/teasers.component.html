@@ -2,7 +2,7 @@
   <a 
     *ngFor="let teaser of teasers()"
     class="teaser__card" 
-    [href]="'/products/' + teaser.key"
+    [href]="url(teaser.key)"
     [id]="'goto-' + teaser.key">         
     <img 
       [src]="teaser.image | fromCDN: '500'" 
@@ -10,5 +10,5 @@
       sizes="500px" 
       class="teaser__img"/>
     <p class="teaser__title">{{teaser.title}}</p>
-  </a>
+  </a> 
 </div>

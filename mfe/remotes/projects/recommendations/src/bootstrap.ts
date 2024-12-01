@@ -1,7 +1,7 @@
 import { createApplication } from '@angular/platform-browser';
+import { createCustomElement } from '@angular/elements';
 import { appConfig } from './exp-recommendations/recommendations.config';
 import { RecommendationsComponent } from './exp-recommendations/recommendations.component';
-import { createCustomElement } from '@angular/elements';
 import 'zone.js';
 
 (async () => {

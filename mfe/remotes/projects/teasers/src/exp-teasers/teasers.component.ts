@@ -1,25 +1,25 @@
-import { Component, inject, signal, ViewEncapsulation } from '@angular/core';
-import { FeaturedHttpService } from './../shared/http/featured-http.service';
-import { AsyncPipe, CommonModule } from '@angular/common';
-import { fromCDNPipe } from '../shared/from-cdn.pipe';
+import { CommonModule } from '@angular/common';
+import { afterNextRender, Component, inject, PLATFORM_ID, ViewEncapsulation } from '@angular/core';
+import { MFE_ENV, FeaturedHttpService, fromCDNPipe } from '@shared';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'exp-teasers',
   standalone: true,
-  imports: [fromCDNPipe, CommonModule, AsyncPipe],
+  imports: [CommonModule, fromCDNPipe],
   providers: [FeaturedHttpService],
   templateUrl: './teasers.component.html',
   styleUrls: ['./teasers.component.scss'],
   encapsulation: ViewEncapsulation.Emulated
 })
 export class TeasersComponent {
-  private http = inject(FeaturedHttpService);
-  
-  visible = signal(true);
-  teasers = toSignal(this.http.teasers$(), { initialValue: [] });
+  #env = inject(MFE_ENV);
+  #platform = inject(PLATFORM_ID);
+  #http = inject(FeaturedHttpService);
 
-  hide() {
-    this.visible.set(false);
+  teasers = toSignal(this.#http.teasers$(), { initialValue: [] });
+
+  url(key: string) {
+    return this.#env.mfe + '/products/' + key;
   }
 }
