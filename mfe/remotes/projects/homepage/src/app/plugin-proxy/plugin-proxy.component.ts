@@ -1,26 +1,28 @@
-import { Component, Input, OnChanges, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, input, effect, inject, ChangeDetectorRef, signal, ChangeDetectionStrategy } from "@angular/core";
 import { loadRemoteModule } from '@angular-architects/native-federation';
+import { CommonModule } from "@angular/common";
 
 @Component({
     selector: 'plugin-proxy',
-    template: `<ng-container #placeHolder></ng-container>`,
-    styles: []
+    standalone: true,
+    imports: [CommonModule],
+    template: `<ng-container *ngComponentOutlet="remoteComponent()" /> `,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PluginProxyComponent implements OnChanges {
-    @ViewChild('placeHolder', {read: ViewContainerRef, static: true})
-    viewContainer!: ViewContainerRef;
+export class PluginProxyComponent {
+    remoteComponent = signal<any|undefined>(undefined);
 
-    @Input() remote!: {remoteName: string, component: string };
+    cdr = inject(ChangeDetectorRef);
+    remote = input.required<{remoteName: string, component: string}>();
+    
+    constructor() {
+        effect(() => {
+            this.loadComponent(this.remote());
+        }, {allowSignalWrites: true});
+    }
 
-    constructor() {  }
-
-
-    async ngOnChanges() {
-        this.viewContainer.clear();
-
-        const Component = await loadRemoteModule(this.remote.remoteName!, "./Component")
-                                    .then(m => m[this.remote.component]);
-
-        this.viewContainer.createComponent(Component);
+    private async loadComponent(remote: {remoteName: string, component: string}) {
+        return loadRemoteModule(remote.remoteName, "./Component")
+            .then(m => this.remoteComponent.set(m[remote.component]));
     }
 }

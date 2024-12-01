@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [CommonModule, PluginProxyComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

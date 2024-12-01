@@ -1,7 +1,6 @@
 import { Component, inject, Input, PLATFORM_ID, signal } from '@angular/core';
-import { FeaturedHttpService } from './../shared/http/featured-http.service';
 import { CommonModule } from '@angular/common';
-import { fromCDNPipe } from '../shared/from-cdn.pipe';
+import { FeaturedHttpService, fromCDNPipe, MFE_ENV } from '@shared';
 
 @Component({
   selector: 'exp-recommendations',
@@ -13,7 +12,7 @@ import { fromCDNPipe } from '../shared/from-cdn.pipe';
   // encapsulation: ViewEncapsulation.ShadowDom
 })
 export class RecommendationsComponent {
-  #base = "http://localhost:8080";
+  #env = inject(MFE_ENV);
   http = inject(FeaturedHttpService);
   platform = inject(PLATFORM_ID);
 
@@ -33,6 +32,6 @@ export class RecommendationsComponent {
   }
 
   url(productSku: string, sku: string) {
-    return this.#base + '/product/' + productSku + '/' + sku;
+    return this.#env + '/product/' + productSku + '/' + sku;
   }  
 }

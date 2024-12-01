@@ -13,5 +13,7 @@ module.exports = withNativeFederation({
     'rxjs/fetch',
     'rxjs/testing',
     'rxjs/webSocket',
-  ]
+    /^@softarc\/native-federation-node/
+  ],
+  sharedMappings: ['@shared']
 });
