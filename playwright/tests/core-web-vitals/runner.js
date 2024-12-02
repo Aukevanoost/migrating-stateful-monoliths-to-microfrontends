@@ -13,7 +13,7 @@ const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), '../..
 
 
 const heavilyThrottledSettings = {
-  url: 'http://localhost:8080/home',
+  url: 'http://localhost:8080',
   path: `${__dirname}/results/core-web-vitals`,
   viewport: { width: 375, height: 812}, // IPhone 11
   throttling: {
@@ -163,4 +163,4 @@ async function runWebVitalsTests(cfg, runs = 1) {
 }
 
 
-runWebVitalsTests(heavilyThrottledSettings, 60).catch(console.error);
+runWebVitalsTests(defaultSettings, 60).catch(console.error);
