@@ -13,7 +13,7 @@ import { FeaturedHttpService, fromCDNPipe, MFE_ENV } from '@shared';
 })
 export class RecommendationsComponent {
   #env = inject(MFE_ENV);
-  http = inject(FeaturedHttpService);
+  #http = inject(FeaturedHttpService);
   platform = inject(PLATFORM_ID);
 
   #recommendations = signal<any[]>([]);
@@ -21,13 +21,14 @@ export class RecommendationsComponent {
 
   @Input() set product(value: string) {
     const skus = value.split(',');
-    this.http.recommendations$(skus).subscribe(x => {
-      this.#recommendations.set(x)
+    this.#http.recommendations$(skus).subscribe(x => {
+      this.#recommendations.set(x);
     });
   }
-  constructor() {
-    this.http.recommendations$(["CL-01-GY", "AU-07-MT"]).subscribe(x => {
-      this.#recommendations.set(x)
+
+  ngOnInit() {
+    this.#http.recommendations$(["CL-01-GY", "AU-07-MT"]).subscribe(x => {
+      this.#recommendations.set(x);
     });
   }
 

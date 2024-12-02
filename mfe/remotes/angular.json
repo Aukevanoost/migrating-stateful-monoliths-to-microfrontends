@@ -18,11 +18,11 @@
 					"builder": "@angular-architects/native-federation:build",
 					"options": {
 						"ssr": true,
-						"target": "teasers:esbuild:development"
+						"target": "teasers:esbuild:production"
 					},
 					"configurations": {
-						"production": { },
-						"development": { }
+						"production": {  },
+						"development": {  }
 					},
 					"defaultConfiguration": "development"
 				},
@@ -39,24 +39,6 @@
 					"builder": "@angular-devkit/build-angular:extract-i18n",
 					"options": {
 						"buildTarget": "teasers:build"
-					}
-				},
-				"test": {
-					"builder": "@angular-devkit/build-angular:karma",
-					"options": {
-						"polyfills": [
-							"zone.js",
-							"zone.js/testing"
-						],
-						"tsConfig": "projects/teasers/tsconfig.spec.json",
-						"inlineStyleLanguage": "scss",
-						"assets": [
-							"projects/teasers/src/assets"
-						],
-						"styles": [
-							"projects/teasers/src/styles.scss"
-						],
-						"scripts": []
 					}
 				},
 				"esbuild": {
@@ -80,19 +62,32 @@
 						"browser": "projects/teasers/src/main.ts",
 						"server": "projects/teasers/src/main.server.ts",
 						"prerender": false,
-						"optimization": false,
-						"sourceMap": true,
-						"namedChunks": true,
 						"ssr": {
 							"entry": "projects/teasers/server.ts"
 						}
 					},
 					"configurations": {
 						"production": {
-
+							"optimization": true,
+							"outputHashing": "all",
+							"budgets": [
+								{
+								"type": "initial",
+								"maximumWarning": "500kB",
+								"maximumError": "1MB"
+								},
+								{
+								"type": "anyComponentStyle",
+								"maximumWarning": "4kB",
+								"maximumError": "8kB"
+								}
+							]
 						},
 						"development": {
-
+							"optimization": false,
+							"extractLicenses": false,
+							"sourceMap": true,
+							"namedChunks": true
 						}
 					},
 					"defaultConfiguration": "development"
@@ -128,17 +123,15 @@
 			"architect": {
 				"build": {
 					"builder": "@angular-architects/native-federation:build",
-					"options": {},
-					"configurations": {
-						"production": {
-							"target": "recommendations:esbuild:production"
-						},
-						"development": {
-							"target": "recommendations:esbuild:development",
-							"dev": true
-						}
+					"options": {
+						"ssr": true,
+						"target": "recommendations:esbuild:production"
 					},
-					"defaultConfiguration": "production"
+					"configurations": {
+						"production": { },
+						"development": { }
+					},
+					"defaultConfiguration": "development"
 				},
 				"serve": {
 					"builder": "@angular-architects/native-federation:build",
@@ -153,24 +146,6 @@
 					"builder": "@angular-devkit/build-angular:extract-i18n",
 					"options": {
 						"buildTarget": "recommendations:build"
-					}
-				},
-				"test": {
-					"builder": "@angular-devkit/build-angular:karma",
-					"options": {
-						"polyfills": [
-							"zone.js",
-							"zone.js/testing"
-						],
-						"tsConfig": "projects/recommendations/tsconfig.spec.json",
-						"inlineStyleLanguage": "scss",
-						"assets": [
-							"projects/recommendations/src/assets"
-						],
-						"styles": [
-							"projects/recommendations/src/styles.scss"
-						],
-						"scripts": []
 					}
 				},
 				"esbuild": {
@@ -193,26 +168,28 @@
 						"scripts": [],
 						"browser": "projects/recommendations/src/main.ts",
 						"server": "projects/recommendations/src/main.server.ts",
-						"prerender": true,
+						"prerender": false,
+
 						"ssr": {
 							"entry": "projects/recommendations/server.ts"
 						}
 					},
 					"configurations": {
 						"production": {
+							"optimization": true,
+							"outputHashing": "all",
 							"budgets": [
 								{
-									"type": "initial",
-									"maximumWarning": "500kb",
-									"maximumError": "1mb"
+								"type": "initial",
+								"maximumWarning": "500kB",
+								"maximumError": "1MB"
 								},
 								{
-									"type": "anyComponentStyle",
-									"maximumWarning": "2kb",
-									"maximumError": "4kb"
+								"type": "anyComponentStyle",
+								"maximumWarning": "4kB",
+								"maximumError": "8kB"
 								}
-							],
-							"outputHashing": "all"
+							]
 						},
 						"development": {
 							"optimization": false,
@@ -221,7 +198,7 @@
 							"namedChunks": true
 						}
 					},
-					"defaultConfiguration": "production"
+					"defaultConfiguration": "development"
 				},
 				"serve-original": {
 					"builder": "@angular-devkit/build-angular:dev-server",
