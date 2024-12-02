@@ -31,9 +31,9 @@
 				"serve": {
 					"builder": "@angular-architects/native-federation:build",
 					"options": {
-						"target": "teasers:serve-original:development",
+						"target": "teasers:serve-original:production",
 						"rebuildDelay": 0,
-						"dev": true,
+						"dev": false,
 						"port": 0
 					}
 				},
@@ -132,9 +132,9 @@
 				"serve": {
 					"builder": "@angular-architects/native-federation:build",
 					"options": {
-						"target": "recommendations:serve-original:development",
+						"target": "recommendations:serve-original:production",
 						"rebuildDelay": 0,
-						"dev": true,
+						"dev": false,
 						"port": 0
 					}
 				},
