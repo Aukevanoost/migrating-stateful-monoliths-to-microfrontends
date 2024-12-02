@@ -1,7 +1,7 @@
 const { withNativeFederation, shareAll } = require('@angular-architects/native-federation/config');
 
 module.exports = withNativeFederation({
-  name: 'recommendations',
+  name: 'explore/recommendations',
   exposes: {
     './Component': './projects/recommendations/src/exp-recommendations/recommendations.component.ts',
   },

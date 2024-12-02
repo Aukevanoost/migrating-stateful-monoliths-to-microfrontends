@@ -28,14 +28,6 @@
       <plugin-proxy [remote]="{remoteName: 'explore/recommendations', component: 'RecommendationsComponent'}"></plugin-proxy>
     </div>
   </main>
-
-  <script type="module-shim">import { initMicroFrontends } from './scripts/loader.js';
-      initMicroFrontends({
-          'explore/teasers': 'http://localhost:4001/remoteEntry.json',
-          'explore/recommendations': 'http://localhost:4002/remoteEntry.json'
-      })
-  </script>
-      
 </div>
 <div id="footer">
     <footer class="e_Footer" data-boundary="explore">

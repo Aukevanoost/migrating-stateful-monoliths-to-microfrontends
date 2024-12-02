@@ -1,28 +1,40 @@
-import { Component, input, effect, inject, ChangeDetectorRef, signal, ChangeDetectionStrategy } from "@angular/core";
+import { Component, input, effect, inject, ChangeDetectionStrategy, PLATFORM_ID, ViewContainerRef, Injector } from "@angular/core";
 import { loadRemoteModule } from '@angular-architects/native-federation';
-import { CommonModule } from "@angular/common";
+import { CommonModule, isPlatformBrowser } from "@angular/common";
 
 @Component({
     selector: 'plugin-proxy',
     standalone: true,
     imports: [CommonModule],
-    template: `<ng-container *ngComponentOutlet="remoteComponent()" /> `,
+    template: ``,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PluginProxyComponent {
-    remoteComponent = signal<any|undefined>(undefined);
+    #platformID = inject(PLATFORM_ID);
+    #vcr = inject(ViewContainerRef);
+    #injector = inject(Injector);
+    // #environmentInjector = inject(EnvironmentInjector);
 
-    cdr = inject(ChangeDetectorRef);
     remote = input.required<{remoteName: string, component: string}>();
-    
+
+
     constructor() {
-        effect(() => {
-            this.loadComponent(this.remote());
-        }, {allowSignalWrites: true});
+        if(isPlatformBrowser(this.#platformID)) {
+            effect(() => {
+                this.loadComponent(this.remote());
+            }, {allowSignalWrites: true});
+        }
     }
 
     private async loadComponent(remote: {remoteName: string, component: string}) {
-        return loadRemoteModule(remote.remoteName, "./Component")
-            .then(m => this.remoteComponent.set(m[remote.component]));
+        const comp = await loadRemoteModule(remote.remoteName, "./Component");
+        try {
+            const componentRef = this.#vcr.createComponent(comp[remote.component], {
+                injector: this.#injector ,
+                // environmentInjector: this.environmentInjector
+            });
+        }catch(e) {
+            console.log(e);
+        }
     }
 }
