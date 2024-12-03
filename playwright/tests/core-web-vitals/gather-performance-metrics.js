@@ -13,10 +13,10 @@ const gatherPerformanceMetrics = () => {
 
     const observers = [];
     
-    const QUIET_WINDOW = 5_000;
+    const QUIET_WINDOW = 25_000;
     let quietWindowTimer;
 
-    const TIMEOUT = 15_000;
+    const TIMEOUT = 5_000;
     let timeoutTimer;
 
     const cleanupAndReturnMetrics = () => {
@@ -125,7 +125,7 @@ const gatherPerformanceMetrics = () => {
       const entries = list.getEntries();
       if (entries.length > 0) {
         const navigationEntry = entries[0];
-        metrics.ttfb = navigationEntry.responseStart - navigationEntry.startTime;
+        metrics.ttfb = navigationEntry.responseEnd - navigationEntry.startTime;
       }
     })
 

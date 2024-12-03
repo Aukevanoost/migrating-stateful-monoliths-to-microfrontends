@@ -13,7 +13,7 @@ const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), '../..
 
 
 const heavilyThrottledSettings = {
-  url: 'http://localhost:8080/home',
+  url: 'http://localhost:8080',
   path: `${__dirname}/results/core-web-vitals`,
   viewport: { width: 375, height: 812}, // IPhone 11
   throttling: {
@@ -27,7 +27,7 @@ const heavilyThrottledSettings = {
 }
 
 const throttledSettings = {
-  url: 'http://localhost:8080/home',
+  url: 'http://localhost:8080',
   path: `${__dirname}/results/core-web-vitals`,
   viewport: { width: 375, height: 812}, // IPhone 11
   throttling: {
@@ -41,7 +41,7 @@ const throttledSettings = {
 }
 
 const defaultSettings = {
-  url: 'http://localhost:8080/home',
+  url: 'http://localhost:8080',
   path: `${__dirname}/results/core-web-vitals`,
   viewport: { width: 3024, height: 1964} // macbook
 }
@@ -57,18 +57,13 @@ async function getBrowser(cfg) {
 
   const client = await context.newCDPSession(page);
 
-  await client.send('Network.enable');
   await client.send('Network.setCacheDisabled', { cacheDisabled: true });
 
-  if(cfg.throttling) {
+  await client.send('Network.enable');
 
-    await page.context().addInitScript(() => {
-      window.cpuThrottling = true;
-    });
-  
+  if(cfg.throttling) {
     await client.send('Emulation.setCPUThrottlingRate', { rate: cfg.throttling.cpu });
   
-
     await client.send('Network.emulateNetworkConditions', {
       offline: false,
       downloadThroughput: cfg.throttling.network.download,
