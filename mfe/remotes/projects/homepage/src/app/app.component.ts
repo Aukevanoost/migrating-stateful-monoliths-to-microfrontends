@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { PluginProxyComponent } from './plugin-proxy/plugin-proxy.component';
 import { CommonModule } from '@angular/common';
+import { PluginProxyComponent } from './plugin-proxy/plugin-proxy.component';
 
 @Component({
   selector: 'app-root',

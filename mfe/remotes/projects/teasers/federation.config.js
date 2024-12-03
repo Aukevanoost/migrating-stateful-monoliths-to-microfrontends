@@ -4,6 +4,7 @@ module.exports = withNativeFederation({
   name: 'teasers',
   exposes: {
     './Component': './projects/teasers/src/exp-teasers/teasers.component.ts',
+
   },
   shared: {
     ...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
