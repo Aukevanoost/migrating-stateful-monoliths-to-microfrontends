@@ -158,4 +158,4 @@ async function runWebVitalsTests(cfg, runs = 1) {
 }
 
 
-runWebVitalsTests(defaultSettings, 60).catch(console.error);
+runWebVitalsTests(throttledSettings, 60).catch(console.error);
