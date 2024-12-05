@@ -97,7 +97,7 @@ async function runTest(cfg, idx) {
   const results = {
     site: `${cfg.url}/`,
     timestamp: new Date(),
-    run: idx,
+    idx,
   };
 
   try{
@@ -158,4 +158,4 @@ async function runWebVitalsTests(cfg, runs = 1) {
 }
 
 
-runWebVitalsTests(defaultSettings, 60).catch(console.error);
+runWebVitalsTests(heavilyThrottledSettings, 1).catch(console.error);

@@ -4,7 +4,8 @@ import { promisify } from 'util';
 
 const writeFileAsync = promisify(fs.writeFile);
 
-async function saveMetricsToCSV(pathToDir, results) {
+async function saveMetricsToCSV(pathToDir, metrics) {
+
   function formatDateTime(dt) {
     const hours = dt.getHours().toString().padStart(2, "0");
     const minutes = dt.getMinutes().toString().padStart(2, "0");
@@ -16,8 +17,9 @@ async function saveMetricsToCSV(pathToDir, results) {
     };
   }
 
-  function convertToCSV(data) {
+  function processResults(data) {
     const headers = [
+      "idx",
       "site",
       "date",
       "time",
@@ -37,17 +39,18 @@ async function saveMetricsToCSV(pathToDir, results) {
       const metrics = run.metrics || {};
       const { date, time } = formatDateTime(run.timestamp);
       return [
+        run.idx,
         run.site,
         date,
         time,
         run?.navToPageInMS ?? -1,
         run?.testTotalTimeInMS ?? -1,
         metrics?.lcp?.endTime ?? -1,
-        metrics?.fcp?.endTime ?? -1,
+        metrics?.fcp ?? -1,
         metrics?.ttfb || -1,
         metrics?.tbt || 0,
         metrics?.tti || -1,
-        metrics?.longTasks || 0,
+        metrics?.longTasks.length || 0,
         metrics?.longestTask?.duration || -1,
         run.error || "",
       ]
@@ -58,14 +61,66 @@ async function saveMetricsToCSV(pathToDir, results) {
     return [headers.join(","), ...rows].join("\n");
   }
 
+  function processDetailed(data) {
+    const headers = [
+      "idx",
+      "site",
+      "date",
+      "time",
+      "type",
+      "start",
+      "end",
+      "duration",
+      "name",
+      "element",
+      "url",
+      "id",
+      "loadTime",
+      "renderTime"
+    ];
+
+    const rows = [];
+    data.forEach((run) => {
+      console.log(run.metrics.lcp);
+
+      const { date, time } = formatDateTime(run.timestamp);
+      const LCP = [ 
+        run.idx, run.site, date, time, "LCP",
+        run.metrics.lcp.startTime, run.metrics.lcp.endTime, run.metrics.lcp.duration, 
+        "-1", run.metrics.lcp.element, run.metrics.lcp.url, run.metrics.lcp.id,
+        run.metrics.lcp.loadTime, run.metrics.lcp.renderTime
+      ].map((value) => `"${value}"`).join(",");
+      rows.push(LCP);
+
+      run.metrics.longTasks.forEach(t => {
+        console.log(t);
+
+        const longTask = [
+          run.idx, run.site, date, time, "longTask", 
+          t.startTime, t.endTime, t.duration, t.name,
+          "-1","-1","-1","-1","-1",
+        ].map((value) => `"${value}"`).join(",");
+        rows.push(longTask);
+      });
+    });
+
+    return [headers.join(","), ...rows].join("\n");
+  }
+
   try {
     if (!fs.existsSync(pathToDir)) {
       fs.mkdirSync(pathToDir, { recursive: true });
     }
-    const pathToFile = `${pathToDir}/${new Date().toISOString()}_results.csv`;
+    await writeFileAsync(
+      `${pathToDir}/${new Date().toISOString()}_results.csv`, 
+      processResults(metrics)
+    );
+    await writeFileAsync(
+      `${pathToDir}/${new Date().toISOString()}_details.csv`, 
+      processDetailed(metrics)
+    );
 
-    await writeFileAsync(pathToFile, convertToCSV(results));
-    console.log(`Results saved to ${pathToFile}`);
+    console.log(`Metrics saved!`);
   } catch (error) {
     console.error("Error saving results:", error);
   }

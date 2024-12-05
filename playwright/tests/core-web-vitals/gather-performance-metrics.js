@@ -35,7 +35,7 @@ const gatherPerformanceMetrics = () => {
           }
 
           // TBT
-          if(task.startTime >= metrics.fcp.startTime){
+          if(task.startTime >= metrics.fcp){
             const blockingTime = task.duration - 50;
             if (blockingTime > 0) metrics.tbt += blockingTime;
           }
@@ -44,10 +44,9 @@ const gatherPerformanceMetrics = () => {
           if(!metrics.longestTask || task.duration > metrics.longestTask.duration) metrics.longestTask = task;
         });
 
-        metrics.tti ??= metrics.fcp.endTime;
+        metrics.tti ??= metrics.fcp;
       }
 
-      metrics.longTasks = metrics.longTasks.length;
 
       observers.forEach(observer => observer.disconnect());
       resolve(metrics);
@@ -72,9 +71,10 @@ const gatherPerformanceMetrics = () => {
         const task = {
           startTime: entry.startTime,
           duration: entry.duration,
-          endTime: entry.startTime + entry.duration
+          endTime: entry.startTime + entry.duration,
+          name: entry.name,
+          attribution: entry.attribution
         };
-        
         metrics.longTasks.push(task);
   
         if (!!metrics.fcp) {
@@ -93,8 +93,13 @@ const gatherPerformanceMetrics = () => {
       if(!!lastEntry) {
         const newLCP = {
           startTime: lastEntry.startTime,
-          duration: lastEntry.duration,
-          endTime: lastEntry.startTime + lastEntry.duration
+          duration: (lastEntry.loadTime ?? 0) + (lastEntry.renderTime ?? 0),
+          endTime: lastEntry.startTime + (lastEntry.loadTime ?? 0) + (lastEntry.renderTime ?? 0),
+          element: lastEntry.element,
+          url: lastEntry.url,
+          loadTime: lastEntry.loadTime,
+          renderTime: lastEntry.renderTime,
+          id: lastEntry.id
         };
         if ( !metrics.lcp || metrics.lcp.duration < newLCP.duration ){
           metrics.lcp = newLCP;
@@ -108,13 +113,9 @@ const gatherPerformanceMetrics = () => {
     const fcpObserver = new PerformanceObserver((list) => {
       const entries = list.getEntries();
       const entry = entries.find(entry => entry.name === 'first-contentful-paint');
-
       if(!!entry) {
-        metrics.fcp = {
-          startTime: entry.startTime,
-          duration: entry.duration,
-          endTime: entry.startTime + entry.duration
-        };
+        // duration is always 0 and endTime is not available
+        metrics.fcp = entry.startTime; 
         startQuietWindowTimer();
       }
     });
@@ -128,8 +129,8 @@ const gatherPerformanceMetrics = () => {
         metrics.ttfb = navigationEntry.responseEnd - navigationEntry.startTime;
       }
     })
-
     ttfbObserver.observe({type: 'navigation',buffered: true,});
+
     observers.push(ttfbObserver);
 
     timeoutTimer = setTimeout(() => {
