@@ -13,10 +13,10 @@ const gatherPerformanceMetrics = () => {
 
     const observers = [];
     
-    const QUIET_WINDOW = 25_000;
+    const QUIET_WINDOW = 5_000;
     let quietWindowTimer;
 
-    const TIMEOUT = 5_000;
+    const TIMEOUT = 25_000;
     let timeoutTimer;
 
     const cleanupAndReturnMetrics = () => {
