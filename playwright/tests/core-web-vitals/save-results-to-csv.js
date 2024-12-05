@@ -81,7 +81,6 @@ async function saveMetricsToCSV(pathToDir, metrics) {
 
     const rows = [];
     data.forEach((run) => {
-      console.log(run.metrics.lcp);
 
       const { date, time } = formatDateTime(run.timestamp);
       const LCP = [ 
@@ -93,8 +92,6 @@ async function saveMetricsToCSV(pathToDir, metrics) {
       rows.push(LCP);
 
       run.metrics.longTasks.forEach(t => {
-        console.log(t);
-
         const longTask = [
           run.idx, run.site, date, time, "longTask", 
           t.startTime, t.endTime, t.duration, t.name,
