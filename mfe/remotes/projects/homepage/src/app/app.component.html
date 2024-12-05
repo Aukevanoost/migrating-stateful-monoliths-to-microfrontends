@@ -24,9 +24,9 @@
 </div>
 <div id="body">
   <main class="e_HomePage" id="homepage">
-      <plugin-proxy [remote]="{remoteName: 'explore/teasers', component: 'TeasersComponent'}"></plugin-proxy>
+      <plugin-proxy *ngIf="teasers()" [remote]="teasers()"></plugin-proxy>
     <div>
-      <plugin-proxy [remote]="{remoteName: 'explore/recommendations', component: 'RecommendationsComponent'}"></plugin-proxy>
+      <plugin-proxy *ngIf="recommendations()"  [remote]="recommendations()"></plugin-proxy>
     </div>
   </main>
 </div>

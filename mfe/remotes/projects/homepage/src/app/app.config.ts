@@ -3,6 +3,7 @@ import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { Env, MFE_ENV } from '@shared';
+import { APP_BASE_HREF } from '@angular/common';
 
 const fallback: Env = {
   cdn: 'http://localhost:8080',
@@ -15,7 +16,7 @@ const fallback: Env = {
 export const appConfig: ApplicationConfig = {
   providers: [
     // { provide: APP_ID, useValue: 'exp-homepage' },
-    // { provide: APP_BASE_HREF, useValue: 'http://localhost:4000/'},
+    { provide: APP_BASE_HREF, useValue: 'http://localhost:4000/'},
     { provide: MFE_ENV, useValue: fallback },
     provideZoneChangeDetection({eventCoalescing: true}),
     provideHttpClient(withFetch()),
