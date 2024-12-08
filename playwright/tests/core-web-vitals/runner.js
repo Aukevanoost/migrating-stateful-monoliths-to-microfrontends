@@ -13,7 +13,7 @@ const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), '../..
 
 
 const heavilyThrottledSettings = {
-  url: 'http://localhost:8080/home',
+  url: 'http://localhost:8080',
   path: `${__dirname}/results/core-web-vitals`,
   viewport: { width: 375, height: 812}, // IPhone 11
   throttling: {
@@ -27,7 +27,7 @@ const heavilyThrottledSettings = {
 }
 
 const throttledSettings = {
-  url: 'http://localhost:8080/home',
+  url: 'http://localhost:8080',
   path: `${__dirname}/results/core-web-vitals`,
   viewport: { width: 375, height: 812}, // IPhone 11
   throttling: {
@@ -41,7 +41,7 @@ const throttledSettings = {
 }
 
 const defaultSettings = {
-  url: 'http://localhost:8080/home',
+  url: 'http://localhost:8080',
   path: `${__dirname}/results/core-web-vitals`,
   viewport: { width: 3024, height: 1964} // macbook
 }
@@ -158,4 +158,4 @@ async function runWebVitalsTests(cfg, runs = 1) {
 }
 
 
-runWebVitalsTests(defaultSettings, 505).catch(console.error);
+runWebVitalsTests(throttledSettings, 505).catch(console.error);
