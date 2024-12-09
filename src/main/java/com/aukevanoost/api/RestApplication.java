@@ -9,7 +9,7 @@ public class RestApplication extends Application {
     @Override
     public Set<Class<?>> getClasses() {
         Set<Class<?>> resources = new HashSet<>();
-        resources.add(CorsFilter.class);
+        resources.add(ApiHttpFilter.class);
         resources.add(FeaturedResource.class);
 
         return resources;

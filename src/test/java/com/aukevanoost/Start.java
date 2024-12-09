@@ -1,5 +1,6 @@
 package com.aukevanoost;
 
+import com.aukevanoost.presentation._core.WicketHttpFilter; 
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.Server;
@@ -7,8 +8,11 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.ee10.webapp.WebAppContext;
 import org.eclipse.jetty.util.component.LifeCycle;
+import org.eclipse.jetty.ee10.sevlet.FilterHolder;
+import jakarta.sevlet.DispatcherType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.EnumSet;
 
 public class Start {
 	private static final Logger log = LoggerFactory.getLogger(Start.class);
@@ -39,6 +43,9 @@ public class Start {
 			bb.setServer(wicketServer);
 			bb.setContextPath("/");
 			bb.setWar("src/main/webapp");
+
+            FilterHolder httpFilter = new FilterHolder(new WicketHttpFilter());
+            bb.addFilter(httpFilter, "/*", EnumSet.of(DispatcherType.REQUEST));
 
 			wicketServer.setHandler(bb);
 
