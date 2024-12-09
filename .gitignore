@@ -10,6 +10,7 @@ bin/
 *.log.?
 .rebel.xml.bak
 logs
+jupytervenv/
 dependency-reduced-pom.xml
 Thumbs.db
 .thumbcache
