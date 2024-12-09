@@ -11,7 +11,6 @@ const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), '../..
  * src: https://github.com/GoogleChrome/lighthouse/blob/main/docs/throttling.md#the-mobile-network-throttling-preset
  */
 
-
 const heavilyThrottledSettings = {
   url: 'http://localhost:8080',
   path: `${__dirname}/results/core-web-vitals`,
@@ -43,11 +42,18 @@ const throttledSettings = {
 const defaultSettings = {
   url: 'http://localhost:8080',
   path: `${__dirname}/results/core-web-vitals`,
-  viewport: { width: 3024, height: 1964} // macbook
+  viewport: { width: 1512, height: 982} // macbook
 }
 
 async function getBrowser(cfg) {
-  const browser = await playwright.chromium.launch({headless: false});
+  const browser = await playwright.chromium.launch({
+    headless: false,
+      args: [
+        '--memory-pressure-off',
+        '--disable-dev-shm-usage',
+        '--memory-limit=4096',
+      ],
+  });
 
   const context = await browser.newContext({
     viewport: cfg.viewport
@@ -158,4 +164,4 @@ async function runWebVitalsTests(cfg, runs = 1) {
 }
 
 
-runWebVitalsTests(defaultSettings, 105).catch(console.error);
+runWebVitalsTests(defaultSettings, 505).catch(console.error);
