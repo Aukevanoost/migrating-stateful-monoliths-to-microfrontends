@@ -75,8 +75,6 @@ async function saveMetricsToCSV(pathToDir, metrics) {
       "element",
       "url",
       "id",
-      "loadTime",
-      "renderTime"
     ];
 
     const rows = [];
@@ -86,8 +84,7 @@ async function saveMetricsToCSV(pathToDir, metrics) {
       const LCP = [ 
         run.idx, run.site, date, time, "LCP",
         run.metrics.lcp.startTime, run.metrics.lcp.endTime, run.metrics.lcp.duration, 
-        "-1", run.metrics.lcp.element, run.metrics.lcp.url, run.metrics.lcp.id,
-        run.metrics.lcp.loadTime, run.metrics.lcp.renderTime
+        "-1", run.metrics.lcp.element, run.metrics.lcp.url, run.metrics.lcp.id
       ].map((value) => `"${value}"`).join(",");
       rows.push(LCP);
 
@@ -95,7 +92,7 @@ async function saveMetricsToCSV(pathToDir, metrics) {
         const longTask = [
           run.idx, run.site, date, time, "longTask", 
           t.startTime, t.endTime, t.duration, t.name,
-          "-1","-1","-1","-1","-1",
+          "-1","-1","-1",
         ].map((value) => `"${value}"`).join(",");
         rows.push(longTask);
       });

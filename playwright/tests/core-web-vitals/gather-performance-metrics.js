@@ -92,18 +92,14 @@ const gatherPerformanceMetrics = () => {
 
       if(!!lastEntry) {
         const newLCP = {
-          startTime: lastEntry.startTime,
-          duration: (lastEntry.loadTime ?? 0) + (lastEntry.renderTime ?? 0),
-          endTime: lastEntry.startTime + (lastEntry.loadTime ?? 0) + (lastEntry.renderTime ?? 0),
+          startTime: lastEntry.loadTime,
+          endTime: lastEntry.startTime,  // renderTime if available, else loadTime
+          duration: lastEntry.startTime - lastEntry.loadTime, // duration is always 0 and endTime is not available
           element: lastEntry.element,
           url: lastEntry.url,
-          loadTime: lastEntry.loadTime,
-          renderTime: lastEntry.renderTime,
           id: lastEntry.id
         };
-        if ( !metrics.lcp || metrics.lcp.duration < newLCP.duration ){
-          metrics.lcp = newLCP;
-        }
+        metrics.lcp = newLCP;
       }
     });
     lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
