@@ -1,0 +1,10 @@
+{
+  "name": "explore",
+  "shared": [],
+  "exposes": [
+    {
+      "key": "./Component",
+      "outFileName": "Component-YKAI74MU.js"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "name": "teasers",
+  "shared": [],
+  "exposes": [
+    {
+      "key": "./Component",
+      "outFileName": "Component-G55JRRU5.js"
+    }
+  ]
+}

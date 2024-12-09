@@ -1,6 +1,6 @@
 const TEASERS = [
     {
-        url: "http://localhost:4201/exp-teasers.js",
+        url: "http://localhost:4000/teasers/Component-G55JRRU5.js",
         metadata: {
             integrity: "CHECKSUM",
             version: "1.0.0"
@@ -12,7 +12,7 @@ const TEASERS = [
         },
         extras: {
             nativefederation: {
-                remoteEntry: "http://localhost:4201/remoteEntry.json",
+                remoteEntry: "http://localhost:4000/teasers/remoteEntry.json",
                 exposedModule: "./Component",
                 element: "exp-teasers"
             },
@@ -22,7 +22,7 @@ const TEASERS = [
 
 const RECOMMENDATIONS = [
     {
-        url: "http://localhost:4202/exp-recommendations.js",
+        url: "http://localhost:4000/recommendations/Component-YKAI74MU.js",
         metadata: {
             integrity: "CHECKSUM",
             version: "1.0.0"
@@ -34,7 +34,7 @@ const RECOMMENDATIONS = [
         },
         extras: {
             nativefederation: {
-                remoteEntry: "http://localhost:4202/remoteEntry.json",
+                remoteEntry: "http://localhost:4000/recommendations/remoteEntry.json",
                 exposedModule: "./Component",
                 element: "exp-recommendations"
             },

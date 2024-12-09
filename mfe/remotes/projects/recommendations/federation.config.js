@@ -9,13 +9,15 @@ module.exports = withNativeFederation({
   },
 
   shared: {
-    ...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
+    //...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
   },
-
   skip: [
     'rxjs/ajax',
+    '@shared',
     'rxjs/fetch',
     'rxjs/testing',
     'rxjs/webSocket',
-  ]
+    /^@softarc\/native-federation-node/
+  ],
+  sharedMappings: ['@shared']
 });
