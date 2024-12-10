@@ -6,11 +6,10 @@ module.exports = withNativeFederation({
     './Component': './projects/recommendations/src/bootstrap.ts'
   },
   shared: {
-    // ...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
+    ...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
   },
   skip: [
     'rxjs/ajax',
-    '@shared',
     'rxjs/fetch',
     'rxjs/testing',
     'rxjs/webSocket',
