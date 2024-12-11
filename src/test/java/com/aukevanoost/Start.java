@@ -1,7 +1,6 @@
 package com.aukevanoost;
 
-import com.aukevanoost.api.CorsFilter;
-import com.aukevanoost.presentation._core.CORSFilter;
+import com.aukevanoost.presentation._core.WicketHttpFilter;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.Server;
@@ -45,8 +44,8 @@ public class Start {
 			bb.setWar("src/main/webapp");
 
 			// Add CORS Filter
-			FilterHolder corsFilter = new FilterHolder(new CORSFilter());
-			bb.addFilter(corsFilter, "/font/*", EnumSet.of(DispatcherType.REQUEST));
+			FilterHolder httpFilter = new FilterHolder(new WicketHttpFilter());
+			bb.addFilter(httpFilter, "/*", EnumSet.of(DispatcherType.REQUEST));
 
 			wicketServer.setHandler(bb);
 

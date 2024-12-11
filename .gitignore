@@ -12,6 +12,7 @@ bin/
 .rebel.xml.bak
 logs
 dependency-reduced-pom.xml
+jupytervenv/
 Thumbs.db
 .thumbcache
 rebel.xml

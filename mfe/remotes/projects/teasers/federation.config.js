@@ -12,6 +12,7 @@ module.exports = withNativeFederation({
   skip: [
     'rxjs/ajax',
     'rxjs/fetch',
+    // '@shared',
     'rxjs/testing',
     'rxjs/webSocket',
     /^@softarc\/native-federation-node/

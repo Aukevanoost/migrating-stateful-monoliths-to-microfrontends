@@ -14,9 +14,18 @@ export function app(): express.Express {
 
   const commonEngine = new CommonEngine();
 
-  server.use(cors())
+  server.use(cors());
+  
+  server.use((req,res,next) => {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires','0');
+    next();
+  });
+
   server.set('view engine', 'html');
   server.set('views', browserDistFolder);
+
 
   // Example Express Rest API endpoints
   // server.get('/api/**', (req, res) => { });
