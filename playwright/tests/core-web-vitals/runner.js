@@ -12,7 +12,7 @@ const __dirname = path.join(path.dirname(fileURLToPath(import.meta.url)), '../..
  */
 
 const heavilyThrottledSettings = {
-  url: 'http://localhost:8080',
+  url: 'http://localhost:8080/home',
   path: `${__dirname}/results/core-web-vitals`,
   viewport: { width: 375, height: 812}, // IPhone 11
   throttling: {
@@ -26,7 +26,7 @@ const heavilyThrottledSettings = {
 }
 
 const throttledSettings = {
-  url: 'http://localhost:8080',
+  url: 'http://localhost:8080/home',
   path: `${__dirname}/results/core-web-vitals`,
   viewport: { width: 375, height: 812}, // IPhone 11
   throttling: {
@@ -40,7 +40,7 @@ const throttledSettings = {
 }
 
 const defaultSettings = {
-  url: 'http://localhost:8080',
+  url: 'http://localhost:8080/home',
   path: `${__dirname}/results/core-web-vitals`,
   viewport: { width: 1512, height: 982} // macbook
 }
