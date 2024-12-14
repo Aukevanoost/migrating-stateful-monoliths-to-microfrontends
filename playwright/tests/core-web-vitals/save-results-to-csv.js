@@ -32,6 +32,9 @@ async function saveMetricsToCSV(pathToDir, metrics) {
       "tti",
       "longTasks",
       "longestTask",
+      "nf:init",
+      "nf:config",
+      "nf:loaded",
       "error",
     ];
 
@@ -52,6 +55,9 @@ async function saveMetricsToCSV(pathToDir, metrics) {
         metrics?.tti || -1,
         metrics?.longTasks.length || 0,
         metrics?.longestTask?.duration || -1,
+        (metrics?.nfEvents ?? {})["nf:init"]?.startTime ?? -1,
+        (metrics?.nfEvents ?? {})["nf:config"]?.startTime ?? -1,
+        (metrics?.nfEvents ?? {})["nf:loaded"]?.startTime ?? -1,
         run.error || "",
       ]
         .map((value) => `"${value}"`)

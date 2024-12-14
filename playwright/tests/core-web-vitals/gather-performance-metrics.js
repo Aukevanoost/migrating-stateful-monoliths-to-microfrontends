@@ -8,7 +8,8 @@ const gatherPerformanceMetrics = () => {
       tbt: null,   
       longTasks: [],
       longestTask: null,
-      quietWindowStart: null
+      quietWindowStart: null,
+      nfEvents: {}
     };
 
     const observers = [];
@@ -117,6 +118,16 @@ const gatherPerformanceMetrics = () => {
     });
     fcpObserver.observe({ type: 'paint', buffered: true });
     observers.push(fcpObserver);
+
+    const nfObserver = new PerformanceObserver((list) => {
+      list.getEntries()
+        .filter(e => e.name.startsWith("nf:"))
+        .forEach(e => {
+          metrics.nfEvents[e.name] = { startTime: e.startTime }
+      })
+    });
+    nfObserver.observe({ type: 'mark', buffered: true });
+    observers.push(nfObserver);
 
     const ttfbObserver = new PerformanceObserver((list) => {
       const entries = list.getEntries();
