@@ -26,6 +26,30 @@ async function copyStaticFiles(srcDir, outDir, files) {
   }
 }
 
+async function buildShims() {
+  const shimsConfig = {
+    stdin: {
+      contents: `import 'es-module-shims'`,
+      resolveDir: process.cwd(),
+    },
+    outfile: path.join(__dirname, CONFIG.outDir, 'es-module-shims.js'),
+    bundle: true,
+    platform: "browser",
+    format: "esm",
+    mainFields: ["es2022", "browser", "module", "main"],
+    conditions: ["es2022", "es2015", "module"],
+    resolveExtensions: [".js", ".mjs"],
+    splitting: false,
+    logLevel: "info",
+    minify: true,
+    sourcemap: true,
+    target: ['es2022'],
+    treeShaking: true,
+  };
+
+  return esbuild.build(shimsConfig);
+}
+
 async function build() {
   try {
     const srcDir = path.join(__dirname, CONFIG.srcDir);
@@ -53,10 +77,15 @@ async function build() {
         '.js': 'jsx',
         '.mjs': 'jsx'
       },
-      treeShaking: true,     
+      treeShaking: true,
+      external: ['es-module-shims'], // Exclude es-module-shims from main bundles
     };
 
+    // Build main files
     const result = await esbuild.build(buildConfig);
+
+    // Build separate es-module-shims bundle
+    await buildShims();
 
     // Log build analytics
     const text = await esbuild.analyzeMetafile(result.metafile);
@@ -72,6 +101,7 @@ async function build() {
     await esbuild.stop();
   }
 }
+
 process.on('SIGINT', async () => {
   console.log('\nBuild interrupted');
   await esbuild.stop();
