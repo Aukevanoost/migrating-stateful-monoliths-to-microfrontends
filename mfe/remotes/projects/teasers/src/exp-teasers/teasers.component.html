@@ -1,14 +1,17 @@
 <div class="teaser__container">
-  <a 
-    *ngFor="let teaser of teasers()"
-    class="teaser__card" 
-    [href]="url(teaser.key)"
-    [id]="'goto-' + teaser.key">         
-    <img 
-      [src]="teaser.image | fromCDN: '500'" 
-      width="500" 
-      sizes="500px" 
-      class="teaser__img"/>
-    <p class="teaser__title">{{teaser.title}}</p>
-  </a> 
+  @for (teaser of teasers(); track teaser.key; let first = $first) {
+    @let size = first ? '1000' : '500';
+    
+    <a 
+      class="teaser__card" 
+      [href]="url(teaser.key)"
+      [id]="'goto-' + teaser.key">         
+      <img 
+        [src]="teaser.image | fromCDN: size" 
+        [width]="size" 
+        [sizes]="size + 'px'" 
+        class="teaser__img"/>
+      <p class="teaser__title">{{teaser.title}}</p>
+    </a> 
+  }
 </div>
