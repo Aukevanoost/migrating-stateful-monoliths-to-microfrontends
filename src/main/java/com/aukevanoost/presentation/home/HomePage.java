@@ -50,10 +50,10 @@ public class HomePage extends BaseTemplate {
                 mfeContentFutures.get(RECOMMENDATIONS_KEY).get()
             );
 
-            addHydrationScript(
-                config.getMicroFrontends().get(TEASERS_KEY).getFirst(),
-                config.getMicroFrontends().get(RECOMMENDATIONS_KEY).getFirst()
-            );
+//            addHydrationScript(
+//                config.getMicroFrontends().get(TEASERS_KEY).getFirst(),
+//                config.getMicroFrontends().get(RECOMMENDATIONS_KEY).getFirst()
+//            );
 
         } catch (Exception e) {
             error("Failed to initialize HomePage: " + e.getMessage());
