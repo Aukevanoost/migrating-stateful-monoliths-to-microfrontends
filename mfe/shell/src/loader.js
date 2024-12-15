@@ -6,14 +6,21 @@ const initMicroFrontends = async (urlOrManifest, remotes) => {
         remotes = Object.keys(urlOrManifest);
     }
 
-    const {load} = await initFederation(urlOrManifest);
+    return initFederation(urlOrManifest)
+        .then(({load}) => {
+            performance.mark('nf:config');
+            return Promise.all(remotes.map(r => load(r, "./Component")))
+        })
+        .then(_ => performance.mark('nf:loaded'));
 
-    performance.mark('nf:config');
+    // const {load} = await initFederation(urlOrManifest);
 
-    for (const r of remotes) {
-        await load(r, "./Component");
-    }
-    performance.mark('nf:loaded');
+    // performance.mark('nf:config');
+
+    // for (const r of remotes) {
+    //     await load(r, "./Component");
+    // }
+    // performance.mark('nf:loaded');
 }
 
 export { initMicroFrontends }

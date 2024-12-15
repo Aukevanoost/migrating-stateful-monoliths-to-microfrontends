@@ -9,8 +9,9 @@ import java.util.Set;
 public class WicketHttpFilter implements Filter {
 
     private static final Set<String> WHITELIST = Set.of(
-        // SSR
+        // CDN
         "http://localhost:4000",
+        // SSR
         "http://localhost:4001",
         "http://localhost:4002",
         // CSR
