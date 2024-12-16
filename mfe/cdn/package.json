@@ -2,9 +2,9 @@
   "name": "cdn",
   "version": "1.0.0",
   "scripts": {
-    "start": "http-server ./dist --cors -p=4000"
+    "start": "node server.js"
   },
   "dependencies": {
-    "http-server": "^14.1.1"
+    "express": "^4.21.2"
   }
 }

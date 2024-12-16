@@ -27,7 +27,6 @@ public class HomePage extends BaseTemplate {
     @Override
     protected void onInitialize() {
         super.onInitialize();
-
         try {
             var config = discoveryController.fetchConfig(MANIFEST_URL);
 
@@ -71,6 +70,7 @@ public class HomePage extends BaseTemplate {
     }
 
     private void addHydrationScript(MicroFrontend teasers, MicroFrontend recommendations) {
+
         var hydrationScript = String.format("""
             import { initMicroFrontends } from './scripts/loader.js';
             
