@@ -1,6 +1,6 @@
 const TEASERS = [
     {
-        url: "http://localhost:4000/teasers/Component-G55JRRU5.js",
+        url: "http://localhost:4000/teasers/Component-XL3CU7WB.js",
         metadata: {
             integrity: "CHECKSUM",
             version: "1.0.0"
@@ -22,7 +22,7 @@ const TEASERS = [
 
 const RECOMMENDATIONS = [
     {
-        url: "http://localhost:4000/recommendations/Component-YKAI74MU.js",
+        url: "http://localhost:4000/recommendations/Component-KEIHPLWD.js",
         metadata: {
             integrity: "CHECKSUM",
             version: "1.0.0"

@@ -14,12 +14,11 @@ import { toSignal } from '@angular/core/rxjs-interop';
 })
 export class TeasersComponent {
   #env = inject(MFE_ENV);
-  #platform = inject(PLATFORM_ID);
   #http = inject(FeaturedHttpService);
 
   teasers = toSignal(this.#http.teasers$(), { initialValue: [] });
 
   url(key: string) {
-    return this.#env.mfe + '/products/' + key;
+    return this.#env.shell + '/products/' + key;
   }
 }

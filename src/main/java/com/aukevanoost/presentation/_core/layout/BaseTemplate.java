@@ -1,5 +1,6 @@
 package com.aukevanoost.presentation._core.layout;
 
+import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.Component;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -15,6 +16,7 @@ public class BaseTemplate extends WebPage {
 
     protected void onInitialize() {
         super.onInitialize();
+        add(new HeaderResponseContainer("footer-container", "footer-container"));
         add(headerPanel = new HeaderPanel("headerPanel"));
         add(footerPanel = new FooterPanel("footerPanel"));
     }

@@ -58,6 +58,7 @@
 								"input": "projects/teasers/public"
 							}
 						],
+						"baseHref": "http://localhost:4000/teasers/",
 						"styles": [
 							"projects/teasers/src/styles.scss"
 						],
@@ -153,6 +154,7 @@
 						],
 						"tsConfig": "projects/recommendations/tsconfig.app.json",
 						"inlineStyleLanguage": "scss",
+						"baseHref": "http://localhost:4000/recommendations/",
 						"assets": [
 							{
 								"glob": "**/*",

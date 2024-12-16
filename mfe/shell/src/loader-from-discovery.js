@@ -2,10 +2,13 @@ import { initFederationFromDiscovery } from 'vanilla-native-federation/plugins/d
 import { consoleLogger } from 'vanilla-native-federation';
 
 const initMicroFrontends = (url, logLevel = "error") => {
-    return initFederationFromDiscovery(url, { 
-        logLevel: logLevel,
-        logger: consoleLogger
-    });
+    performance.mark('nf:init');
+    return initFederationFromDiscovery(url, {logLevel, logger: consoleLogger})
+        .then(mfe => {
+            performance.mark('nf:config');
+            return Promise.all(remotes.map(r => load(r, "./Component")))
+        })
+        .then(_ => performance.mark('nf:loaded'));
 }
 
 export { initMicroFrontends };
