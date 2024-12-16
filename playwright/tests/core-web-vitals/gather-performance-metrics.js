@@ -17,7 +17,7 @@ const gatherPerformanceMetrics = () => {
     const QUIET_WINDOW = 5_000;
     let quietWindowTimer;
 
-    const TIMEOUT = 25_000;
+    const TIMEOUT = 30_000;
     let timeoutTimer;
 
     const cleanupAndReturnMetrics = () => {
@@ -86,38 +86,32 @@ const gatherPerformanceMetrics = () => {
     longTaskObserver.observe({ type: 'longtask', buffered: true });
     observers.push(longTaskObserver);
       
+    const fcpObserver = new PerformanceObserver((list) => {
+      const entries = list.getEntries();
+      const entry = entries.find(entry => entry.name === 'first-contentful-paint');
+
+      metrics.fcp = entry.startTime; 
+      startQuietWindowTimer();
+    });
+    fcpObserver.observe({ type: 'paint', buffered: true });
+    observers.push(fcpObserver);
 
     const lcpObserver = new PerformanceObserver((list) => {
       const entries = list.getEntries();
       const lastEntry = entries.at(-1);
 
-      if(!!lastEntry) {
-        const newLCP = {
-          startTime: lastEntry.loadTime,
-          endTime: lastEntry.startTime,  // renderTime if available, else loadTime
-          duration: lastEntry.startTime - lastEntry.loadTime, // duration is always 0 and endTime is not available
-          element: lastEntry.element,
-          url: lastEntry.url,
-          id: lastEntry.id
-        };
-        metrics.lcp = newLCP;
-      }
+      const newLCP = {
+        startTime: lastEntry.loadTime,
+        endTime: lastEntry.renderTime ?? lastEntry.loadTime,  // renderTime if available, else loadTime
+        duration: lastEntry.startTime - lastEntry.renderTime, // duration is always 0 and endTime is not available
+        element: lastEntry.element,
+        url: lastEntry.url,
+        id: lastEntry.id
+      };
+      metrics.lcp = newLCP;
     });
     lcpObserver.observe({ type: 'largest-contentful-paint', buffered: true });
     observers.push(lcpObserver);
-    
-
-    const fcpObserver = new PerformanceObserver((list) => {
-      const entries = list.getEntries();
-      const entry = entries.find(entry => entry.name === 'first-contentful-paint');
-      if(!!entry) {
-        // duration is always 0 and endTime is not available
-        metrics.fcp = entry.startTime; 
-        startQuietWindowTimer();
-      }
-    });
-    fcpObserver.observe({ type: 'paint', buffered: true });
-    observers.push(fcpObserver);
 
     const nfObserver = new PerformanceObserver((list) => {
       list.getEntries()
@@ -136,7 +130,7 @@ const gatherPerformanceMetrics = () => {
         metrics.ttfb = navigationEntry.responseEnd - navigationEntry.startTime;
       }
     })
-    ttfbObserver.observe({type: 'navigation',buffered: true,});
+    ttfbObserver.observe({type: 'navigation', buffered: true,});
 
     observers.push(ttfbObserver);
 

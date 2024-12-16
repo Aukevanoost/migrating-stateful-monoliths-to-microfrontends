@@ -48,11 +48,7 @@ const defaultSettings = {
 async function getBrowser(cfg) {
   const browser = await playwright.chromium.launch({
     headless: false,
-      args: [
-        '--memory-pressure-off',
-        '--disable-dev-shm-usage',
-        '--memory-limit=4096',
-      ],
+    args: [ ],
   });
 
   const context = await browser.newContext({
@@ -60,16 +56,14 @@ async function getBrowser(cfg) {
   });
   
   const page = await context.newPage();
-
   const client = await context.newCDPSession(page);
 
-  await client.send('Network.setCacheDisabled', { cacheDisabled: true });
-
+  await client.send('Network.clearBrowserCache');
   await client.send('Network.enable');
+
 
   if(cfg.throttling) {
     await client.send('Emulation.setCPUThrottlingRate', { rate: cfg.throttling.cpu });
-  
     await client.send('Network.emulateNetworkConditions', {
       offline: false,
       downloadThroughput: cfg.throttling.network.download,
@@ -78,20 +72,23 @@ async function getBrowser(cfg) {
     });
   }
 
+  const cleanup = async() => {
+    try {
+      await client.detach();
+      await page.close();
+      await context.close();
+      await browser.close();
+    } catch (error) {
+      console.error('Cleanup error:', error);
+    }
+  };
 
   // LOGGING
   page.on('console', msg => console.log(`Page log: ${msg.text()}`));
   page.on('pageerror', err => console.error(`Page error: ${err}`));
   page.on('requestfailed', req => console.error(`Failed request: ${req.url()}`));
 
-  const cleanup = async() => {
-    await client.detach();
-    await page.close().catch(console.error);
-    await context.close().catch(console.error);
-    await browser.close().catch(console.error);
-  }
-
-  return { cleanup, browser, page, }
+  return { cleanup, browser, page };
 }
 
 /**
@@ -108,20 +105,15 @@ async function runTest(cfg, idx) {
 
   try{
     const beforeNav = Date.now();
-    await host.page.goto(cfg.url, {
-      waitUntil: 'commit',
-      timeout: 20_000
-    });
+    await host.page.goto(cfg.url, {waitUntil: 'commit'});
     const afterNav = Date.now();
     results.navToPageInMS = afterNav - beforeNav;
     console.log(`Navigation took ${results.navToPageInMS} ms`);
 
-
     results.metrics = await host.page.evaluate(gatherPerformanceMetrics);
     const afterTest = Date.now();
 
-    results.testTotalTimeInMS = afterTest - beforeNav;
-
+    results.testTotalTimeInMS = afterTest - beforeNav - 5000;
   } catch (error) {
     console.error('Test run error:', error);
     results.error = error.message;
@@ -162,6 +154,5 @@ async function runWebVitalsTests(cfg, runs = 1) {
   await saveMetricsToCSV(cfg.path, results);
   console.log('====== TEST COMPLETED ======');
 }
-
 
 runWebVitalsTests(defaultSettings, 505).catch(console.error);
