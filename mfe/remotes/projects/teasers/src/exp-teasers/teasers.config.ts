@@ -4,7 +4,7 @@ import { provideClientHydration, withEventReplay } from '@angular/platform-brows
 import { MFE_ENV, Env } from '@shared';
 
 const fallback: Env = {
-  cdn: 'http://localhost:8080',
+  cdn: 'http://localhost:4000',
   shell: 'http://localhost:8080',
   api: 'http://localhost:8081/v1',
   mfe: 'http://localhost:4001'
@@ -12,8 +12,6 @@ const fallback: Env = {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    // { provide: APP_ID, useValue: 'exp-teasers' },
-    // { provide: APP_BASE_HREF, useValue: 'http://localhost:4001'},
     { provide: MFE_ENV, useValue: fallback },
     provideZoneChangeDetection({eventCoalescing: true}),
     provideHttpClient(withFetch()),

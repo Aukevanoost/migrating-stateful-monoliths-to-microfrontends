@@ -10,10 +10,12 @@ import java.util.Set;
 @Provider
 public class ApiHttpFilter implements ContainerResponseFilter {
     private static final Set<String> WHITELIST = Set.of(
-        // SSR
+        // CDN
         "http://localhost:4000",
+        // SSR
         "http://localhost:4001",
         "http://localhost:4002",
+        "http://localhost:4003",
         // CSR
         "http://localhost:4200",
         "http://localhost:4201",

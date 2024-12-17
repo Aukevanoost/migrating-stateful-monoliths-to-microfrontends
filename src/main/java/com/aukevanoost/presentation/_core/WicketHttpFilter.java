@@ -9,10 +9,12 @@ import java.util.Set;
 public class WicketHttpFilter implements Filter {
 
     private static final Set<String> WHITELIST = Set.of(
-        // SSR
+        // CDN
         "http://localhost:4000",
+        // SSR
         "http://localhost:4001",
         "http://localhost:4002",
+        "http://localhost:4003",
         // CSR
         "http://localhost:4200",
         "http://localhost:4201",
@@ -40,10 +42,10 @@ public class WicketHttpFilter implements Filter {
         httpResponse.setHeader("Access-Control-Max-Age", "1800");
 
         // Add cache control headers
-        httpResponse.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, private");
+        httpResponse.setHeader("Cache-Control", "no-cache");
+
         httpResponse.setHeader("Pragma", "no-cache");
         httpResponse.setDateHeader("Expires", 0);
-        httpResponse.setDateHeader("Last-Modified", System.currentTimeMillis());
 
         // Handle preflight requests
         if ("OPTIONS".equalsIgnoreCase(httpRequest.getMethod())) {

@@ -4,12 +4,10 @@ import org.apache.wicket.request.*;
 import org.apache.wicket.request.http.WebResponse;
 
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
-import org.apache.wicket.protocol.http.WebApplication;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
