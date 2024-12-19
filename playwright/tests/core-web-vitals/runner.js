@@ -155,4 +155,4 @@ async function runWebVitalsTests(cfg, runs = 1) {
   console.log('====== TEST COMPLETED ======');
 }
 
-runWebVitalsTests(heavilyThrottledSettings, 505).catch(console.error);
+runWebVitalsTests(throttledSettings, 505).catch(console.error);

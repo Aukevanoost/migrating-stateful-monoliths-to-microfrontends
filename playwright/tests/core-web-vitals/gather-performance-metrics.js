@@ -30,6 +30,7 @@ const gatherPerformanceMetrics = () => {
 
       if (metrics.fcp !== null) {
         metrics.longTasks.forEach(task => {
+
           // TTI
           if(!metrics.tti || metrics.tti < task.endTime){
             metrics.tti = task.endTime;
@@ -90,8 +91,10 @@ const gatherPerformanceMetrics = () => {
       const entries = list.getEntries();
       const entry = entries.find(entry => entry.name === 'first-contentful-paint');
 
-      metrics.fcp = entry.startTime; 
-      startQuietWindowTimer();
+      if (entry?.startTime){
+        metrics.fcp = entry.startTime; 
+        startQuietWindowTimer();
+      } 
     });
     fcpObserver.observe({ type: 'paint', buffered: true });
     observers.push(fcpObserver);
@@ -126,6 +129,7 @@ const gatherPerformanceMetrics = () => {
     const ttfbObserver = new PerformanceObserver((list) => {
       const entries = list.getEntries();
       if (entries.length > 0) {
+
         const navigationEntry = entries[0];
         metrics.ttfb = navigationEntry.responseEnd - navigationEntry.startTime;
       }
