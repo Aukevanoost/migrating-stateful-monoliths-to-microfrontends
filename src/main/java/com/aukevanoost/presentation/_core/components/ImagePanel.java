@@ -12,6 +12,7 @@ import java.util.stream.IntStream;
 
 public class ImagePanel extends GenericPanel<String> {
     private final int[] sizes;
+    private final static String CDN = "http://localhost:4000";
 
     public ImagePanel(String id, IModel<String> urlModel, int... sizes) {
         super(id, urlModel);
@@ -50,7 +51,7 @@ public class ImagePanel extends GenericPanel<String> {
     }
 
     private String getImageSrc(String url, int size) {
-        return url.replace("[size]", String.valueOf(size));
+        return CDN + url.replace("[size]", String.valueOf(size));
     }
 
     private String getImageSrcSet(String url, int size) {

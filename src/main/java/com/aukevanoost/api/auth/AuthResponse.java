@@ -1,4 +1,4 @@
-package com.aukevanoost.api.response;
+package com.aukevanoost.api.auth;
 
 public class AuthResponse {
     private String token;

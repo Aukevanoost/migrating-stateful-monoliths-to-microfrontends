@@ -1,6 +1,5 @@
-package com.aukevanoost.api.resources;
+package com.aukevanoost.api.auth;
 
-import com.aukevanoost.api.response.AuthResponse;
 import com.aukevanoost.interfaces.AuthController;
 import com.aukevanoost.interfaces.boundaries.auth.AuthControllerFactory;
 import com.aukevanoost.interfaces.boundaries.auth.IAuthController;
