@@ -9,17 +9,16 @@ import org.eclipse.jetty.server.*;
 
 import org.eclipse.jetty.ee10.webapp.WebAppContext;
 import org.eclipse.jetty.util.component.LifeCycle;
-import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.EnumSet;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Start {
 	private static final Logger log = LoggerFactory.getLogger(Start.class);
 
 	public static void main(String[] args) throws Exception {
-		System.setProperty("wicket.configuration", "development");
+		System.setProperty("wicket.configuration", "deployment");
+
 		log.info("Starting servers...");
 
 		Server wicketServer = null;
