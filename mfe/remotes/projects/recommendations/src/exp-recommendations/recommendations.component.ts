@@ -27,9 +27,11 @@ export class RecommendationsComponent {
   }
 
   ngOnInit() {
+    this.#http.teasers$().subscribe(console.warn);
     this.#http.recommendations$(["CL-01-GY", "AU-07-MT"]).subscribe(x => {
       this.#recommendations.set(x);
     });
+    
   }
 
   url(productSku: string, sku: string) {

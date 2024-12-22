@@ -1,6 +1,6 @@
 const TEASERS = [
     {
-        url: "http://localhost:4001/ssr-IGQPTHAQ.js",
+        url: "http://teasers:4001/ssr-IGQPTHAQ.js",
         metadata: {
             integrity: "CHECKSUM",
             version: "1.0.0"
@@ -16,7 +16,7 @@ const TEASERS = [
                 exposedModule: "./Component",
                 element: "exp-teasers"
             },
-            ssr: { html: "http://localhost:4001/html"}
+            ssr: { html: "http://teasers:4001/html"}
         },
     }
 ]
@@ -39,7 +39,7 @@ const RECOMMENDATIONS = [
                 exposedModule: "./Component",
                 element: "exp-recommendations"
             },
-            ssr: { html: "http://localhost:4002/html"}
+            ssr: { html: "http://recommendations:4002/html"}
         },
     }
 ]

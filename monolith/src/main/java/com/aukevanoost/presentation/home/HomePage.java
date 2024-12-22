@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 public class HomePage extends BaseTemplate {
     private static final String TEASERS_KEY = "explore/teasers";
     private static final String RECOMMENDATIONS_KEY = "explore/recommendations";
-    private static final String MANIFEST_URL = "http://localhost:3000/from-manifest";
+    private static final String MANIFEST_URL = "http://discovery:3000/from-manifest";
 
     private transient final IDiscoveryController discoveryController;
 
@@ -30,6 +30,7 @@ public class HomePage extends BaseTemplate {
         try {
             var config = discoveryController.fetchConfig(MANIFEST_URL);
 
+            System.out.println("Config successfully loaded");
             var mfeContentFutures = discoveryController.fetchMfeContents(
                 config,
                 TEASERS_KEY, RECOMMENDATIONS_KEY
@@ -56,13 +57,12 @@ public class HomePage extends BaseTemplate {
 
         } catch (Exception e) {
             error("Failed to initialize HomePage: " + e.getMessage());
-            replace(new ErrorPanel("content", e.getMessage()));
         }
     }
 
     private void addMfePanel(String id, MicroFrontendResponse content) {
         if (content.error() != null) {
-            add(new ErrorPanel(id, content.error().getMessage()));
+            System.out.println("Error loading MFE content: " + content.error());
             return;
         }
 
@@ -88,14 +88,5 @@ public class HomePage extends BaseTemplate {
         add(new Label("hydrationScript", hydrationScript)
             .setEscapeModelStrings(false)
             .add(new AttributeModifier("type", "module-shim")));
-    }
-
-    private static class ErrorPanel extends Panel {
-        public ErrorPanel(String id, String errorMessage) {
-            super(id);
-            add(new Label("content",
-                String.format("<div class='error'>%s</div>", errorMessage))
-                .setEscapeModelStrings(false));
-        }
     }
 }
