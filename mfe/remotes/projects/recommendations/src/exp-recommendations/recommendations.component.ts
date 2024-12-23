@@ -32,6 +32,6 @@ export class RecommendationsComponent {
   }
 
   url(productSku: string, sku: string) {
-    return this.#env + '/product/' + productSku + '/' + sku;
+    return this.#env.shell + '/product/' + productSku + '/' + sku;
   }  
 }

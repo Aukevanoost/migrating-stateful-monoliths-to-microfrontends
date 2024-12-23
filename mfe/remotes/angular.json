@@ -274,7 +274,7 @@
 							"projects/homepage/src/styles.scss"
 						],
 						"scripts": [],
-						"baseHref": "http://localhost:4003/",
+						"baseHref": "http://docker.for.mac.localhost:4003/",
 						"server": "projects/homepage/src/main.server.ts",
 						"prerender": false,
 						"ssr": {

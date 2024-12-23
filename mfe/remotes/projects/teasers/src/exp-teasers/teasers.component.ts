@@ -20,7 +20,7 @@ export class TeasersComponent {
   teasers = toSignal(this.#http.teasers$(), { initialValue: [] });
 
   url(key: string) {
-    return this.#env.mfe + '/products/' + key;
+    return this.#env.shell + '/products/' + key;
   }
 
   constructor() {

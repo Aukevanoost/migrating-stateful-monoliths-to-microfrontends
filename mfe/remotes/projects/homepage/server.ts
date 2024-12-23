@@ -4,7 +4,7 @@ console.log('Starting SSR for Shell');
 
 (async () => {
 
-  await fetch("http://localhost:3000/native-federation")
+  await fetch("http://docker.for.mac.localhost:3000/native-federation")
     .then(r => r.json())
     .then(manifestUrl => initNodeFederation({
       remotesOrManifestUrl: manifestUrl,

@@ -18,7 +18,7 @@ export class AppComponent {
   recommendations = signal<undefined|any>(undefined);
 
   ngOnInit() {
-    this.#http.get("http://localhost:3000/").forEach((cfg:any) => {
+    this.#http.get("http://docker.for.mac.localhost:3000/").forEach((cfg:any) => {
 
       const teasers: any = Object.values(cfg['explore/teasers'])[0]!;
       this.teasers.set({remoteName: teasers.module.remoteName, component: 'TeasersComponent'});
