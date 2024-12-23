@@ -14,7 +14,7 @@
         <script type="module-shim">
             import { initFederation } from './init-federation.js';
             initFederation({
-                "teasers": "http://localhost:4001/remoteEntry.json"
+                "teasers": "http://docker.for.mac.localhost:4001/remoteEntry.json"
             })
                 .then(({load, importMap}) => {
                     return Promise.all([

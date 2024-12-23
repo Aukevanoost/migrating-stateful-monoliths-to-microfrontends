@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
 
 public class ImagePanel extends GenericPanel<String> {
     private final int[] sizes;
-    private final static String CDN = "http://localhost:4000";
+    private final static String CDN = "http://docker.for.mac.localhost:4000";
 
     public ImagePanel(String id, IModel<String> urlModel, int... sizes) {
         super(id, urlModel);

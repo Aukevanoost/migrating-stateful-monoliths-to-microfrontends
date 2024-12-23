@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 public class HomePage extends BaseTemplate {
     private static final String TEASERS_KEY = "explore/teasers";
     private static final String RECOMMENDATIONS_KEY = "explore/recommendations";
-    private static final String MANIFEST_URL = "http://discovery:3000/from-manifest";
+    private static final String MANIFEST_URL = "http://docker.for.mac.localhost:3000/from-manifest";
 
     private transient final IDiscoveryController discoveryController;
 

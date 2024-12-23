@@ -1,6 +1,6 @@
 const TEASERS = [
     {
-        url: "http://teasers:4001/ssr-IGQPTHAQ.js",
+        url: "http://docker.for.mac.localhost:4001/ssr-IGQPTHAQ.js",
         metadata: {
             integrity: "CHECKSUM",
             version: "1.0.0"
@@ -12,18 +12,18 @@ const TEASERS = [
         },
         extras: {
             nativefederation: {
-                remoteEntry: "http://localhost:4001/remoteEntry.json",
+                remoteEntry: "http://docker.for.mac.localhost:4001/remoteEntry.json",
                 exposedModule: "./Component",
                 element: "exp-teasers"
             },
-            ssr: { html: "http://teasers:4001/html"}
+            ssr: { html: "http://docker.for.mac.localhost:4001/html"}
         },
     }
 ]
 
 const RECOMMENDATIONS = [
     {
-        url: "http://localhost:4002/web-component-IAM3TNZN.js",
+        url: "http://docker.for.mac.localhost:4002/web-component-IAM3TNZN.js",
         metadata: {
             integrity: "CHECKSUM",
             version: "1.0.0"
@@ -35,11 +35,11 @@ const RECOMMENDATIONS = [
         },
         extras: {
             nativefederation: {
-                remoteEntry: "http://localhost:4002/remoteEntry.json",
+                remoteEntry: "http://docker.for.mac.localhost:4002/remoteEntry.json",
                 exposedModule: "./Component",
                 element: "exp-recommendations"
             },
-            ssr: { html: "http://recommendations:4002/html"}
+            ssr: { html: "http://docker.for.mac.localhost:4002/html"}
         },
     }
 ]
