@@ -54,7 +54,21 @@ services:
         limits:
           cpus: '3'
           memory: 4G
-
+  jmeter:
+    container_name: jmeter
+    build:
+      context: ./jmeter
+      dockerfile: Dockerfile
+    privileged: true
+    ports:
+      - "9270:9270"
+    environment:
+      - JMETER_JMX=load-test.jmx
+      - CONF_EXEC_WAIT_AFTER_TEST=20
+      - CONF_EXEC_WAIT_BEFORE_TEST=20
+    # restart: unless-stopped
+    depends_on:
+      - monolith
   cadvisor:
     # https://github.com/google/cadvisor/issues/2838
     container_name: cadvisor
@@ -91,3 +105,4 @@ services:
       - --enable-feature=memory-snapshot-on-shutdown
     depends_on:
       - cadvisor
+      - jmeter
