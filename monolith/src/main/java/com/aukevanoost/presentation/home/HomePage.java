@@ -2,14 +2,17 @@ package com.aukevanoost.presentation.home;
 
 import com.aukevanoost.interfaces.boundaries.discovery.DiscoveryControllerFactory;
 import com.aukevanoost.interfaces.boundaries.discovery.IDiscoveryController;
+import com.aukevanoost.interfaces.discovery.DiscoveryException;
 import com.aukevanoost.interfaces.discovery.models.MicroFrontend;
 import com.aukevanoost.interfaces.discovery.models.MicroFrontendResponse;
+import com.aukevanoost.presentation.WicketApplication;
 import com.aukevanoost.presentation._core.components.RemoteContentPanel;
 import com.aukevanoost.presentation._core.layout.BaseTemplate;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 
+import java.net.ConnectException;
 import java.util.concurrent.CompletableFuture;
 
 public class HomePage extends BaseTemplate {
@@ -21,7 +24,7 @@ public class HomePage extends BaseTemplate {
 
     public HomePage() {
         super();
-        this.discoveryController = DiscoveryControllerFactory.inject();
+        this.discoveryController = WicketApplication.getDiscoveryController();
     }
 
     @Override
@@ -30,7 +33,6 @@ public class HomePage extends BaseTemplate {
         try {
             var config = discoveryController.fetchConfig(MANIFEST_URL);
 
-            System.out.println("Config successfully loaded");
             var mfeContentFutures = discoveryController.fetchMfeContents(
                 config,
                 TEASERS_KEY, RECOMMENDATIONS_KEY
@@ -55,8 +57,10 @@ public class HomePage extends BaseTemplate {
                 config.getMicroFrontends().get(RECOMMENDATIONS_KEY).getFirst()
             );
 
+        } catch (DiscoveryException e) {
+            throw new RuntimeException("Failed to load discovery", e);
         } catch (Exception e) {
-            error("Failed to initialize HomePage: " + e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
@@ -68,6 +72,8 @@ public class HomePage extends BaseTemplate {
 
         add(new RemoteContentPanel(id, content));
     }
+
+
 
     private void addHydrationScript(MicroFrontend teasers, MicroFrontend recommendations) {
 

@@ -13,45 +13,73 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class DiscoveryController implements IDiscoveryController {
+    private static volatile DiscoveryController instance;
     private final HttpClient client;
     private final ObjectMapper mapper;
 
-    public DiscoveryController() {
+    private DiscoveryController() {
         this.client = HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_1_1)
-            .connectTimeout(Duration.ofSeconds(5))
+            .connectTimeout(Duration.ofSeconds(10))
+            .executor(Executors.newFixedThreadPool(200))
             .build();
         this.mapper = new ObjectMapper();
     }
 
-    public Config fetchConfig(String url) throws Exception {
-        HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create(url))
-            .build();
+    public static DiscoveryController getInstance() {
+        if (instance == null) {
+            synchronized (DiscoveryController.class) {
+                if (instance == null) {
+                    instance = new DiscoveryController();
+                }
+            }
+        }
+        return instance;
+    }
 
-        HttpResponse<String> response = client.send(request,
-            HttpResponse.BodyHandlers.ofString());
+    public Config fetchConfig(String url) throws DiscoveryException {
+        long startTime = System.nanoTime();
 
-        return mapper.readValue(response.body(), Config.class);
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .header("Accept", "application/json")
+                .header("User-Agent", "DiscoveryService/1.0")
+                .GET()
+                .build();
+
+            HttpResponse<String> response = client.send(request,
+                HttpResponse.BodyHandlers.ofString());
+            long duration = (System.nanoTime() - startTime) / 1_000_000;
+            System.out.printf("DISC (%dms)%n", duration);
+            return mapper.readValue(response.body(), Config.class);
+        } catch (Exception e) {
+            throw new DiscoveryException(e);
+        }
     }
 
     public Map<String, CompletableFuture<MicroFrontendResponse>> fetchMfeContents(Config config, String... mfeKeys) {
         return Stream.of(mfeKeys)
             .collect(HashMap::new,
-                (map, key) -> map.put(
-                    key,
-                    fetchMfeContent(config.getMicroFrontends().get(key).getFirst().getExtras().getSsr().getHtml())
-                ),
+                (map, key) -> {
+                    var mfe = config.getMicroFrontends().get(key);
+                    if (mfe != null && mfe.getFirst() != null && mfe.getFirst().getExtras() != null) {
+                        map.put(key, fetchMfeContent(mfe.getFirst().getExtras().getSsr().getHtml()));
+                    }
+                },
                 Map::putAll
             );
     }
 
     private CompletableFuture<MicroFrontendResponse> fetchMfeContent(String url) {
+        long startTime = System.nanoTime();
+
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(url))
             .header("Accept", "text/html")
@@ -60,12 +88,27 @@ public class DiscoveryController implements IDiscoveryController {
 
         return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
             .thenApply(response -> {
+                long duration = (System.nanoTime() - startTime) / 1_000_000;
+
                 if (response.statusCode() != 200) {
-                    throw new RuntimeException("HTTP " + response.statusCode());
+                    System.out.printf("HTTP Failed for URL %s: %d (took %dms)%n",
+                        url, response.statusCode(), duration);
+                } else {
+                    System.out.printf("MFE (%dms)%n", duration);
                 }
+
+                if (duration > 1000) {
+                    System.out.printf("WARNING: Slow request to %s (%dms)%n", url, duration);
+                }
+
                 return parseMfeResponse(response.body(), null);
             })
-            .exceptionally(e -> parseMfeResponse(null, e));
+            .exceptionally(e -> {
+                long duration = (System.nanoTime() - startTime) / 1_000_000;
+                System.out.printf("Request failed for %s after %dms: %s%n",
+                    url, duration, e.getMessage());
+                return parseMfeResponse(null, e);
+            });
     }
 
     private MicroFrontendResponse parseMfeResponse(String response, Throwable error) {
@@ -73,14 +116,14 @@ public class DiscoveryController implements IDiscoveryController {
             return new MicroFrontendResponse(null, null, null, error);
         }
 
-        Pattern style_pattern = Pattern.compile("<style ng-app-id=\"([^\"]+)\"[^>]*>(.*?)</style>", Pattern.DOTALL);
-        Pattern state_pattern = Pattern.compile("<script id=\"[^\"]+?-state\"[^>]*>(.*?)</script>", Pattern.DOTALL);
+        Pattern stylePattern = Pattern.compile("<style ng-app-id=\"([^\"]+)\"[^>]*>(.*?)</style>", Pattern.DOTALL);
+        Pattern statePattern = Pattern.compile("<script id=\"[^\"]+?-state\"[^>]*>(.*?)</script>", Pattern.DOTALL);
 
         StringBuilder html = new StringBuilder(response);
         String css = "", state = "";
         int start, end;
 
-        Matcher styleMatcher = style_pattern.matcher(html);
+        Matcher styleMatcher = stylePattern.matcher(html);
         if (styleMatcher.find()) {
             start = styleMatcher.start();
             end = styleMatcher.end();
@@ -88,7 +131,7 @@ public class DiscoveryController implements IDiscoveryController {
             html.delete(start, end);
         }
 
-        Matcher stateMatcher = state_pattern.matcher(html);
+        Matcher stateMatcher = statePattern.matcher(html);
         if (stateMatcher.find()) {
             start = stateMatcher.start();
             end = stateMatcher.end();

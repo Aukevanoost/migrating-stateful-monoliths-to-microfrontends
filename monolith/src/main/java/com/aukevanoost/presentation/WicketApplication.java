@@ -1,5 +1,7 @@
 package com.aukevanoost.presentation;
 
+import com.aukevanoost.interfaces.boundaries.discovery.DiscoveryControllerFactory;
+import com.aukevanoost.interfaces.boundaries.discovery.IDiscoveryController;
 import com.aukevanoost.presentation.cart.CartPage;
 import com.aukevanoost.presentation.home.HomePage;
 import com.aukevanoost.presentation.category.CategoryPage;
@@ -32,6 +34,8 @@ import java.time.Duration;
  */
 public class WicketApplication extends WebApplication
 {
+	private IDiscoveryController discoveryController;
+
 	/**
 	 * @see org.apache.wicket.Application#getHomePage()
 	 */
@@ -48,7 +52,10 @@ public class WicketApplication extends WebApplication
 	public void init()
 	{
 		super.init();
-//		getRequestCycleListeners().add(new ResourceMonitoringFilter());
+		discoveryController = DiscoveryControllerFactory.inject();
+		getServletContext().setAttribute("discoveryController", discoveryController);
+
+		getRequestCycleListeners().add(new ResourceMonitoringFilter());
 
 		getMarkupSettings().setStripWicketTags(true);
 
@@ -89,10 +96,15 @@ public class WicketApplication extends WebApplication
 //		});
 	}
 
+	public static IDiscoveryController getDiscoveryController() {
+		return ((WicketApplication) WebApplication.get()).discoveryController;
+	}
+
 	@Override
 	public Session newSession(Request request, Response response) {
 		return new StoreSession(request);
 	}
+
 }
 
 class ResourceMonitoringFilter implements IRequestCycleListener {

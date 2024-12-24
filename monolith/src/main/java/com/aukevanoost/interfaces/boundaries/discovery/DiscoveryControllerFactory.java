@@ -4,6 +4,6 @@ import com.aukevanoost.interfaces.discovery.DiscoveryController;
 
 public class DiscoveryControllerFactory {
     public static IDiscoveryController inject() {
-        return new DiscoveryController();
+        return DiscoveryController.getInstance();
     }
 }

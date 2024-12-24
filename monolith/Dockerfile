@@ -25,4 +25,4 @@ EXPOSE 8080
 EXPOSE 8081
 EXPOSE 8443
 
-CMD ["java", "-Xmx4g", "-Xms4g", "-XX:+UseG1GC", "-XX:ActiveProcessorCount=3", "-cp", "/app/test-classes:/app/classes:/app/lib/*", "com.aukevanoost.Start"]
+CMD ["java", "-Xmx4g", "-Xms4g", "-cp", "/app/test-classes:/app/classes:/app/lib/*", "com.aukevanoost.Start"]
