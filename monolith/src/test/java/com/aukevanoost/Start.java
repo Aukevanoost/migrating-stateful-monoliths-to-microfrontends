@@ -19,7 +19,7 @@ public class Start {
 	private static final Logger log = LoggerFactory.getLogger(Start.class);
 
 	public static void main(String[] args) throws Exception {
-		System.setProperty("wicket.configuration", "development");
+		System.setProperty("wicket.configuration", "deployment");
 		log.info("Starting servers...");
 
 		Server wicketServer = null;

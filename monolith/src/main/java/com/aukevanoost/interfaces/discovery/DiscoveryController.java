@@ -44,8 +44,6 @@ public class DiscoveryController implements IDiscoveryController {
     }
 
     public Config fetchConfig(String url) throws DiscoveryException {
-        long startTime = System.nanoTime();
-
         try {
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
@@ -56,8 +54,6 @@ public class DiscoveryController implements IDiscoveryController {
 
             HttpResponse<String> response = client.send(request,
                 HttpResponse.BodyHandlers.ofString());
-            long duration = (System.nanoTime() - startTime) / 1_000_000;
-            System.out.printf("DISC (%dms)%n", duration);
             return mapper.readValue(response.body(), Config.class);
         } catch (Exception e) {
             throw new DiscoveryException(e);
@@ -78,8 +74,6 @@ public class DiscoveryController implements IDiscoveryController {
     }
 
     private CompletableFuture<MicroFrontendResponse> fetchMfeContent(String url) {
-        long startTime = System.nanoTime();
-
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(url))
             .header("Accept", "text/html")
@@ -88,25 +82,16 @@ public class DiscoveryController implements IDiscoveryController {
 
         return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
             .thenApply(response -> {
-                long duration = (System.nanoTime() - startTime) / 1_000_000;
 
                 if (response.statusCode() != 200) {
-                    System.out.printf("HTTP Failed for URL %s: %d (took %dms)%n",
-                        url, response.statusCode(), duration);
-                } else {
-                    System.out.printf("MFE (%dms)%n", duration);
-                }
-
-                if (duration > 1000) {
-                    System.out.printf("WARNING: Slow request to %s (%dms)%n", url, duration);
+                    System.out.printf("HTTP Failed for URL %s with status %d%n", url, response.statusCode());
                 }
 
                 return parseMfeResponse(response.body(), null);
             })
             .exceptionally(e -> {
-                long duration = (System.nanoTime() - startTime) / 1_000_000;
-                System.out.printf("Request failed for %s after %dms: %s%n",
-                    url, duration, e.getMessage());
+                System.out.printf("Request failed for %s: %s%n",
+                    url, e.getMessage());
                 return parseMfeResponse(null, e);
             });
     }
