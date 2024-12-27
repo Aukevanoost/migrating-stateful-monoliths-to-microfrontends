@@ -16,7 +16,7 @@ collect_stats() {
         | sed -E 's/%|\x1b\[H|\x1b\[K|\x1b\[J//g' \
         | sed 's/ \/ /,/g' \
         | sed '/^$/d' \
-        >> "$OUTPUT_DIR/docker_stats.csv"
+        >> "$OUTPUT_DIR/docker.csv"
         
         perl -MTime::HiRes=time,sleep -e '
             my $elapsed = time() - '$start_time';
@@ -40,5 +40,5 @@ trap cleanup EXIT INT TERM
 k6 run k6/load-test.js --out csv="$OUTPUT_DIR/raw_k6.csv" | tee /dev/tty
 
 echo "Test completed! Results saved in: $OUTPUT_DIR"
-echo "Docker stats: $OUTPUT_DIR/docker_stats.csv"
-echo "k6 output: $OUTPUT_DIR/k6_output.log"
+echo "Docker stats: $OUTPUT_DIR/docker.csv"
+echo "k6 output: $OUTPUT_DIR/raw_k6.csv"
