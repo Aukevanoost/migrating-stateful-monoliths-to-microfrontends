@@ -26,7 +26,7 @@ public class DiscoveryController implements IDiscoveryController {
     private DiscoveryController() {
         this.client = HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_1_1)
-            .connectTimeout(Duration.ofSeconds(10))
+            .connectTimeout(Duration.ofSeconds(30))
             .executor(Executors.newFixedThreadPool(200))
             .build();
         this.mapper = new ObjectMapper();
