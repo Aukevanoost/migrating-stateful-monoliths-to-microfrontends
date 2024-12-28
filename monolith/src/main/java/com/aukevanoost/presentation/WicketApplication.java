@@ -16,9 +16,9 @@ import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.resource.caching.NoOpResourceCachingStrategy;
+import org.apache.wicket.settings.RequestCycleSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -74,7 +74,8 @@ public class WicketApplication extends WebApplication
 		mountPage("/stores", StoresPage.class);
 		mountPage("/cart", CartPage.class);
 
-
+		getRequestCycleSettings().setRenderStrategy(
+			RequestCycleSettings.RenderStrategy.ONE_PASS_RENDER);
 //		setPageManagerProvider(new DefaultPageManagerProvider(this) {
 //			@Override
 //			public IPageManager get() {
