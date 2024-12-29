@@ -30,10 +30,8 @@ export class PluginProxyComponent {
         const removeTask = this.#pendingTasks.add();
 
         try {
-            console.log('LOAD COMPONENT');
             const comp = await loadRemoteModule({ remoteName, exposedModule: './Component'})
                 .then(m => m[component]);
-            console.log('DONE LOAD COMPONENT');
 
             if (this.#destroyed) return;
 

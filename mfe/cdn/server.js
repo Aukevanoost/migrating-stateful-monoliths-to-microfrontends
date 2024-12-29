@@ -4,7 +4,6 @@ const app = express();
 
 // Serve static files from the 'dist' directory
 app.use((req, res, next) => {
-  console.log(`Requested: ${req.url}`);
   
   // res.header('Cache-Control', 'no-cache');
   // res.header('Pragma', 'no-cache');

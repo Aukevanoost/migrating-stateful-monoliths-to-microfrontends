@@ -50,7 +50,6 @@ public class ProxyRequestMapper implements IRequestMapper {
     @Override
     public IRequestHandler mapRequest(Request request) {
         String url = request.getUrl().toString();
-        System.out.println("Url: " + url);
         if (!shouldProxy(url)) {
             return null;
         }
@@ -150,7 +149,6 @@ public class ProxyRequestMapper implements IRequestMapper {
 
         for (String path : proxyPaths) {
             if (path.isEmpty() && normalizedUrl.isEmpty()) {
-                System.out.println("Redirecting to: " + backendUrl);
                 return true;
             }
             if (!path.isEmpty() && normalizedUrl.startsWith(path)) {
