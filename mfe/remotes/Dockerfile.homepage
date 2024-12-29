@@ -14,7 +14,7 @@ RUN npm run build homepage
 
 EXPOSE 4003
 
-# ENV NODE_ENV=production
+ENV NODE_ENV=production
 
 WORKDIR /usr/src/app/dist/homepage/server
 
