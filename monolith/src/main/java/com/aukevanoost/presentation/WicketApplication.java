@@ -17,6 +17,7 @@ import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.cycle.IRequestCycleListener;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.settings.RequestCycleSettings;
 import org.apache.wicket.request.resource.caching.NoOpResourceCachingStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,6 +74,9 @@ public class WicketApplication extends WebApplication
 
 		getHeaderResponseDecorators().add(response ->
 			new JavaScriptFilteredIntoFooterHeaderResponse(response, "footer-container"));
+
+		getRequestCycleSettings().setRenderStrategy(
+			RequestCycleSettings.RenderStrategy.ONE_PASS_RENDER);
 
 		getRootRequestMapperAsCompound().add(new ProxyRequestMapper(
 			"http://docker.for.mac.localhost:4003",

@@ -28,6 +28,11 @@ services:
       - "4001:4001"
     environment:
       - NODE_ENV=production
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://docker.for.mac.localhost:4001"]
+        interval: 30s
+        timeout: 10s
+        retries: 5
     restart: unless-stopped
   recommendations:
     container_name: recommendations
@@ -38,6 +43,11 @@ services:
       - "4002:4002"
     environment:
       - NODE_ENV=production
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://docker.for.mac.localhost:4002"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
     restart: unless-stopped
   homepage:
     container_name: homepage
@@ -46,8 +56,17 @@ services:
       dockerfile: Dockerfile.homepage
     ports:
       - "4003:4003"
-    environment:
-      - NODE_ENV=production
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://docker.for.mac.localhost:4003"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    depends_on:
+      - recommendations
+      - teasers
+    links: 
+      - recommendations
+      - teasers
     restart: unless-stopped
   monolith:
     container_name: monolith
@@ -58,46 +77,9 @@ services:
       - "8080:8080"
       - "8081:8081"
       - "8443:8443"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://docker.for.mac.localhost:8081"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
     restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          cpus: '3'
-          memory: 4G
-
-  cadvisor:
-    # https://github.com/google/cadvisor/issues/2838
-    container_name: cadvisor
-    image: gcr.io/cadvisor/cadvisor:latest
-    privileged: true
-    ports:
-      - "3001:3001"
-    command:
-      - --port=3001
-      - --allow_dynamic_housekeeping=true 
-    devices:
-      - /dev/kmsg:/dev/kmsg
-    volumes:
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /etc/machine-id:/etc/machine-id:ro
-      - /var/lib/dbus/machine-id:/var/lib/dbus/machine-id:ro
-    restart: unless-stopped
-  prometheus:
-    container_name: prometheus
-    image: prom/prometheus:latest
-    ports:
-      - "3002:3002"
-    volumes: 
-      - "./prometheus.yml:/prometheus/prometheus.yml"
-    command:
-      - --config.file=/prometheus/prometheus.yml
-      - --storage.tsdb.path=/prometheus
-      - --storage.tsdb.retention.time=1h
-      - --web.listen-address=:3002
-      - --web.enable-lifecycle
-      - --enable-feature=memory-snapshot-on-shutdown
-    depends_on:
-      - cadvisor

@@ -1,6 +1,6 @@
 import { Component, input, effect, inject, ChangeDetectionStrategy, PLATFORM_ID, DestroyRef, ExperimentalPendingTasks, signal, Type } from "@angular/core";
 import { loadRemoteModule } from '@angular-architects/native-federation';
-import { CommonModule, isPlatformServer } from "@angular/common";
+import { CommonModule } from "@angular/common";
 
 @Component({
     selector: 'plugin-proxy',
@@ -30,8 +30,10 @@ export class PluginProxyComponent {
         const removeTask = this.#pendingTasks.add();
 
         try {
+            console.log('LOAD COMPONENT');
             const comp = await loadRemoteModule({ remoteName, exposedModule: './Component'})
                 .then(m => m[component]);
+            console.log('DONE LOAD COMPONENT');
 
             if (this.#destroyed) return;
 
