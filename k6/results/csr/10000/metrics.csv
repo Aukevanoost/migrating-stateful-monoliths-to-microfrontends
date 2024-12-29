@@ -1,4 +1,4 @@
-timestamp,cdn_cpu_percent,discovery_cpu_percent,monolith_cpu_percent,cdn_mem_percent,discovery_mem_percent,monolith_mem_percent,cdn_mem_usage,discovery_mem_usage,monolith_mem_usage,mean,min,max,count,throughput_mean,throughput_min,throughput_max,throughput_count,err_mean,err_count
+timestamp,cdn_cpu_percent,discovery_cpu_percent,monolith_cpu_percent,cdn_mem_percent,discovery_mem_percent,monolith_mem_percent,cdn_mem_usage,discovery_mem_usage,monolith_mem_usage,duration_mean,duration_min,duration_max,duration_count,throughput_mean,throughput_min,throughput_max,throughput_count,err_mean,err_count
 0,0.0,0.0,127.4,0.23,0.23,21.16,17.83,17.7,1658.0,1.0549664268585133,0.673,5.941,834,166.6,166.0,167.0,833.0,0.0,0.0
 5,0.0,0.0,126.81,0.23,0.23,28.21,17.83,17.7,2210.0,0.781124849939976,0.559,4.069,833,166.8,166.0,167.0,834.0,0.0,0.0
 10,0.0,0.0,112.84,0.23,0.23,34.4,17.83,17.7,2696.0,0.6762278177458034,0.458,5.621,834,166.6,166.0,167.0,833.0,0.0,0.0
