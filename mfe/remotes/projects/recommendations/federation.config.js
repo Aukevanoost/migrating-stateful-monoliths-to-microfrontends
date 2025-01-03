@@ -9,11 +9,11 @@ module.exports = withNativeFederation({
   },
 
   shared: {
-    ...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
+    // ...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
   },
   skip: [
     'rxjs/ajax',
-    // '@shared',
+    '@shared',
     'rxjs/fetch',
     'rxjs/testing',
     'rxjs/webSocket',
