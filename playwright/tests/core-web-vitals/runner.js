@@ -115,8 +115,7 @@ async function runTest(cfg, idx) {
 
     results.testTotalTimeInMS = afterTest - beforeNav - 5000;
   } catch (error) {
-    console.error('Test run error:', error);
-    results.error = error.message;
+    results.error = error;
   } finally {
     await host.cleanup();
   }
@@ -145,14 +144,27 @@ async function runWebVitalsTests(cfg, runs = 1) {
 
   const results = [];
 
+  let retry = 1;
   for (let i = 1; i <= runs; i++) {
     console.log(`Test run ${i}/${runs}`);
-    const metrics = await runTest(cfg, i);
-    results.push(metrics);
+    const testResults = await runTest(cfg, i);
+    
+    if(!!testResults.error) {
+      console.error('TEST FAILED (retry' + retry + '/3): ', testResults.error.message);
+      retry++;
+      i--;
+      if(retry > 3) {
+        console.error('TEST SUITE FAILED, shutting down test suite.');
+        break;
+      }
+    } else {
+      results.push(testResults);
+      retry = 1;
+    }
   }
 
   await saveMetricsToCSV(cfg.path, results);
   console.log('====== TEST COMPLETED ======');
 }
 
-runWebVitalsTests(throttledSettings, 505).catch(console.error);
+runWebVitalsTests(heavilyThrottledSettings, 505).catch(console.error);
