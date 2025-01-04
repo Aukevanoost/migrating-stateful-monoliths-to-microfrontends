@@ -20,7 +20,6 @@ def get_threshold(x, k=30):
 
     return lower_threshold, upper_threshold
 
-# Example usage
 # if __name__ == "__main__":    
 #     q25 = harrell_davis_quantile(df['value'], 0.25)
 #     q75 = harrell_davis_quantile(df['value'], 0.75)
