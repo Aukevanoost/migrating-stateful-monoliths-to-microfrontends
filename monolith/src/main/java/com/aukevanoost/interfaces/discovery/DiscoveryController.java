@@ -13,7 +13,6 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -27,7 +26,7 @@ public class DiscoveryController implements IDiscoveryController {
         this.client = HttpClient.newBuilder()
             .version(HttpClient.Version.HTTP_1_1)
             .connectTimeout(Duration.ofSeconds(30))
-            .executor(Executors.newFixedThreadPool(200))
+            .executor(MonitoredThreadPool.createInstance())
             .build();
         this.mapper = new ObjectMapper();
     }

@@ -1,8 +1,7 @@
 package com.aukevanoost.presentation.home;
 
-import com.aukevanoost.interfaces.boundaries.discovery.DiscoveryControllerFactory;
 import com.aukevanoost.interfaces.boundaries.discovery.IDiscoveryController;
-import com.aukevanoost.interfaces.discovery.DiscoveryException;
+import com.aukevanoost.interfaces.discovery.models.Config;
 import com.aukevanoost.interfaces.discovery.models.MicroFrontend;
 import com.aukevanoost.interfaces.discovery.models.MicroFrontendResponse;
 import com.aukevanoost.presentation.WicketApplication;
@@ -10,9 +9,7 @@ import com.aukevanoost.presentation._core.components.RemoteContentPanel;
 import com.aukevanoost.presentation._core.layout.BaseTemplate;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.panel.Panel;
-
-import java.net.ConnectException;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class HomePage extends BaseTemplate {
@@ -31,68 +28,65 @@ public class HomePage extends BaseTemplate {
     protected void onInitialize() {
         super.onInitialize();
         try {
-            var config = discoveryController.fetchConfig(MANIFEST_URL);
+            Config config = discoveryController.fetchConfig(MANIFEST_URL);
 
-            var mfeContentFutures = discoveryController.fetchMfeContents(
-                config,
-                TEASERS_KEY, RECOMMENDATIONS_KEY
-            );
+            Map<String, CompletableFuture<MicroFrontendResponse>> futures =
+                discoveryController.fetchMfeContents(config, TEASERS_KEY, RECOMMENDATIONS_KEY);
 
-            CompletableFuture.allOf(
-                mfeContentFutures.values().toArray(CompletableFuture[]::new)
-            ).join();
+            CompletableFuture.allOf(futures.values().toArray(new CompletableFuture[0])).join();
 
-            addMfePanel(
-                "exp_teasers",
-                mfeContentFutures.get(TEASERS_KEY).get()
-            );
+            addMfePanel("exp_teasers", futures.get(TEASERS_KEY).join());
+            addMfePanel("exp_recommendations", futures.get(RECOMMENDATIONS_KEY).join());
 
-            addMfePanel(
-                "exp_recommendations",
-                mfeContentFutures.get(RECOMMENDATIONS_KEY).get()
-            );
+            addHydrationScript(config);
 
-            addHydrationScript(
-                config.getMicroFrontends().get(TEASERS_KEY).getFirst(),
-                config.getMicroFrontends().get(RECOMMENDATIONS_KEY).getFirst()
-            );
-
-        } catch (DiscoveryException e) {
-            throw new RuntimeException("Failed to load discovery", e);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            handleError(e);
         }
     }
 
     private void addMfePanel(String id, MicroFrontendResponse content) {
-        if (content.error() != null) {
-            System.out.println("Error loading MFE content: " + content.error());
+        if (content == null || content.error() != null) {
+            add(new Label(id, "Content unavailable"));
             return;
         }
-
         add(new RemoteContentPanel(id, content));
     }
 
+    private void addHydrationScript(Config config) {
+        try {
+            MicroFrontend teasers = config.getMicroFrontends().get(TEASERS_KEY).getFirst();
+            MicroFrontend recommendations = config.getMicroFrontends().get(RECOMMENDATIONS_KEY).getFirst();
 
+            String hydrationScript = String.format("""
+                import { initMicroFrontends } from './scripts/loader.js';
+                
+                initMicroFrontends({
+                    '%s': '%s',
+                    '%s': '%s'
+                })
+                """,
+                TEASERS_KEY,
+                teasers.getExtras().getNativefederation().getRemoteEntry(),
+                RECOMMENDATIONS_KEY,
+                recommendations.getExtras().getNativefederation().getRemoteEntry()
+            );
 
-    private void addHydrationScript(MicroFrontend teasers, MicroFrontend recommendations) {
+            add(new Label("hydrationScript", hydrationScript)
+                .setEscapeModelStrings(false)
+                .add(new AttributeModifier("type", "module-shim")));
+        } catch (Exception e) {
+            System.err.println("Failed to add hydration script: " + e.getMessage());
+            add(new Label("hydrationScript", ""));
+        }
+    }
 
-        var hydrationScript = String.format("""
-            import { initMicroFrontends } from './scripts/loader.js';
-            
-            initMicroFrontends({
-                '%s': '%s',
-                '%s': '%s'
-            })
-            """,
-            TEASERS_KEY,
-            teasers.getExtras().getNativefederation().getRemoteEntry(),
-            RECOMMENDATIONS_KEY,
-            recommendations.getExtras().getNativefederation().getRemoteEntry()
-        );
+    private void handleError(Exception e) {
+        System.err.println("Error initializing page: " + e.getMessage());
+        e.printStackTrace();
 
-        add(new Label("hydrationScript", hydrationScript)
-            .setEscapeModelStrings(false)
-            .add(new AttributeModifier("type", "module-shim")));
+        add(new Label("exp_teasers", "Content unavailable"));
+        add(new Label("exp_recommendations", "Content unavailable"));
+        add(new Label("hydrationScript", ""));
     }
 }
