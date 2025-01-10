@@ -24,11 +24,7 @@ export class RecommendationsComponent {
       this.#recommendations.set(x)
     });
   }
-  constructor() {
-    this.http.recommendations$(["CL-01-GY", "AU-07-MT"]).subscribe(x => {
-      this.#recommendations.set(x)
-    });
-  }
+  constructor() {  }
 
   url(productSku: string, sku: string) {
     return this.#env + '/product/' + productSku + '/' + sku;
